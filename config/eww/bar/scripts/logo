@@ -1,0 +1,9 @@
+#!/bin/sh
+# =============================================================
+# gh0stzk - Script estático para logo personalizado
+# Muestra siempre el icono "images/foto.png"
+# =============================================================
+
+case "$1" in
+    --icon) echo "images/foto.png" ;;
+esac

@@ -1,0 +1,9 @@
+[font]
+size = 16
+
+builtin_box_drawing = true
+
+[font.normal]
+family = "JetBrains Mono"
+
+

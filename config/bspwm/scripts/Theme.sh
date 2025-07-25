@@ -1,25 +1,27 @@
 #!/bin/sh
-# =============================================================
-#  ████████╗██╗  ██╗███████╗███╗   ███╗███████╗
-#  ╚══██╔══╝██║  ██║██╔════╝████╗ ████║██╔════╝
-#     ██║   ███████║█████╗  ██╔████╔██║█████╗
-#     ██║   ██╔══██║██╔══╝  ██║╚██╔╝██║██╔══╝
-#     ██║   ██║  ██║███████╗██║ ╚═╝ ██║███████╗
-#     ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝╚══════╝
-# Author: gh0stzk
-# Repo:   https://github.com/gh0stzk/dotfiles
-# Date:   02.05.2025 07:37:41
-# Info:   This file will configure and launch the rice.
-#
-# Copyright (C) 2021-2025 gh0stzk <z0mbi3.zk@protonmail.com>
-# Licensed under GPL-3.0 license
-# =============================================================
+# ===============================================
+#	⠀⠀⢀⣴⣿⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+#	⠀⢠⣿⣿⢿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+#	⢀⡾⠋⠀⣰⣿⣿⠻⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+#	⠘⠀⠀⢠⣿⣿⠃⠀⠈⠻⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+#	⠀⠀⠀⢸⣿⡇⠀⠀⠀⣼⣉⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⠀
+#	⠀⠀⠀⢹⣿⡇⠀⠀⠀⣿⣿⣿⣿⣿⣷⡄⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⠟⣿⠉⠁
+#	⠀⠀⠀⠸⣿⣿⣄⠀⠀⠘⢿⣿⡵⠋⠙⢿⣦⡀⠀⠀⣤⣠⠀⣠⣿⡅⠀⣿⠀⠀
+#	⠀⠀⠀⠀⠈⠻⢿⣿⣶⣤⣄⣀⠀⠀⠀⠈⠻⣷⣄⣠⣿⣿⡼⠋⠛⣡⡼⠋⠀⠀
+#	⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠛⠻⠿⠿⠷⠶⠶⠾⣿⡿⠋⠻⣟⠉⠁⠀⠀⠀⠀⠀
+#	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡠⠶⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+# Author: g3k
+# Rep: https://github.com/IamGenarov/blackbspwm
+# ===============================================
 
 # Current Rice
-read -r RICE < "$HOME"/.config/bspwm/.rice
+RICE="z0mbi3"
 
 # Load theme configuration
-. "$HOME"/.config/bspwm/rices/$RICE/theme-config.bash
+. "$HOME"/.config/eww/theme-config.bash
+
+# Load theme configuration
+. "$HOME"/.config/eww/theme-config.bash
 
 # Function to wait for processes to finish correctly
 wait_for_termination() {
@@ -68,22 +70,7 @@ apply_bspwm_config() {
 	bspc config focused_border_color "${FOCUSED_BC}"
 	bspc config presel_feedback_color "${blue}"
 }
-
-# Terminal colors
-apply_term_config() {
-	# Alacritty
-	sed -i "$HOME"/.config/alacritty/fonts.toml \
-		-e "s/size = .*/size = $term_font_size/" \
-		-e "s/family = .*/family = \"$term_font_name\"/"
-
-    sed -i "$HOME"/.config/alacritty/alacritty.toml \
-        -e "s|\"themes/.*\.toml\",|\"themes/${RICE}.toml\",|"
-
-	# Kitty
-	kitten themes --reload-in=all ${RICE}
-}
-
-# Set compositor configuration
+#Set compositor configuration
 apply_picom_config() {
 	picom_conf_file="$HOME/.config/bspwm/src/config/picom.conf"
 	picom_animations_file="$HOME/.config/bspwm/src/config/picom-animations.conf"
@@ -167,20 +154,7 @@ apply_menu_colors() {
 		-e "s/color_sep_fg = .*/color_sep_fg = ${jg_sep}/"
 
 	# Rofi launchers
-	cat >"$HOME"/.config/bspwm/src/rofi-themes/shared.rasi <<-EOF
-		* {
-		    font: "${rofi_font}";
-		    background: ${rofi_background};
-		    bg-alt: ${rofi_bg_alt};
-		    background-alt: ${rofi_background_alt};
-		    foreground: ${rofi_fg};
-		    selected: ${rofi_selected};
-		    active: ${rofi_active};
-		    urgent: ${rofi_urgent};
-
-		    img-background: url("~/.config/bspwm/rices/${RICE}/rofi.webp", width);
-		}
-	EOF
+	
 
 	# Screenlock colors
 	sed -i "$HOME"/.config/bspwm/src/ScreenLocker \
@@ -215,40 +189,17 @@ apply_geany_theme(){
 }
 
 # Apply wallpaper engine
+
 apply_wallpaper () {
-	case $ENGINE in
-		"Theme")
-			feh -z --no-fehbg --bg-fill "${HOME}"/.config/bspwm/rices/"${RICE}"/walls ;;
-
-		"CustomDir")
-			feh -z --no-fehbg --bg-fill "$CUSTOM_DIR" ;;
-
-		"CustomImage")
-			feh --no-fehbg --bg-fill "$CUSTOM_WALL" ;;
-
-		"CustomAnimated")
-			AnimatedWall --start "$CUSTOM_ANIMATED" ;;
-
-        "Slideshow")
-            (
-                while true; do
-                    feh -z --no-fehbg --bg-fill "${HOME}"/.config/bspwm/rices/"${RICE}"/walls
-                    sleep 900  # 900 seconds = 15 minutes
-                done
-            ) &
-            echo $! > /tmp/wall_refresh.pid  ;;
-
-		*)
-			feh -z --no-fehbg --bg-fill "${HOME}"/.config/bspwm/rices/"${RICE}"/walls ;;
-	esac
+    feh --bg-scale "$HOME/Pictures/.wallpapers/fp3.png"
 }
+
 
 # Launch bars
 apply_bar() {
-	. "$HOME"/.config/bspwm/rices/"$RICE"/Bar.bash
+	. "$HOME"/.config/eww/Bar.bash
 }
-
-### Apply Configurations
+#Apply Configurations
 
 kill_processes
 apply_picom_config

@@ -1,0 +1,43 @@
+#!/bin/bash
+# =============================================================
+#     🧠 Hacking Workspace Launcher — BSPWM Edition
+# =============================================================
+
+WORKDIR="$HOME/Documents/nvim_labs"
+
+# Crear el directorio del proyecto si no existe
+mkdir -p "$WORKDIR"
+
+# --- Escritorio 1: 2 terminales horizontales ---
+bspc desktop -f ^1
+alacritty &
+sleep 1
+bspc node -p east
+alacritty &
+sleep 2
+
+# --- Escritorio 2: 1 terminal ---
+bspc desktop -f ^2
+alacritty &
+sleep 1
+
+# --- Escritorio 3: LibreWolf ---
+bspc desktop -f ^3
+librewolf &
+sleep 2
+
+# --- Escritorio 4: BurpSuite ---
+bspc desktop -f ^4
+~/.config/bspwm/scripts/Burpsuite &
+sleep 2
+
+# --- Escritorio 5: Neovim en carpeta de proyectos, sin archivo abierto ---
+bspc desktop -f ^5
+alacritty -e bash -c "cd \"$WORKDIR\" && nvim" &
+sleep 2
+
+# --- Volver al escritorio 1 ---
+bspc desktop -f ^1
+
+# Notificación final
+notify-send "✅ Entorno de hacking cargado"

@@ -3,7 +3,16 @@
 bat=/sys/class/power_supply/BAT0/
 per="$(cat "$bat/capacity")"
 
-battery_status () {
+# Ruta de imágenes
+img_path="/home/g3k/.config/eww/bar/images"
+
+# Archivo temporal para animación
+frame_file="/tmp/.battery_frame"
+
+# Inicializa frame si no existe
+[ ! -f "$frame_file" ] && echo 0 > "$frame_file"
+
+battery_status() {
 	if [ -d "$bat" ]; then
 		printf "true"
 	else
@@ -12,33 +21,41 @@ battery_status () {
 }
 
 icon() {
+    if [ "$(cat "$bat/status")" = "Charging" ]; then
+        # Definir frames según nivel actual
+        if [ "$per" -le 10 ]; then
+            frames=(min-low.png low-battery.png half-battery.png full-battery.png)
+        elif [ "$per" -le 30 ]; then
+            frames=(low-battery.png half-battery.png full-battery.png)
+        elif [ "$per" -le 79 ]; then
+            frames=(half-battery.png full-battery.png)
+        else
+            frames=(full-battery.png)
+        fi
 
-    [ "$(cat "$bat/status")" = Charging ] && icon="images/battery_charging.png" && echo "$icon" && exit
+        total=${#frames[@]}
+        frame=$(cat "$frame_file")
 
-    if [ "$per" -gt "90" ]; then
-        icon="images/battery_100.png"
-    elif [ "$per" -gt "80" ]; then
-        icon="images/battery_90.png"
-    elif [ "$per" -gt "70" ]; then
-        icon="images/battery_70.png"
-    elif [ "$per" -gt "60" ]; then
-        icon="images/battery_50.png"
-    elif [ "$per" -gt "50" ]; then
-        icon="images/battery_50.png"
-    elif [ "$per" -gt "40" ]; then
-        icon="images/battery_30.png"
-    elif [ "$per" -gt "30" ]; then
-        icon="images/battery_30.png"
-    elif [ "$per" -gt "20" ]; then
-        icon="images/battery_20.png"
-    elif [ "$per" -gt "10" ]; then
-        icon="images/battery_20.png"
-    elif [ "$per" -gt "0" ]; then
-        icon="images/battery_empty.png"
-    else
-        icon="images/battery_empty.png"
+        echo "$img_path/${frames[$frame]}"
+
+        # Siguiente frame (bucle)
+        next=$(( (frame + 1) % total ))
+        echo "$next" > "$frame_file"
+        exit
     fi
-    echo "$icon"
+
+    # No está cargando → ícono estático
+    if [ "$per" -le 10 ]; then
+        icon="min-low.png"
+    elif [ "$per" -le 30 ]; then
+        icon="low-battery.png"
+    elif [ "$per" -le 79 ]; then
+        icon="half-battery.png"
+    else
+        icon="full-battery.png"
+    fi
+
+    echo "$img_path/$icon"
 }
 
 percent() {

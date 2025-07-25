@@ -1,40 +1,37 @@
-;; Modified   by https://github.com/gh0stzk/dotfiles
+;; Modificado por https://github.com/gh0stzk/dotfiles
 
 (defvar volum false)
 (defvar notify false)
 (defvar power false)
 (defvar pac false)
 
-;; Workspaces
+;; Escritorios
 (include "./workspaces.yuck")
 
-
-;; logo
+;; Icono del logo
 (defpoll logo_icon :interval "1s" "scripts/logo --icon")
 
-
-;; Volume vars
+;; Variables de volumen
 (defpoll volume_icon :interval "1s" "scripts/Volume --icon")
 (defpoll volume_value :interval "1s" "scripts/Volume --vol")
 
-;; Network
+;; Red (Network)
 (defpoll WIFIICON :interval "15s" `scripts/Network --icon`)
 (defpoll NETSTAT :interval "15s" `scripts/Network --stat`)
 
-;; Updates vars
+;; Variables de actualizaciones
 (defpoll UPDATES :interval "15m" `cat $HOME/.cache/Updates.txt 2>/dev/null`)
-;;(defpoll UPDATES :interval "15m" `cat $HOME/.cache/Updates.txt 2>/dev/null`)
 
-;; Battery vars
+;; Variables de batería
 (defpoll battery_status :interval "10s" "scripts/battery battery_status")
-(defpoll battery_icon :run-while battery_status :interval "15s" "scripts/battery icon")
+(defpoll battery_icon :run-while battery_status :interval "0.5s" "scripts/battery icon")
 (defpoll battery_percentage :run-while battery_status :interval "15s" "scripts/battery percent")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;							Widget Section's							 ;;
+;;							Sección de Widgets							 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Launcher Widgets ;;
+;; Widget del Lanzador
 (defwidget launcher []
 	(box :orientation "v"
 		   :space-evenly "false"
@@ -49,6 +46,7 @@
   )
 )
 
+;; Widget del logo
 (defwidget imagenbox []
          (box    :orientation "v"
                 (eventbox       :cursor "pointer"
@@ -60,7 +58,7 @@
         )
 )
 
-;; Wifi Widgets ;;
+;; Widget de Wi-Fi
 (defwidget wifi []
 	(box	:orientation "v"
 		(eventbox 	:cursor "pointer"
@@ -72,16 +70,16 @@
 	)
 )
 
-;; Battery Widget
+;; Widget de Batería
 (defwidget battery []
   (box :orientation "v"
        :visible {battery_status ?: "false"}
     (eventbox :cursor "pointer"
       (button :class "trayicon"
               :style "background-image: url('${battery_icon}');"
-              :tooltip "Battery: ${battery_percentage}%"))))
+              :tooltip "Batería: ${battery_percentage}%"))))
 
-;; control center ;;
+;; Centro de notificaciones
 (defwidget notifycenter []
 	(eventbox	:onhover "${EWW_CMD} update notify=true"
 				:onhoverlost "${EWW_CMD} update notify=false"
@@ -99,28 +97,26 @@
 	(eventbox :cursor "pointer"
 	(button		:style "background-image: url('images/riceselector.png');"
 				:class "trayicon"
-				:tooltip "Change Rice!"
+				:tooltip "¡Cambiar Rice!"
 				:onclick "OpenApps --rice"))
 
 	(eventbox :cursor "pointer"
 	(button		:style "background-image: url('images/music_player.png');"
 				:class "trayicon"
-				:tooltip "Music Player"
+				:tooltip "Reproductor de Música"
 				:onclick "OpenApps --player"))
 
 	(eventbox :cursor "pointer"
 	(button		:style "background-image: url('images/usercard.png');"
 				:class "trayicon"
-				:tooltip "User Card"
+				:tooltip "Tarjeta de Usuario"
 				:onclick "OpenApps --usercard"))))
 
 	(button		:style "background-image: url('images/widget_apps.png');"
 				:class "trayicon"
 				:tooltip "Widgets"))))
 
-
-
-;; Pacman Widgets ;;
+;; Widget de Pacman (actualizaciones)
 (defwidget pacman []
 	(eventbox	:onhover "${EWW_CMD} update pac=true"
 				:onhoverlost "${EWW_CMD} update pac=false"
@@ -143,8 +139,7 @@
 				:onrightclick "OpenApps --update"
 				:onclick "OpenApps --checkupdates")))))
 
-
-;; Volume Widgets ;;
+;; Widget de Volumen
 (defwidget volum []
 	(eventbox :onhover "${EWW_CMD} update volum=true"
 			  :onhoverlost "${EWW_CMD} update volum=false"
@@ -160,7 +155,7 @@
 			  :onchange "pamixer --set-volume {}"
 			  :orientation "v"
 			  :flipped true
-			  :tooltip "Volume: ${volume_value}%"
+			  :tooltip "Volumen: ${volume_value}%"
 			  :max 101
 			  :min 0))
 	(button   :style "background-image: url('${volume_icon}');"
@@ -168,7 +163,7 @@
 			  :onrightclick "OpenApps --soundcontrol"
 			  :onclick "scripts/Volume --toggle-muted"))))
 
-;; Clock Widgets ;;
+;; Widget de Reloj
 (defwidget time []
 	(box	:orientation "v"
 			:class "time"
@@ -180,8 +175,7 @@
 	(button	:onclick "OpenApps --calendar"
 			:class "time-min" "${formattime(EWW_TIME, "%M")}"))))
 
-
-;; Powermenu Widgets ;;
+;; Widget de menú de energía
 (defwidget power []
 	(eventbox	:onhover "${EWW_CMD} update power=true"
 				:onhoverlost "${EWW_CMD} update power=false"
@@ -201,38 +195,36 @@
 
 	(button	:style "background-image: url('images/enpass.png');"
 			:class "button-lock"
-			:tooltip "Lock Screen"
+			:tooltip "Bloquear pantalla"
 			:onclick "ScreenLocker")
 
 	(button :style "background-image: url('images/sys-sleep.png');"
 			:class "button-bspres"
-			:tooltip "Suspend computer"
+			:tooltip "Suspender equipo"
 			:onclick "systemctl suspend")
 
 	(button	:style "background-image: url('images/sys-reboot.png');"
 			:class "button-reb"
-	  		:tooltip "Reboot"
+	  		:tooltip "Reiniciar"
 			:onclick "reboot")
 
 	(button	:style "background-image: url('images/sys-poweroff.png');"
 			:class "button-off"
-			:tooltip "Shutdown"
+			:tooltip "Apagar"
 			:onclick "shutdown now")))
 
 	(button	:style "background-image: url('images/sys-powermenu.png');"
 			:class "button-powermenu"
-			:tooltip "Power Menu"))))
+			:tooltip "Menú de energía"))))
 
-
-;; Systray widget ;;
+;; Widget de bandeja del sistema
 (defwidget systemtray []
   (box :orientation "v" :halign "center"
     (systray :class "tray" :orientation "v" :icon-size 16 :spacing 5)
   )
 )
 
-
-;; Top Widgets ;;
+;; Widgets superiores
 (defwidget top [monitor]
 	(box	:orientation "v"
 			:space-evenly "false"
@@ -241,13 +233,13 @@
 (imagenbox)
 (workspaces :monitor monitor)))
 
-;; Bottom Widgets ;;
+;; Widgets inferiores
 (defwidget bottom []
 	(box	:orientation "v"
 			:space-evenly "false"
 ))
 
-;; Control Panel Widgets ;;
+;; Widgets del panel de control
 (defwidget control []
 	(box :orientation "v"
 		 :space-evenly false
@@ -257,7 +249,7 @@
 (wifi)
 (battery)))
 
-;; End Widgets ;;
+;; Widgets del extremo inferior
 (defwidget end []
 	(box :orientation "v"
 		 :space-evenly "false"
@@ -270,17 +262,18 @@
 (time)
 ))
 
-;; Bar Widgets ;;
+;; Widget principal de la barra
 (defwidget bar [monitor]
 	(box :class "eww_bar"
 		 :orientation "v"
 		 :vexpand "false"
 		 :hexpand "false"
+
 (top :monitor monitor)
 (end)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;							Window Section's							 ;;
+;;							Sección de Ventana							 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defwindow bar [monitor]

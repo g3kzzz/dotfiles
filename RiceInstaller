@@ -112,70 +112,101 @@ ${BLD}${CGR}[${CRE}!${CGR}]${CNC} ${BLD}${CRE}This script does NOT have the pote
         esac
     done
 }
-
 install_dependencies() {
     clear
     logo "Installing needed packages from official repositories..."
     sleep 2
 
-    # Ensure reflector is installed and update mirrorlist
     is_reflector
     printf "%b\n\n" "${BLD}${CGR}Getting the 5 best and fastest mirrors${CNC}"
     sudo reflector --verbose --age 12 --fastest 10 --score 10 --protocol https --latest 5 --sort rate --save /etc/pacman.d/mirrorlist
     sudo pacman -Syy
 
-    # List of dependencies
-    dependencies="alacritty alsa-utils base-devel bat brightnessctl bspwm clipcat dbus dunst eza feh flameshot fzf git gnome-themes-extra jq jgmenu lxappearance lxsession-gtk3 mpc mpd mpv neovim networkmanager ncmpcpp noto-fonts noto-fonts-emoji pamixer papirus-icon-theme picom playerctl polkit pipewire pipewire-pulse pavucontrol python-gobject qt5ct rofi rustup sxhkd tar tmux ttf-font-awesome ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-terminus-nerd ttf-ubuntu-mono-nerd unzip xclip xdg-user-dirs xdo xdotool xorg xorg-xdpyinfo xorg-xinit xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo xsettingsd xf86-input-libinput zsh zsh-autosuggestions zsh-syntax-highlighting"
+    printf "\n%b\n\n" "${BLD}${CBL}Installing required packages one by one...${CNC}"
+    sleep 1
 
+    try_install() {
+        pkg="$1"
+        printf "%b\n" "${BLD}${CBL}Installing $pkg...${CNC}"
+        if sudo pacman -S --noconfirm "$pkg" >>"$ERROR_LOG" 2>&1; then
+            printf "%b\n" "  ${BLD}${CGR}$pkg installed successfully${CNC}"
+        else
+            printf "%b\n" "  ${BLD}${CRE}$pkg failed to install${CNC}"
+            log_error "Failed to install: $pkg"
+        fi
+    }
 
-    printf "\n%b\n\n" "${BLD}${CBL}Checking for required packages...${CNC}"
+    try_install alacritty
+    try_install alsa-utils
+    try_install base-devel
+    try_install bat
+    try_install brightnessctl
+    try_install bspwm
+    try_install clipcat
+    try_install dbus
+    try_install dunst
+    try_install eza
+    try_install feh
+    try_install flameshot
+    try_install fzf
+    try_install git
+    try_install gnome-themes-extra
+    try_install jq
+    try_install jgmenu
+    try_install lxappearance
+    try_install lxsession-gtk3
+    try_install mpc
+    try_install mpd
+    try_install mpv
+    try_install neovim
+    try_install networkmanager
+    try_install ncmpcpp
+    try_install noto-fonts
+    try_install noto-fonts-emoji
+    try_install pamixer
+    try_install papirus-icon-theme
+    try_install picom
+    try_install playerctl
+    try_install polkit
+    try_install pipewire
+    try_install pipewire-pulse
+    try_install pavucontrol
+    try_install python-gobject
+    try_install qt5ct
+    try_install rofi
+    try_install rustup
+    try_install sxhkd
+    try_install tar
+    try_install tmux
+    try_install ttf-font-awesome
+    try_install ttf-inconsolata
+    try_install ttf-jetbrains-mono
+    try_install ttf-jetbrains-mono-nerd
+    try_install ttf-terminus-nerd
+    try_install ttf-ubuntu-mono-nerd
+    try_install unzip
+    try_install xclip
+    try_install xdg-user-dirs
+    try_install xdo
+    try_install xdotool
+    try_install xorg
+    try_install xorg-xdpyinfo
+    try_install xorg-xinit
+    try_install xorg-xkill
+    try_install xorg-xprop
+    try_install xorg-xrandr
+    try_install xorg-xsetroot
+    try_install xorg-xwininfo
+    try_install xsettingsd
+    try_install xf86-input-libinput
+    try_install zsh
+    try_install zsh-autosuggestions
+    try_install zsh-syntax-highlighting
+
+    printf "\n%b\n" "${BLD}${CGR}Finished installing all requested packages.${CNC}"
     sleep 2
-
-    # Detect missing packages
-    missing_pkgs=""
-    for pkg in $dependencies; do
-        if ! is_installed "$pkg"; then
-            missing_pkgs="$missing_pkgs $pkg"
-            printf "%b\n" " ${BLD}${CYE}$pkg ${CRE}not installed${CNC}"
-        else
-            printf "%b\n" "${BLD}${CGR}$pkg ${CBL}already installed${CNC}"
-        fi
-    done
-
-    # Batch installation if needed
-    if [ -n "$(printf "%s" "$missing_pkgs" | tr -s ' ')" ]; then
-        count=$(printf "%s" "$missing_pkgs" | wc -w)
-        printf "\n%b\n\n" "${BLD}${CYE}Installing $count packages, please wait...${CNC}"
-
-        if sudo pacman -S --noconfirm $missing_pkgs 2>&1 | tee -a "$ERROR_LOG" >/dev/null; then
-            # Verify complete installation
-            failed_pkgs=""
-            for pkg in $missing_pkgs; do
-                if ! is_installed "$pkg"; then
-                    failed_pkgs="$failed_pkgs $pkg"
-                    log_error "Failed to install: $pkg"
-                fi
-            done
-
-            # Show final results
-            if [ -z "$(printf "%s" "$failed_pkgs" | tr -s ' ')" ]; then
-                printf "%b\n\n" "${BLD}${CGR}All packages installed successfully!${CNC}"
-            else
-                fail_count=$(printf "%s" "$failed_pkgs" | wc -w)
-                printf "%b\n" "${BLD}${CRE}Failed to install $fail_count packages:${CNC}"
-                printf "%b\n\n" "  ${BLD}${CYE}$(printf "%s" "$failed_pkgs")${CNC}"
-            fi
-        else
-            log_error "Critical error during batch installation"
-            printf "%b\n" "${BLD}${CRE}Installation failed! Check log for details${CNC}"
-            return 1
-        fi
-    else
-        printf "%b\n" "\n${BLD}${CGR}All dependencies are already installed!${CNC}"
-    fi
-
-    sleep 3
 }
+
 
 
 install_aur_dependencies() {

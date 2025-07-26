@@ -293,7 +293,7 @@ clone_dotfiles() {
     clear
     logo "Downloading dotfiles"
     repo_url="https://github.com/IamGenarov/blackbspwm"
-    repo_dir="$HOME/blackbswpm"
+    repo_dir="$HOME/blackbspwm"
     timestamp=$(date +"%Y%m%d-%H%M%S")
     sleep 3
 

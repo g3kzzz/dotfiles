@@ -135,6 +135,9 @@ install_dependencies() {
             log_error "Failed to install: $pkg"
         fi
     }
+    try_install lightdm
+    try_install lightdm-gtk-greeter
+    try_install lightdm-gtk-greeter-settings  
 
     try_install alacritty
     try_install alsa-utils
@@ -414,6 +417,14 @@ change_default_shell() {
 }
 
 final_prompt() {
+    printf "\n%b\n" "${BLD}${CBL}Enabling LightDM service...${CNC}"
+if sudo systemctl enable lightdm >>"$ERROR_LOG" 2>&1; then
+    printf "%b\n" "${BLD}${CGR}LightDM enabled successfully${CNC}"
+else
+    printf "%b\n" "${BLD}${CRE}Failed to enable LightDM${CNC}"
+    log_error "Failed to enable LightDM"
+fi
+
     clear
     logo "Installation Complete"
 

@@ -125,8 +125,8 @@ install_dependencies() {
     sudo pacman -Syy
 
     # List of dependencies
-    dependencies="alacritty base-devel git xorg xorg-xinit xorg-xrandr xorg-xsetroot xf86-input-libinput bspwm sxhkd picom dunst rofi alacritty feh xclip lxappearance qt5ct ttf-jetbrains-mono-nerd ttf-font-awesome noto-fonts noto-fonts-emoji pipewire pipewire-pulse wireplumber alsa-utils pavucontrol networkmanager unzip tar polkit dbus papirus-icon-theme gnome-themes-extra xorg xorg-xinit xorg-xrandr xorg-xsetroot xf86-input-libinput xclip ttf-font-awesome ttf-jetbrains-mono-nerd feh unzip tar alsa-utils pipewire wireplumber
- base-devel bat brightnessctl bspwm clipcat dunst eza feh fzf  git  jq jgmenu  flameshot mpc mpd mpv neovim ncmpcpp pamixer pacman-contrib papirus-icon-theme picom playerctl lxsession-gtk3 python-gobject  rofi rustup sxhkd tmux xclip xdg-user-dirs xdo xdotool xsettingsd xorg-xdpyinfo xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo zsh zsh-autosuggestions zsh-syntax-highlighting ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-terminus-nerd ttf-ubuntu-mono-nerd"
+    dependencies="alacritty alsa-utils base-devel bat brightnessctl bspwm clipcat dbus dunst eza feh flameshot fzf git gnome-themes-extra jq jgmenu lxappearance lxsession-gtk3 mpc mpd mpv neovim networkmanager ncmpcpp noto-fonts noto-fonts-emoji pamixer papirus-icon-theme picom playerctl polkit pipewire pipewire-pulse pavucontrol python-gobject qt5ct rofi rustup sxhkd tar tmux ttf-font-awesome ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-terminus-nerd ttf-ubuntu-mono-nerd unzip xclip xdg-user-dirs xdo xdotool xorg xorg-xdpyinfo xorg-xinit xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo xsettingsd xf86-input-libinput zsh zsh-autosuggestions zsh-syntax-highlighting"
+
 
     printf "\n%b\n\n" "${BLD}${CBL}Checking for required packages...${CNC}"
     sleep 2

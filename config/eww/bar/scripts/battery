@@ -4,7 +4,7 @@ bat=/sys/class/power_supply/BAT0/
 per="$(cat "$bat/capacity")"
 
 # Ruta de imágenes
-img_path="/home/g3k/.config/eww/bar/images"
+img_path="~/.config/eww/bar/images"
 
 # Archivo temporal para animación
 frame_file="/tmp/.battery_frame"

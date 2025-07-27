@@ -136,10 +136,18 @@ xorg-xrandr \
 xorg-xsetroot \
 xorg-xwininfo \
 xsettingsd \
+libnotify \
 xf86-input-libinput \
 zsh \
 zsh-autosuggestions \
 zsh-syntax-highlighting || true
+# -------------------------
+#     INSTALAR LIBREWOLF
+# -------------------------
+
+echo "[+] Instalando LibreWolf desde AUR..."
+yay -S --noconfirm librewolf || true
+echo "LibreWolf instalado correctamente"
 
 # -------------------------
 #     INSTALAR EWW (AUR)

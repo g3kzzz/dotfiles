@@ -235,5 +235,16 @@ if [ -f "$HOME/.zshrc" ]; then
     echo "[+] Recargando ZSH..."
     source "$HOME/.zshrc" || true
 fi
+echo "[+] Configurando ZSH para el usuario root..."
+
+sudo ln -sf /home/g3k/.zshrc /root/.zshrc
+sudo ln -s /home/g3k/.oh-my-zsh /root/.oh-my-zsh
+
+sudo mkdir -p /root/.oh-my-zsh/custom/plugins
+
+sudo ln -s /home/g3k/.oh-my-zsh/custom/plugins/zsh-autosuggestions /root/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+sudo ln -s /home/g3k/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting /root/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+
+echo "[✓] ZSH configurado para root correctamente."
 
 echo -e "${GREEN}[✔] Todo listo. El entorno ha sido configurado correctamente.${RESET}"

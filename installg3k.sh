@@ -155,6 +155,15 @@ echo "LibreWolf instalado correctamente"
 
 echo "[+] Instalando EWW desde AUR..."
 yay -S --noconfirm eww || true
+# ----------------------------
+#   INSTALAR LY (DISPLAY MANAGER)
+# ----------------------------
+
+echo "[+] Instalando LY Display Manager..."
+yay -S --noconfirm ly || true
+echo "[+] Habilitando ly.service para el arranque..."
+sudo systemctl enable ly.service || true
+echo "Display Manager" "LY instalado y habilitado correctamente"
 
 # -------------------------
 #     HABILITAR SERVICIOS

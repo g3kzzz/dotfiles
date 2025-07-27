@@ -1,458 +1,226 @@
-#!/bin/sh
-# Colors
-CRE=$(tput setaf 1)    # Red
-CYE=$(tput setaf 3)    # Yellow
-CGR=$(tput setaf 2)    # Green
-CBL=$(tput setaf 4)    # Blue
-BLD=$(tput bold)       # Bold
-CNC=$(tput sgr0)       # Reset colors
+#!/bin/bash
 
-# Global vars
-backup_folder=~/.g3kBackup
-ERROR_LOG="$HOME/g3kError.log"
+set -euo pipefail
 
-# Logo
-logo() {
-    text="$1"
-    printf "%b" "
-               %%%
-        %%%%%//%%%%%
-      %%************%%%
-  (%%//############*****%%
- %%%%**###&&&&&&&&&###**//
- %%(**##&&&#########&&&##**
- %%(**##*****#####*****##**%%%
- %%(**##     *****     ##**
-   //##   @@**   @@   ##//
-     ##     **###     ##
-     #######     #####//
-       ###**&&&&&**###
-       &&&         &&&
-       &&&////   &&
-          &&//@@@**
-            ..***
+GREEN='\033[1;32m'
+RESET='\033[0m'
 
-   ${BLD}${CRE}[ ${CYE}${text} ${CRE}]${CNC}\n\n"
-}
+# -------------------------
+#     ANIMACIÓN TREN
+# -------------------------
 
-# Handle errors
-log_error() {
-    error_msg=$1
-    timestamp=$(date +"%Y-%m-%d %H:%M:%S")
-
-    printf "%s" "[${timestamp}] ERROR: ${error_msg}\n" >> "$ERROR_LOG"
-    printf "%s%sERROR:%s %s\n" "${CRE}" "${BLD}" "${CNC}" "${error_msg}" >&2
-}
-
-# Verificaciones iniciales
-initial_checks() {
-    # Verificar usuario root
-    if [ "$(id -u)" = 0 ]; then
-        log_error "This script MUST NOT be run as root user."
-        exit 1
-    fi
-
-    # Verificar directorio HOME
-    if [ "$PWD" != "$HOME" ]; then
-        log_error "The script must be executed from HOME directory."
-        exit 1
-    fi
-
-    # Verificar conexión a internet
-    if ! ping -q -c 1 -W 1 8.8.8.8 >/dev/null 2>&1; then
-        log_error "No internet connection detected."
-        exit 1
-    fi
-}
-
-# Internal verification function
-is_installed() {
-    pacman -Qq "$1" >/dev/null 2>&1
-}
-
-is_reflector() {
-    if ! command -v reflector >/dev/null 2>&1; then
-        # Mensaje de instalación
-        printf "\t%b\n" "${BLD}${CBL}Installing reflector to get the best mirrors...${CNC}"
-        sudo pacman -Syy 2>&1 | tee -a "$ERROR_LOG" >/dev/null
-        sudo pacman -S reflector --noconfirm 2>&1 | tee -a "$ERROR_LOG" >/dev/null
-    fi
-}
-
-welcome() {
-    clear
-    logo "Welcome $USER"
-
-    printf "%b" "${BLD}${CGR}This script will install my dotfiles and this is what it will do:${CNC}
-
-  ${BLD}${CGR}[${CYE}i${CGR}]${CNC} 2 Repositories will be installed. ${CBL}gh0stzk-dotfiles${CNC} and ${CBL}Chaotic-Aur${CNC}
-  ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Check necessary dependencies and install them
-  ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Download my dotfiles in ${HOME}/dotfiles
-  ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Backup of possible existing configurations (bspwm, polybar, etc...)
-  ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Install my configuration
-  ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Enabling MPD service (Music player daemon)
-  ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Change your shell to zsh shell
-
-${BLD}${CGR}[${CRE}!${CGR}]${CNC} ${BLD}${CRE}My dotfiles DO NOT modify any of your system configurations${CNC}
-${BLD}${CGR}[${CRE}!${CGR}]${CNC} ${BLD}${CRE}This script does NOT have the potential power to break your system${CNC}
-
-"
-
-    while :; do
-        printf " %b" "${BLD}${CGR}Do you wish to continue?${CNC} [y/N]: "
-        read -r yn
-        case "$yn" in
-            [Yy])
-                break ;;
-            [Nn]|"")
-                printf "\n%b\n" "${BLD}${CYE}Operation cancelled${CNC}"
-                exit 0 ;;
-            *)
-                printf "\n%b\n" "${BLD}${CRE}Error:${CNC} Just write '${BLD}${CYE}y${CNC}' or '${BLD}${CYE}n${CNC}'" ;;
-        esac
-    done
-}
-install_dependencies() {
-    clear
-    logo "Installing needed packages from official repositories..."
-    sleep 2
-
-    is_reflector
-    printf "%b\n\n" "${BLD}${CGR}Getting the 5 best and fastest mirrors${CNC}"
-    sudo reflector --verbose --age 12 --fastest 10 --score 10 --protocol https --latest 5 --sort rate --save /etc/pacman.d/mirrorlist
-    sudo pacman -Syy
-
-    printf "\n%b\n\n" "${BLD}${CBL}Installing required packages one by one...${CNC}"
-    sleep 1
-
-    try_install() {
-        pkg="$1"
-        printf "%b\n" "${BLD}${CBL}Installing $pkg...${CNC}"
-        if sudo pacman -S --noconfirm "$pkg" >>"$ERROR_LOG" 2>&1; then
-            printf "%b\n" "  ${BLD}${CGR}$pkg installed successfully${CNC}"
-        else
-            printf "%b\n" "  ${BLD}${CRE}$pkg failed to install${CNC}"
-            log_error "Failed to install: $pkg"
-        fi
-    }
-    try_install lightdm
-    try_install lightdm-gtk-greeter
-    try_install lightdm-gtk-greeter-settings  
-
-    try_install alacritty
-    try_install alsa-utils
-    try_install base-devel
-    try_install bat
-    try_install brightnessctl
-    try_install bspwm
-    try_install clipcat
-    try_install dbus
-    try_install dunst
-    try_install eza
-    try_install feh
-    try_install flameshot
-    try_install fzf
-    try_install git
-    try_install gnome-themes-extra
-    try_install jq
-    try_install jgmenu
-    try_install lxappearance
-    try_install lxsession-gtk3
-    try_install mpc
-    try_install mpd
-    try_install mpv
-    try_install neovim
-    try_install networkmanager
-    try_install ncmpcpp
-    try_install noto-fonts
-    try_install noto-fonts-emoji
-    try_install pamixer
-    try_install papirus-icon-theme
-    try_install picom
-    try_install playerctl
-    try_install polkit
-    try_install pipewire
-    try_install pipewire-pulse
-    try_install pavucontrol
-    try_install python-gobject
-    try_install qt5ct
-    try_install rofi
-    try_install rustup
-    try_install sxhkd
-    try_install tar
-    try_install tmux
-    try_install ttf-font-awesome
-    try_install ttf-inconsolata
-    try_install ttf-jetbrains-mono
-    try_install ttf-jetbrains-mono-nerd
-    try_install ttf-terminus-nerd
-    try_install ttf-ubuntu-mono-nerd
-    try_install unzip
-    try_install xclip
-    try_install xdg-user-dirs
-    try_install xdo
-    try_install xdotool
-    try_install xorg
-    try_install xorg-xdpyinfo
-    try_install xorg-xinit
-    try_install xorg-xkill
-    try_install xorg-xprop
-    try_install xorg-xrandr
-    try_install xorg-xsetroot
-    try_install xorg-xwininfo
-    try_install xsettingsd
-    try_install xf86-input-libinput
-    try_install zsh
-    try_install zsh-autosuggestions
-    try_install zsh-syntax-highlighting
-
-    printf "\n%b\n" "${BLD}${CGR}Finished installing all requested packages.${CNC}"
-    sleep 2
-}
-
-
-
-install_aur_dependencies() {
-    # ─────────────────────────────────────────────────────────────
-    # 📦 Install yay and paru from AUR using /opt/apps build dir
-    # ─────────────────────────────────────────────────────────────
-
-    printf "\n%b\n" "${BLD}${CBL}Installing AUR helpers (yay & paru)...${CNC}"
-    AUR_HELPER_DIR="/opt/apps"
-    sudo mkdir -p "$AUR_HELPER_DIR"
-    sudo chown "$USER:$USER" "$AUR_HELPER_DIR"
-
-    for helper in paru yay; do
-        if ! command -v "$helper" &>/dev/null; then
-            printf "%b\n" "${BLD}${CBL}Cloning and building: $helper${CNC}"
-            cd "$AUR_HELPER_DIR" || continue
-            git clone "https://aur.archlinux.org/${helper}.git"
-            cd "${helper}" || continue
-            makepkg -si --noconfirm >> "$ERROR_LOG" 2>&1
-            printf "%b\n" "${BLD}${CGR}$helper installed successfully!${CNC}"
-            cd ..
-        else
-            printf "%b\n" "${BLD}${CGR}$helper already installed.${CNC}"
-        fi
-    done
-    clear
-    logo "Installing AUR dependencies..."
-    sleep 2
-
-    # AUR Package List
-    aur_apps="xqp xwinwrap-0.9-bin"
-
-    printf "%b\n\n" "${BLD}${CBL}Checking for required AUR packages...${CNC}"
-    sleep 2
-
-    # Detect missing AUR packages
-    missing_aur=""
-    for pkg in $aur_apps; do
-        if ! is_installed "$pkg"; then
-            missing_aur="$missing_aur $pkg"
-            printf "%b\n" " ${BLD}${CYE}$pkg ${CRE}not installed${CNC}"
-        else
-            printf "%b\n" "${BLD}${CGR}$pkg ${CBL}already installed${CNC}"
-        fi
-    done
-
-    # Batch AUR installation if needed
-    if [ -n "$(printf "%s" "$missing_aur" | tr -s ' ')" ]; then
-        count=$(printf "%s" "$missing_aur" | wc -w)
-        printf "\n%b\n\n" "${BLD}${CYE}Installing $count AUR packages, please wait...${CNC}"
-
-        aur_failed=""
-        for pkg in $missing_aur; do
-            printf "%b\n" "${BLD}${CBL}Processing: ${pkg}${CNC}"
-
-            if paru -S --skipreview --noconfirm "$pkg" >> "$ERROR_LOG" 2>&1; then
-                printf "%b\n" "  ${BLD}${CGR}Successfully installed!${CNC}"
-            else
-                log_error "AUR package installation failed: $pkg"
-                aur_failed="$aur_failed $pkg"
-                printf "%b\n" "  ${BLD}${CRE}Installation failed!${CNC}"
-            fi
-            sleep 0.5
-        done
-
-        # Show final summary
-        if [ -n "$(printf "%s" "$aur_failed" | tr -s ' ')" ]; then
-            fail_count=$(printf "%s" "$aur_failed" | wc -w)
-            printf "%b\n" "\n${BLD}${CRE}Failed $fail_count/$count AUR packages:${CNC}"
-            printf "%b\n\n" "${BLD}${CYE}$(printf "%s" "$aur_failed")${CNC}"
-        else
-            printf "\n%b\n\n" "${BLD}${CGR}All AUR packages installed successfully!${CNC}"
-        fi
-    else
-        printf "\n%b\n\n" "${BLD}${CGR}All AUR dependencies are already installed!${CNC}"
-    fi
-
-    sleep 3
-
-    
-}
-
-clone_dotfiles() {
-    clear
-    logo "Downloading dotfiles"
-    repo_url="https://github.com/IamGenarov/blackbspwm"
-    repo_dir="$HOME/blackbspwm"
-    timestamp=$(date +"%Y%m%d-%H%M%S")
-    sleep 3
-
-    # Handle existing repository
-    if [ -d "$repo_dir" ]; then
-        backup_dir="${repo_dir}_$timestamp"
-        printf "%b\n" "${BLD}${CYE}Existing repository found - renaming to: ${CBL}${backup_dir}${CNC}"
-
-        mv -v "$repo_dir" "$backup_dir"
-    fi
-
-    # Clone new repository
-    printf "%b\n" "${BLD}${CYE}Cloning dotfiles from: ${CBL}${repo_url}${CNC}"
-    if git clone --depth=1 "$repo_url" "$repo_dir" >> "$ERROR_LOG" 2>&1; then
-        printf "%b\n\n" "${BLD}${CGR}Dotfiles cloned successfully!${CNC}"
-    else
-        log_error "Repository clone failed"
-        printf "%b\n" "${BLD}${CRE}Clone failed! Check ${CYE}$ERROR_LOG${CNC}"
-        return 1
-    fi
-
-    sleep 3
- 
-echo "📁 Iniciando configuración de entorno personal..."
-
-# --- 🗂️ Crear carpetas estándar del $HOME ---
-echo "📂 Creando carpetas estándar en $HOME..."
-
-mkdir -p "$HOME/Desktop"
-mkdir -p "$HOME/Documents"
-mkdir -p "$HOME/Downloads"
-mkdir -p "$HOME/Pictures"
-mkdir -p "$HOME/Music"
-mkdir -p "$HOME/Videos"
-mkdir -p "$HOME/Pictures/.wallpapers"
-
-echo "✅ Carpetas estándar creadas (incluye ~/Pictures/.wallpapers)."
-
-# --- 🔧 Dotfiles en ~/.config ---
-config_dirs=(
-  "alacritty"
-  "bspwm"
-  "dunst"
-  "eww"
-  "nvim"
-  "picom"
-  "rofi"
+smoke_frames=(
+"   (   )"
+"   (    )"
+"   (     )"
+"   (    )"
+"   (   )"
+"   ."
+"    "
 )
 
-echo "📦 Copiando configuraciones a ~/.config/..."
-
-mkdir -p "$HOME/.config"
-
-for dir in "${config_dirs[@]}"; do
-  if [ -d "$dir" ]; then
-    echo "📁 $dir → ~/.config/$dir"
-    rm -rf "$HOME/.config/$dir"
-    cp -r "$dir" "$HOME/.config/"
-  else
-    echo "⚠️  $dir no encontrado en el directorio actual. Saltando..."
-  fi
-done
-
-# --- 🏠 Archivos y carpetas ocultas en $HOME ---
-home_items=(
-  ".bin"
-  ".icons/default"
-  ".gtkrc-2.0"
-)
-
-echo "📦 Copiando archivos y carpetas a $HOME/..."
-
-for item in "${home_items[@]}"; do
-  dest="$HOME/$item"
-  src="$item"
-
-  mkdir -p "$(dirname "$dest")"
-
-  if [ -e "$src" ]; then
-    echo "📁 $src → $dest"
-    rm -rf "$dest"
-    cp -r "$src" "$dest"
-  else
-    echo "⚠️  $src no encontrado. Saltando..."
-  fi
-done
-
-echo -e "\n✅ Todo listo. ¡Tu entorno ha sido configurado correctamente!"
-}
-
-
-
-change_default_shell() {
+print_train() {
     clear
-    logo "Changing default shell to zsh"
-    zsh_path=$(command -v zsh)
-    sleep 3
-
-    if [ -z "$zsh_path" ]; then
-        log_error "Zsh binary not found"
-        printf "%b\n\n" "${BLD}${CRE}Zsh is not installed! Cannot change shell${CNC}"
-        return 1
-    fi
-
-    if [ "$SHELL" != "$zsh_path" ]; then
-        printf "%b\n" "${BLD}${CYE}Changing your shell to Zsh...${CNC}"
-
-        if chsh -s "$zsh_path"; then
-            printf "%b\n" "\n${BLD}${CGR}Shell changed successfully!${CNC}"
-        else
-            printf "%b\n\n" "\n${BLD}${CRE}Error changing shell!{CNC}"
-        fi
-    else
-        printf "%b\n\n" "${BLD}${CGR}Zsh is already your default shell!${CNC}"
-    fi
-
-    sleep 3
+    local pos=$1
+    local frame=$2
+    local space=$(printf "%${pos}s" "")
+    echo "${space}${smoke_frames[$frame]}"
+    cat <<EOF
+${space}   ___     ____       
+${space}  |_ _|   |__ /   _ _     __ _      _ _    ___
+${space}   | |     |_ \  | ' \   / _\` |    | '_|  / _ \ 
+${space}  |___|   |___/  |_||_|  \__,_|   _|_|_   \___/
+${space} _|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|
+${space} "\`-0-0-'"\`-0-0-'"\`-0-0-'"\`-0-0-'"\`-0-0-'"\`-0-0-' 
+EOF
 }
 
-final_prompt() {
-    printf "\n%b\n" "${BLD}${CBL}Enabling LightDM service...${CNC}"
-if sudo systemctl enable lightdm >>"$ERROR_LOG" 2>&1; then
-    printf "%b\n" "${BLD}${CGR}LightDM enabled successfully${CNC}"
-else
-    printf "%b\n" "${BLD}${CRE}Failed to enable LightDM${CNC}"
-    log_error "Failed to enable LightDM"
+for i in {0..20}; do
+    frame=$((i % ${#smoke_frames[@]}))
+    print_train "$i" "$frame"
+    sleep 0.1
+done
+for ((i=20; i>=0; i--)); do
+    frame=$((i % ${#smoke_frames[@]}))
+    print_train "$i" "$frame"
+    sleep 0.1
+done
+
+clear
+echo -e "${GREEN}[✔] Animación finalizada. Iniciando el script...${RESET}"
+
+# -------------------------
+#     INSTALAR YAY
+# -------------------------
+
+if ! command -v yay &> /dev/null; then
+    echo "[+] Instalando yay desde AUR..."
+    sudo pacman -S --noconfirm --needed git base-devel || true
+    cd /tmp
+    git clone https://aur.archlinux.org/yay.git || true
+    cd yay
+    makepkg -si --noconfirm || true
+    cd ~
 fi
 
-    clear
-    logo "Installation Complete"
+# -------------------------
+#     ELIMINAR i3 Y POLYBAR
+# -------------------------
 
-    printf "%b\n" "${BLD}${CGR}Installation completed successfully!${CNC}"
-    printf "%b\n\n" "${BLD}${CRE}You ${CBL}MUST ${CRE}restart your system to apply changes${CNC}"
+echo "[+] Eliminando i3 y polybar..."
+sudo pacman -Rns --noconfirm i3-wm i3-gaps polybar || true
 
-    while :; do
-        printf "%b" "${BLD}${CYE}Reboot now?${CNC} [y/N]: "
-        read -r yn
-        case "$yn" in
-            [Yy]) printf "\n%b\n" "${BLD}${CGR}Initiating reboot...${CNC}"
-                sleep 1
-                sudo reboot
-                break ;;
-            [Nn]|"") printf "\n%b\n\n" "${BLD}${CYE}You really need to reboot bro!!${CNC}"
-                    break ;;
-            *) printf " %b%bError:%b write 'y' or 'n'\n" "${BLD}" "${CRE}" "${CNC}" ;;
-        esac
-    done
-}
+# -------------------------
+#     INSTALAR PAQUETES
+# -------------------------
 
-# --- Main run --- #
-initial_checks
-welcome
+echo "[+] Instalando paquetes con pacman..."
+sudo pacman -S --noconfirm --needed \
+alacritty \
+alsa-utils \
+base-devel \
+bat \
+brightnessctl \
+bspwm \
+clipcat \
+dbus \
+dunst \
+eza \
+feh \
+flameshot \
+fzf \
+git \
+gnome-themes-extra \
+jq \
+lxappearance \
+lxsession-gtk3 \
+mpc \
+mpd \
+mpv \
+neovim \
+networkmanager \
+ncmpcpp \
+noto-fonts \
+noto-fonts-emoji \
+pamixer \
+papirus-icon-theme \
+picom \
+playerctl \
+polkit \
+pipewire \
+pipewire-pulse \
+pavucontrol \
+python-gobject \
+qt5ct \
+rofi \
+rustup \
+sxhkd \
+tar \
+ttf-font-awesome \
+ttf-inconsolata \
+ttf-jetbrains-mono \
+ttf-jetbrains-mono-nerd \
+ttf-terminus-nerd \
+ttf-ubuntu-mono-nerd \
+unzip \
+xclip \
+xdg-user-dirs \
+xdo \
+xdotool \
+xorg \
+xorg-xdpyinfo \
+xorg-xinit \
+xorg-xkill \
+xorg-xprop \
+xorg-xrandr \
+xorg-xsetroot \
+xorg-xwininfo \
+xsettingsd \
+xf86-input-libinput \
+zsh \
+zsh-autosuggestions \
+zsh-syntax-highlighting || true
 
-install_dependencies
-install_aur_dependencies
-clone_dotfiles
+# -------------------------
+#     INSTALAR EWW (AUR)
+# -------------------------
 
-change_default_shell
-final_prompt
+echo "[+] Instalando EWW desde AUR..."
+yay -S --noconfirm eww || true
+
+# -------------------------
+#     HABILITAR SERVICIOS
+# -------------------------
+
+sudo systemctl enable NetworkManager || true
+sudo systemctl start NetworkManager || true
+echo "exec bspwm" > ~/.xinitrc
+chsh -s /bin/zsh || true
+
+# -------------------------
+#     INSTALAR OH-MY-ZSH
+# -------------------------
+
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "[+] Instalando Oh My Zsh..."
+    RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" || true
+fi
+
+git clone https://github.com/zsh-users/zsh-autosuggestions \
+    ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions || true
+
+git clone https://github.com/zsh-users/zsh-syntax-highlighting \
+    ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting || true
+
+# -------------------------
+#     CONFIGURACIÓN DOTFILES
+# -------------------------
+
+CONFIG_DIR="$HOME/.config/i3naro_temp"
+REPO_URL="https://github.com/g333k/blackbspwm.git"
+
+echo "[+] Clonando repositorio $REPO_URL ..."
+rm -rf "$CONFIG_DIR"
+git clone "$REPO_URL" "$CONFIG_DIR" || true
+
+echo "[+] Copiando configuraciones a ~/.config ..."
+
+mkdir -p "$HOME/.config"
+for dir in alacritty bspwm dunst eww nvim picom rofi sxhkd; do
+    mkdir -p "$HOME/.config/$dir"
+    cp -r "$CONFIG_DIR/config/$dir/"* "$HOME/.config/$dir/" 2>/dev/null || true
+done
+
+echo "[+] Copiando archivos personales a $HOME ..."
+cp -f "$CONFIG_DIR/home/.zshrc" "$HOME/" || true
+cp -f "$CONFIG_DIR/home/.gtkrc-2.0" "$HOME/" || true
+
+mkdir -p "$HOME/.bin"
+cp -r "$CONFIG_DIR/home/.bin/"* "$HOME/.bin/" 2>/dev/null || true
+
+mkdir -p "$HOME/.icons/default"
+cp -r "$CONFIG_DIR/home/.icons/default/"* "$HOME/.icons/default/" 2>/dev/null || true
+
+mkdir -p "$HOME/Pictures/.wallpapers"
+cp -r "$CONFIG_DIR/home/Pictures/.wallpapers/"* "$HOME/Pictures/.wallpapers/" 2>/dev/null || true
+
+# -------------------------
+#     CARPETAS ESTÁNDAR
+# -------------------------
+
+echo "[+] Creando carpetas de usuario..."
+mkdir -p "$HOME/Documents" "$HOME/Downloads" "$HOME/Music" "$HOME/Videos" "$HOME/Pictures/Clipboard"
+
+# -------------------------
+#     LIMPIEZA Y FINAL
+# -------------------------
+
+echo "[+] Eliminando temporales..."
+rm -rf "$CONFIG_DIR"
+
+if [ -f "$HOME/.zshrc" ]; then
+    echo "[+] Recargando ZSH..."
+    source "$HOME/.zshrc" || true
+fi
+
+echo -e "${GREEN}[✔] Todo listo. El entorno ha sido configurado correctamente.${RESET}"

@@ -1,0 +1,201 @@
+* {
+  all: unset;
+}
+
+// Variables de color
+//$background: #0d0f18;
+$background: #000000;
+$foreground: #300000;
+
+$black: #1c1c1c;
+$gray: #1c1e27;
+$red: #dd6777;
+$green: #90ceaa;
+$yellow: #ecd3a0;
+$blue: #86aaec;
+$magenta: #c296eb;
+$cyan: #93cee9;
+$white: $foreground;
+$archlogo: #0f94d2;
+$none: #00000000;
+
+// La barra
+.eww_bar {
+  background-color: $background;
+  padding: 0.2rem;
+  border-radius: 25px;
+  min-width: 20px;
+  min-height: 1060px;
+}
+
+// Lanzador
+.launcher_icon {
+  color: $archlogo;
+  font-family: "Material Design Icons Desktop";
+  font-size: 1em;
+  padding: 5rem 0 5rem 0; 
+}
+//.launcher_icon {
+//  font-family: "Material Design Icons Desktop";
+ // font-size: 1.7em;
+ // padding: 1rem 0;
+ // line-height: 1.7em; 
+ // height: 2.5em;
+ 
+//  align-items: center; 
+//  justify-content: center; 
+//}
+
+
+
+.launcher_custom_extra {
+  padding: 0.5rem 0.7rem;
+  border-radius: 5px;
+  background-color: $black;
+}
+
+.imagen_widget {
+  background-repeat: no-repeat;
+  background-size: 38px;
+  min-height: 40px;
+  background-color: $black;
+  min-width: 40px;
+  margin: 0.0rem 0 0.0rem ; 
+  background-position: center;
+  border-radius: 20px;
+  margin: 0.0rem;
+  margin-bottom: 0.7rem;
+  margin-top: 0.4rem;
+}
+
+// Escritorios (Workspaces)
+.works {
+  font-family: "Material Design Icons Desktop";
+  padding: 5px 13px;
+  background-color: $black;
+  border-radius: 8px;
+  
+}
+
+.workspace-focused {
+  font-size: 17px;
+  color: #C6264A;
+  margin: 5px 2px;
+}
+
+.workspace-occupied {
+  font-size: 16px;
+  color: #BFBFBF;
+  margin: 5px 2px;
+}
+
+.workspace-empty {
+  font-size: 17.5px;
+  color: #999999;
+  margin: 5px 2px;
+}
+
+// Bandeja del sistema (System Tray)
+.tray menu {
+	padding: 5px 5px;
+	background-color: $background;
+
+	>menuitem {
+    font-family: JetBrainsMono NF;
+    font-size: 14px;
+		padding: 2px 5px;
+    color: $foreground;
+
+		&:disabled label {
+			color: $black;
+		}
+
+		&:hover {
+			background-color: $gray;
+		}
+	}
+
+	separator {
+		background-color: $foreground;
+		padding-top: 1px;
+
+		&:last-child {
+			padding: unset;
+		}
+	}
+}
+
+// Iconos de información
+.control {
+  padding: 0.5rem;
+  background-color: $black;
+  border-radius: 5px;
+}
+
+.trayicon {
+  background-repeat: no-repeat;
+  background-size: 25px;
+  min-height: 25px;
+  min-width: 15px;
+  ;;margin: 0.2rem 0 0.2rem 0;
+  border-radius: 50px;
+  margin-bottom: 0.3rem;
+}
+
+.bar-updates-text {
+  font-family: "JetBrainsMono NF";
+  font-size: 14px;
+  font-weight: Bold;
+  color: #8ea6c4;
+  margin: 0.4rem 0 0.2rem 0.2rem;
+}
+
+// Barra de volumen
+scale trough {
+  all: unset;
+  background-color: $background;
+  border-radius: 5px;
+  min-height: 80px;
+  min-width: 10px;
+  margin: 0.3rem 0 0.3rem 0.1rem;
+}
+.volbar trough highlight {
+  background: linear-gradient(#39FF14, #FFFF00,#FF8C00, #ff0000);
+  border-radius: 5px;
+}
+
+// Reloj
+.time {
+  font-family: Terminus;
+  font-weight: bold;
+  font-size: 2em;
+  background-color: $black;
+  color: #FFFFFF;
+  border-radius: 25px;
+  padding: 0.7rem 0 0.5rem 0;
+  margin: 0.5rem 0 0.5rem 0;
+}
+
+// Menú de apagado
+.powermenu {
+  font-family: Material Design Icons Desktop;
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+.powericons {
+  margin: 0.2rem 0 0.2rem 0;
+}
+
+.button-bspres,
+.button-reb,
+.button-lock,
+.button-quit,
+.button-powermenu,
+.button-off {
+  background-repeat: no-repeat;
+  background-size: 22px;
+  min-height: 22px;
+  min-width: 7px;
+  margin: 0rem 0rem 0.5rem 9px;
+}

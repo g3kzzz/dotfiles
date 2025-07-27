@@ -15,7 +15,7 @@
 # ===============================================
 
 VPN_CONFIG="$HOME/.config/bspwm/scripts/htb.ovpn"
-LOGFILE="$HOME/htb-vpn.log"
+LOGFILE="$HOME/.htb-vpn.log"
 ICON_VPN_ON="🔐"
 ICON_VPN_OFF="📴"
 

@@ -1,0 +1,76 @@
+#!/bin/sh
+# ===============================================
+#       ⠀⠀⢀⣴⣿⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+#       ⠀⢠⣿⣿⢿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+#       ⢀⡾⠋⠀⣰⣿⣿⠻⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+#       ⠘⠀⠀⢠⣿⣿⠃⠀⠈⠻⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+#       ⠀⠀⠀⢸⣿⡇⠀⠀⠀⣼⣉⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⠀
+#       ⠀⠀⠀⢹⣿⡇⠀⠀⠀⣿⣿⣿⣿⣿⣷⡄⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⠟⣿⠉⠁
+#       ⠀⠀⠀⠸⣿⣿⣄⠀⠀⠘⢿⣿⡵⠋⠙⢿⣦⡀⠀⠀⣤⣠⠀⣠⣿⡅⠀⣿⠀⠀
+#       ⠀⠀⠀⠀⠈⠻⢿⣿⣶⣤⣄⣀⠀⠀⠀⠈⠻⣷⣄⣠⣿⣿⡼⠋⠛⣡⡼⠋⠀⠀
+#       ⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠛⠻⠿⠿⠷⠶⠶⠾⣿⡿⠋⠻⣟⠉⠁⠀⠀⠀⠀⠀
+#       ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡠⠶⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+# Author: g3k
+# Rep: https://github.com/IamGenarov/blackbspwm
+# ===============================================
+
+# Set environment variables
+export PATH="$HOME/.config/bspwm/scripts:$PATH"
+export XDG_CURRENT_DESKTOP='bspwm'
+## Fix java applications
+export _JAVA_AWT_WM_NONREPARENTING=1
+
+#  ╦ ╦╔═╗╦═╗╦╔═╔═╗╔═╗╔═╗╔═╗╔═╗╔═╗
+#  ║║║║ ║╠╦╝╠╩╗╚═╗╠═╝╠═╣║  ║╣ ╚═╗
+#  ╚╩╝╚═╝╩╚═╩ ╩╚═╝╩  ╩ ╩╚═╝╚═╝╚═╝
+
+MonitorSetup
+
+#  ╔╗ ╔═╗╔═╗╦ ╦╔╦╗  ╔═╗╔═╗╔╗╔╔═╗╦╔═╗
+#  ╠╩╗╚═╗╠═╝║║║║║║  ║  ║ ║║║║╠╣ ║║ ╦
+#  ╚═╝╚═╝╩  ╚╩╝╩ ╩  ╚═╝╚═╝╝╚╝╚  ╩╚═╝
+
+bspc monitor -d I II III IV V
+		
+~/.config/bspwm/scripts/autostart.sh &
+
+bspc rule -a FloatingTerm state=floating center=true
+
+bspc config external_rules_command "${HOME}"/.config/bspwm/scripts/ExternalRules
+
+bspc config window_gap                5
+bspc config split_ratio               0.53
+bspc config single_monocle            true
+
+bspc config automatic_scheme          longest_side
+bspc config initial_polarity          second_child
+bspc config removal_adjustment        true
+
+bspc config focus_follows_pointer     true
+bspc config pointer_follows_focus     false
+bspc config pointer_follows_monitor   true
+bspc config pointer_motion_interval   7
+bspc config pointer_modifier          mod4
+bspc config pointer_action1           move
+bspc config pointer_action2           resize_side
+bspc config pointer_action3           resize_corner
+
+run() {
+  if ! pidof -q "$1"; then
+    "$@" &
+  fi
+}
+
+# Launch sxhkd daemon
+run sxhkd -c "${HOME}"/.config/sxhkd/sxhkdrc
+
+# Load current theme
+"${HOME}"/.config/bspwm/scripts/Theme.sh
+
+
+pkill dunst
+sleep 0.2  
+dunst -conf "$HOME/.config/dunst/dunstrc" &
+
+# Launch picom
+pgrep -f picom > /dev/null || picom --config "${HOME}"/.config/picom/picom.conf

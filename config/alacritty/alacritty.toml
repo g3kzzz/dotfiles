@@ -1,0 +1,89 @@
+# =============================================================
+#                   🎨 Alacritty Color Config
+# =============================================================
+
+# Default colors
+[colors.primary]
+background = "#000000"
+foreground = "#a5b6cf"
+
+# Cursor colors
+[colors.cursor]
+cursor = "#a5b6cf"
+text = "#0d0f18"
+
+# Normal colors
+[colors.normal]
+black = "#3d414f"
+red = "#dd6777"
+green = "#90ceaa"
+yellow = "#ecd3a0"
+blue = "#86aaec"
+magenta = "#c296eb"
+cyan = "#93cee9"
+white = "#cbced3"
+
+# Bright colors
+[colors.bright]
+black = "#3d414f"
+red = "#dd6777"
+green = "#90ceaa"
+yellow = "#ecd3a0"
+blue = "#86aaec"
+magenta = "#c296eb"
+cyan = "#93cee9"
+white = "#cbced3"
+
+# =============================================================
+#                    ⚙️ Configuración General
+# =============================================================
+
+[general]
+live_config_reload = true
+import = [ "fonts.toml" ]  # Asegúrate que este archivo no sobrescriba colores
+
+[env]
+TERM = "alacritty"
+WINIT_X11_SCALE_FACTOR = "1.0"
+
+# =============================================================
+#                     🖱️ Cursor Settings
+# =============================================================
+
+[cursor]
+blink_interval = 550
+
+[cursor.style]
+shape = "Beam"
+blinking = "On"
+      
+# =============================================================
+#                     📋 Selección & Copiado
+# =============================================================
+
+[selection]
+save_to_clipboard = true
+
+# =============================================================
+#                        🪟 Ventana
+# =============================================================
+[terminal.shell]
+program= "/bin/zsh"
+[window]
+decorations = "none"
+dynamic_title = true
+opacity = 1
+padding = { x = 15, y = 15 }
+dynamic_padding = true
+resize_increments = true
+
+# =============================================================
+#                      🧾 Scrolling
+# =============================================================
+
+[scrolling]
+history = 10000
+multiplier = 3
+
+[terminal]
+

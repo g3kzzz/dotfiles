@@ -210,13 +210,9 @@ done
 
 echo "[+] Copiando archivos personales a $HOME ..."
 cp -f "$CONFIG_DIR/home/.zshrc" "$HOME/" || true
-cp -f "$CONFIG_DIR/home/.gtkrc-2.0" "$HOME/" || true
 
 mkdir -p "$HOME/.bin"
 cp -r "$CONFIG_DIR/home/.bin/"* "$HOME/.bin/" 2>/dev/null || true
-
-mkdir -p "$HOME/.icons/default"
-cp -r "$CONFIG_DIR/home/.icons/default/"* "$HOME/.icons/default/" 2>/dev/null || true
 
 mkdir -p "$HOME/Pictures/.wallpapers"
 cp -r "$CONFIG_DIR/home/Pictures/.wallpapers/"* "$HOME/Pictures/.wallpapers/" 2>/dev/null || true

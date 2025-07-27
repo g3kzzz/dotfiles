@@ -10,3 +10,16 @@
        :space-evenly false
        :valign "start"
        (box :visible (= monitor MONITOR) (workspace0))))
+
+
+;; Workspaces ;;
+;;(deflisten workspace0 "scripts/WorkSpaces Virtual-1")
+;; Workspaces Widgets ;;
+;;(defwidget workspace0 [] (literal :content workspace0))
+;; Workspaces Main Widget ;;
+;;(defwidget workspaces [monitor]
+;;   (box    :orientation "v"
+;;           :space-evenly "false"
+;;           :valign "start"
+;;           (box :visible { monitor=="Virtual-1" } (workspace0))
+;;))

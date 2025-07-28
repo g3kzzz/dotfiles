@@ -70,4 +70,4 @@ for pkg in "${EXTRA_PKGS[@]}"; do
 done
 
 echo ""
-echo "${GREEN}✅ Instalación completa. Sistema listo para el entrenamiento OSCP.${RESET}"
+echo "${GREEN}✅ Instalación completa.${RESET}"

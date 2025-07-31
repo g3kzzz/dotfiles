@@ -1,0 +1,260 @@
+;; =======================================================================================
+;; VARIABLES
+;; =======================================================================================
+(defvar browser "librewolf")
+(defvar terminal "st") 
+(defvar burp "burpsuite") 
+(defvar volum false)
+(defvar notify false)
+(defvar power false)
+(defvar pac false)
+
+;; =======================================================================================
+;; INCLUDES (si decides modularizar widgets en el futuro)
+;; =======================================================================================
+(include "./workspaces.yuck")
+
+;; =======================================================================================
+;; POLLS
+;; =======================================================================================
+(defpoll logo_icon :interval "1s" "scripts/logo --icon")
+(defpoll volume_icon :interval "1s" "scripts/Volume --icon")
+(defpoll volume_value :interval "1s" "scripts/Volume --vol")
+(defpoll WIFIICON :interval "15s" `scripts/Network --icon`)
+(defpoll NETSTAT :interval "15s" `scripts/Network --stat`)
+(defpoll battery_status :interval "10s" "scripts/battery battery_status")
+(defpoll battery_icon :run-while battery_status :interval "0.5s" "scripts/battery icon")
+(defpoll battery_percentage :run-while battery_status :interval "15s" "scripts/battery percent")
+
+;; =======================================================================================
+;; WIDGETS - LAUNCHER
+;; =======================================================================================
+(defwidget launcher []
+	(box :orientation "v"
+		 :space-evenly "false"
+		 :spacing -15
+	  (eventbox :cursor "pointer"
+		(button :class "launcher_icon"
+		        :onclick "cd ; OpenApps --menu"
+		        :onrightclick "OpenApps --rice"
+		        "󰣇")
+    )
+  )
+)
+
+;; =======================================================================================
+;; WIDGET - IMAGEN (AVATAR / LOGO)
+;; =======================================================================================
+(defwidget imagenbox []
+	(box :orientation "v"
+		(eventbox :cursor "pointer"
+			(button :style "background-image: url('/home/g333k/.config/eww/images/user-image.png');"
+			        :class "imagen_widget"
+			        :tooltip "${NETSTAT}"
+			        :onclick "OpenApps --usercard")
+		)
+	)
+)
+
+;; =======================================================================================
+;; WIDGETS - APPS
+;; =======================================================================================
+(defwidget terminal []
+  (box :class "terminal" :orientation "h" :space-evenly "false"
+    (button :tooltip "Terminal" 
+            :class "terminal" 
+            :onclick "notify-send 'Terminal: ${terminal}' ; ${terminal} &"
+            "")
+  )
+)
+
+(defwidget browser []
+  (box :class "browser" :orientation "h" :space-evenly "false"
+    (button :tooltip "LibreWolf" 
+            :class "browser" 
+            :onclick "notify-send 'Browser: ${browser}' ; ${browser} &"
+            "")
+  )
+)
+
+(defwidget burp []
+  (box :class "burp" :orientation "h" :space-evenly "false"
+    (button :tooltip "BurpSuite" 
+            :class "burp" 
+            :onclick "notify-send 'Launching BurpSuite' ; ${burp} &"
+            "")
+  )
+)
+
+;; =======================================================================================
+;; WIDGET - WIFI
+;; =======================================================================================
+(defwidget wifi []
+	(box :orientation "v"
+		(eventbox :cursor "pointer"
+			(button :style "background-image: url('${WIFIICON}');"
+			        :class "trayicon"
+			        :tooltip "${NETSTAT}"
+			        :onclick "OpenApps --netmanager")
+		)
+	)
+)
+
+;; =======================================================================================
+;; WIDGET - BATERÍA
+;; =======================================================================================
+(defwidget battery []
+  (box :orientation "v"
+       :visible {battery_status ?: "false"}
+    (eventbox :cursor "pointer"
+      (button :class "trayicon"
+              :style "background-image: url('${battery_icon}');"
+              :tooltip "Batería: ${battery_percentage}%")
+    )
+  )
+)
+
+;; =======================================================================================
+;; WIDGET - VOLUMEN
+;; =======================================================================================
+(defwidget volum []
+  (eventbox :onhover "${EWW_CMD} update volum=true"
+            :onhoverlost "${EWW_CMD} update volum=false"
+            :cursor "pointer"
+    (box :orientation "v"
+         :space-evenly "false"
+         :spacing "2"
+      (revealer :transition "slideup"
+                :reveal volum
+                :duration "550ms"
+        (scale :class "volbar"
+               :value {volume_value ?: "0"}
+               :onchange "pamixer --set-volume {}"
+               :orientation "v"
+               :flipped true
+               :tooltip "Volumen: ${volume_value}%"
+               :max 101
+               :min 0))
+      (button :style "background-image: url('${volume_icon}');"
+              :class "trayicon"
+              :onrightclick "OpenApps --soundcontrol"
+              :onclick "scripts/Volume --toggle-muted")
+    )
+  )
+)
+
+;; =======================================================================================
+;; WIDGET - HORA
+;; =======================================================================================
+
+(defwidget time []
+  (box :orientation "v"
+       :class "time"
+       :valign "end"
+    (eventbox :cursor "pointer"
+      (button :onclick "OpenApps --calendar"
+              :class "time-hour"
+              "${formattime(EWW_TIME, "%H")}"
+      )
+    )
+    (eventbox :cursor "pointer"
+      (button :onclick "OpenApps --calendar"
+              :class "time-min"
+              "${formattime(EWW_TIME, "%M")}"
+      )
+    )
+  )
+)
+
+
+;; =======================================================================================
+;; WIDGET - BANDEJA DEL SISTEMA
+;; =======================================================================================
+(defwidget systemtray []
+  (box :orientation "v" :halign "center"
+    (systray :class "tray" :orientation "v" :icon-size 16 :spacing 5)
+  )
+)
+
+;; =======================================================================================
+;; WIDGETS - COMPOSICIÓN DE BARRA
+;; =======================================================================================
+(defwidget top []
+  (box :orientation "v"
+       :space-evenly "false"
+       :valign "start"
+    (imagenbox)
+    (control_2)
+  )
+)
+
+(defwidget bottom []
+  (box :orientation "v"
+       :space-evenly "false"))
+
+(defwidget control_2 []
+  (box :orientation "v"
+       :space-evenly false
+       :class "control"
+    (terminal)
+    (browser)
+    (burp)
+  )
+)
+
+(defwidget control []
+  (box :orientation "v"
+       :space-evenly false
+       :class "control"
+    (volum)
+    (wifi)
+    (battery)
+  )
+)
+
+(defwidget center [monitor]
+  (box :orientation "v"
+       :space-evenly "false"
+       :valign "center"
+    (workspaces :monitor monitor)
+  )
+)
+
+(defwidget end []
+  (box :orientation "v"
+       :space-evenly "false"
+       :valign "end"
+       :spacing 5
+    (systemtray)
+    (bottom)
+    (control)
+    (time)
+  )
+)
+
+(defwidget bar [monitor]
+  (box :class "eww_bar"
+       :orientation "v"
+       :vexpand "false"
+       :hexpand "false"
+    (top)
+    (center :monitor monitor)
+    (end)
+  )
+)
+
+;; =======================================================================================
+;; VENTANA PRINCIPAL
+;; =======================================================================================
+(defwindow bar [monitor]
+  :monitor monitor
+  :geometry (geometry :x "10px"
+                      :y "0%"
+                      :anchor "left center"
+                      :height "90%"
+                      :width "47px")
+  :reserve (struts :distance "5px"
+                   :side "left")
+  :wm-ignore false
+  (bar :monitor monitor))
+

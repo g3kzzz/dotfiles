@@ -247,5 +247,9 @@ sudo ln -s /home/$USER/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting /root/.
 echo "[✓] ZSH configurado para root correctamente."
 
 echo "[✓] ZSH configurado para root correctamente."
+git clone https://git.suckless.org/st ~/.config/st
+cp -r ~/blackbspwm/config/st/ ~/.config/
+cd ~/.config/st
+sudo make clean install
 
 echo -e "${GREEN}[✔] Todo listo. El entorno ha sido configurado correctamente.${RESET}"

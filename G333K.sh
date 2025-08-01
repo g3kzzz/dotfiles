@@ -180,11 +180,15 @@ if [ ! -d "$HOME/.oh-my-zsh" ]; then
     RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" || true
 fi
 
-git clone https://github.com/zsh-users/zsh-autosuggestions \
-    ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions || true
+ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 
-git clone https://github.com/zsh-users/zsh-syntax-highlighting \
-    ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting || true
+if [ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]; then
+  git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+fi
+
+if [ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]; then
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+fi
 
 # -------------------------
 #     CONFIGURACIÓN DOTFILES
@@ -201,10 +205,9 @@ echo "[+] Copiando configuraciones a ~/.config ..."
 
 mkdir -p "$HOME/.config"
 
-cp -r ~/blackbspwm/config/* ~/.config/
-
-echo "[+] Copiando archivos personales a $HOME ..."
-cp -f "$CONFIG_DIR/home/.zshrc" "$HOME/" || true
+echo "[+] Copiando configuración a ~/.config/ ..."
+mkdir -p "$HOME/.config" || true
+cp -r "~/blackbspwm/config/"* "$HOME/.config/" 2>/dev/null || true
 
 mkdir -p "$HOME/.bin"
 cp -r "$CONFIG_DIR/home/.bin/"* "$HOME/.bin/" 2>/dev/null || true

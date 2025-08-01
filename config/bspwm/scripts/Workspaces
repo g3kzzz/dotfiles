@@ -12,15 +12,12 @@ mkdir -p "$WORKDIR"
 
 # --- Escritorio 1: 2 terminales horizontales ---
 bspc desktop -f ^1
-alacritty &
+sh -c 'cd ~ && exec st -e tmux' &
 sleep 1
-bspc node -p east
-alacritty &
-sleep 2
 
 # --- Escritorio 2: 1 terminal ---
 bspc desktop -f ^2
-alacritty &
+sh -c 'cd ~ && exec st -e tmux' &
 sleep 1
 
 # --- Escritorio 3: LibreWolf con enlace específico ---
@@ -35,7 +32,7 @@ sleep 2
 
 # --- Escritorio 4: BurpSuite ---
 bspc desktop -f ^4
-~/.config/bspwm/scripts/Burpsuite &
+burpsuite &
 sleep 2
 
 # --- Escritorio 5: Neovim en carpeta de proyectos, sin archivo abierto ---
@@ -47,4 +44,4 @@ sleep 2
 bspc desktop -f ^1
 
 # Notificación final
-notify-send "✅ Entorno de hacking cargado"
+notify-send "✅ Entorno cargado"

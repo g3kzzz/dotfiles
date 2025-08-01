@@ -14,7 +14,7 @@
 # Rep: https://github.com/IamGenarov/blackbspwm
 # ===============================================
 
-VPN_CONFIG="$HOME/.config/bspwm/scripts/htb.ovpn"
+VPN_CONFIG="$HOME/.config/bspwm/scripts/src/htb.ovpn"
 LOGFILE="$HOME/.htb-vpn.log"
 ICON_VPN_ON="🔐"
 ICON_VPN_OFF="📴"

@@ -14,31 +14,24 @@
 # Rep: https://github.com/IamGenarov/blackbspwm
 # ===============================================
 
-# Set environment variables
 export PATH="$HOME/.config/bspwm/scripts:$PATH"
 export XDG_CURRENT_DESKTOP='bspwm'
-## Fix java applications
-export _JAVA_AWT_WM_NONREPARENTING=1
 
-#  ╦ ╦╔═╗╦═╗╦╔═╔═╗╔═╗╔═╗╔═╗╔═╗╔═╗
-#  ║║║║ ║╠╦╝╠╩╗╚═╗╠═╝╠═╣║  ║╣ ╚═╗
-#  ╚╩╝╚═╝╩╚═╩ ╩╚═╝╩  ╩ ╩╚═╝╚═╝╚═╝
+export _JAVA_AWT_WM_NONREPARENTING=1
 
 MonitorSetup
 
-#  ╔╗ ╔═╗╔═╗╦ ╦╔╦╗  ╔═╗╔═╗╔╗╔╔═╗╦╔═╗
-#  ╠╩╗╚═╗╠═╝║║║║║║  ║  ║ ║║║║╠╣ ║║ ╦
-#  ╚═╝╚═╝╩  ╚╩╝╩ ╩  ╚═╝╚═╝╝╚╝╚  ╩╚═╝
-
 bspc monitor -d I II III IV V
-		
-~/.config/bspwm/scripts/autostart.sh &
+
+bspc config top_padding    10
+bspc config bottom_padding 10
+bspc config right_padding  10
+bspc config left_padding   83
 
 bspc rule -a FloatingTerm state=floating center=true
 
-bspc config external_rules_command "${HOME}"/.config/bspwm/scripts/ExternalRules
+bspc config external_rules_command "${HOME}"/.config/bspwm/scripts/Rules
 
-bspc config window_gap                5
 bspc config split_ratio               0.53
 bspc config single_monocle            true
 
@@ -54,6 +47,7 @@ bspc config pointer_modifier          mod4
 bspc config pointer_action1           move
 bspc config pointer_action2           resize_side
 bspc config pointer_action3           resize_corner
+bspc config border_width 0
 
 run() {
   if ! pidof -q "$1"; then
@@ -61,16 +55,16 @@ run() {
   fi
 }
 
-# Launch sxhkd daemon
 run sxhkd -c "${HOME}"/.config/sxhkd/sxhkdrc
-
-# Load current theme
-"${HOME}"/.config/bspwm/scripts/Theme.sh
-
 
 pkill dunst
 sleep 0.2  
 dunst -conf "$HOME/.config/dunst/dunstrc" &
 
-# Launch picom
 pgrep -f picom > /dev/null || picom --config "${HOME}"/.config/picom/picom.conf
+
+eww daemon --config ~/.config/eww
+sleep 1
+eww open bar --config ~/.config/eww --arg monitor="$(bspc query -M --names | head -n 1)"
+
+feh --bg-fill ~/.config/wallpapers/g333k.png

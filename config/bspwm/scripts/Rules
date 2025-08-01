@@ -1,5 +1,6 @@
 #!/bin/sh
 # ===============================================
+# 🔊 Volumen con imagen y diseño limpio
 #       ⠀⠀⢀⣴⣿⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 #       ⠀⢠⣿⣿⢿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 #       ⢀⡾⠋⠀⣰⣿⣿⠻⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -12,23 +13,31 @@
 #       ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡠⠶⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 # Author: g3k
 # Rep: https://github.com/IamGenarov/blackbspwm
-# ===============================================
+# =============================================== 
 
-WIDGET_DIR="$HOME/.config/bspwm/eww"
+wid=$1
+class=$2
+instance=$3
+consequences=$4
 
-case "$1" in
-  --htbvpn)
-    ~/.config/bspwm/scripts/htb-vpn.sh
-    ;;
-  --netmanager)
-    NetManagerDM
-    ;;
-  --usercard)
-    eww -c "$WIDGET_DIR" open --toggle launchermenu
-    ;;
-  *)
-    echo "❌ Opción inválida: $1"
-    echo "Opciones válidas: --htbvpn | --netmanager | --clipboard | --screenshot | --usercard"
-    exit 1
-    ;;
+result() {
+    eval "$consequences"
+    [ "$state" ] || echo "$1"
+}
+
+case "$class" in
+    *FloatingTerm*)
+    	result "state=floating center=true"
+    	;;
+
+    *wolf*|librewolf|Navigator)
+        result "desktop=^3 follow=on"
+        ;;
+    *burp*)
+        result "desktop=^4 follow=on"
+        ;;
+    vscodium|VSCodium)
+        result "desktop=^5 follow=on"
+        ;;
 esac
+

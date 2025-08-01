@@ -204,7 +204,7 @@ git clone "$REPO_URL" "$CONFIG_DIR" || true
 echo "[+] Copiando configuraciones a ~/.config ..."
 
 mkdir -p "$HOME/.config"
-for dir in alacritty bspwm dunst eww nvim picom rofi sxhkd; do
+for dir in st bspwm dunst eww nvim picom rofi sxhkd wallpapers tmux; do
     mkdir -p "$HOME/.config/$dir"
     cp -r "$CONFIG_DIR/config/$dir/"* "$HOME/.config/$dir/" 2>/dev/null || true
 done
@@ -214,9 +214,6 @@ cp -f "$CONFIG_DIR/home/.zshrc" "$HOME/" || true
 
 mkdir -p "$HOME/.bin"
 cp -r "$CONFIG_DIR/home/.bin/"* "$HOME/.bin/" 2>/dev/null || true
-
-mkdir -p "$HOME/Pictures/.wallpapers"
-cp -r "$CONFIG_DIR/home/Pictures/.wallpapers/"* "$HOME/Pictures/.wallpapers/" 2>/dev/null || true
 
 # -------------------------
 #     CARPETAS ESTÁNDAR

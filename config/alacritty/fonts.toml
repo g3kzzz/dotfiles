@@ -1,9 +1,0 @@
-[font]
-size = 20
-
-builtin_box_drawing = true
-
-[font.normal]
-family = "Terminus"
-
-

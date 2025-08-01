@@ -127,6 +127,7 @@ unzip \
 xclip \
 xdg-user-dirs \
 xdo \
+zsh \
 xdotool \
 xorg \
 xorg-xdpyinfo \
@@ -147,7 +148,7 @@ zsh-syntax-highlighting || true
 # -------------------------
 
 echo "[+] Instalando LibreWolf desde AUR..."
-yay -S --noconfirm librewolf || true
+yay -S --noconfirm librewolf-bin || true
 echo "LibreWolf instalado correctamente"
 
 # -------------------------

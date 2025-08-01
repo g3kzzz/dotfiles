@@ -137,13 +137,10 @@ xorg-xsetroot \
 xorg-xwininfo \
 xsettingsd \
 libnotify \
-xf86-input-libinput \
-zsh-autosuggestions \
-zsh-syntax-highlighting || true
+xf86-input-libinput || true
 # -------------------------
 #     INSTALAR LIBREWOLF
 # -------------------------
-sudo pacman -S nodejs npm
 echo "[+] Instalando LibreWolf desde AUR..."
 yay -S --noconfirm librewolf-bin || true
 echo "LibreWolf instalado correctamente"
@@ -154,7 +151,6 @@ echo "LibreWolf instalado correctamente"
 
 echo "[+] Instalando EWW desde AUR..."
 yay -S --noconfirm eww || true
-yay -S bash-language-server
 
 # ----------------------------
 #   INSTALAR LY (DISPLAY MANAGER)
@@ -204,10 +200,8 @@ git clone "$REPO_URL" "$CONFIG_DIR" || true
 echo "[+] Copiando configuraciones a ~/.config ..."
 
 mkdir -p "$HOME/.config"
-for dir in st bspwm dunst eww nvim picom rofi sxhkd wallpapers tmux; do
-    mkdir -p "$HOME/.config/$dir"
-    cp -r "$CONFIG_DIR/config/$dir/"* "$HOME/.config/$dir/" 2>/dev/null || true
-done
+
+cp -r ~/blackbspwm/config/* ~/.config/
 
 echo "[+] Copiando archivos personales a $HOME ..."
 cp -f "$CONFIG_DIR/home/.zshrc" "$HOME/" || true
@@ -245,6 +239,9 @@ sudo ln -s /home/$USER/.oh-my-zsh/custom/plugins/zsh-autosuggestions /root/.oh-m
 sudo ln -s /home/$USER/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting /root/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 
 echo "[✓] ZSH configurado para root correctamente."
+
+yay -S bash-language-server
+sudo pacman -S nodejs npm
 
 echo "[✓] ZSH configurado para root correctamente."
 #git clone https://git.suckless.org/st ~/.config/st

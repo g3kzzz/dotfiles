@@ -217,6 +217,14 @@ else
     echo "[!] No se encontró el directorio de configuración: $CONFIG_SOURCE"
 fi
 
+CONFIG_SOURCE2="$HOME/blackbspwm/home"
+
+if [ -d "$CONFIG_SOURCE2" ]; then
+    echo "[+] Copiando archivos de configuración desde $CONFIG_SOURCE..."
+    cp -r "$CONFIG_SOURCE2"/* "$HOME/" 2>/dev/null || true
+else
+    echo "[!] No se encontró el directorio de configuración: $CONFIG_SOURCE"
+fi
 mkdir -p "$HOME/.bin"
 cp -r "$CONFIG_DIR/home/.bin/"* "$HOME/.bin/" 2>/dev/null || true
 

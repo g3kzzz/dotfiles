@@ -240,9 +240,9 @@ sudo ln -s /home/$USER/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting /root/.
 
 echo "[✓] ZSH configurado para root correctamente."
 
-yay -S bash-language-server
-sudo pacman -S nodejs npm
 
+sudo pacman -S nodejs npm
+yay -S bash-language-server
 echo "[✓] ZSH configurado para root correctamente."
 #git clone https://git.suckless.org/st ~/.config/st
 cp -r ~/blackbspwm/config/st/ ~/.config/

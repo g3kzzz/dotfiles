@@ -207,7 +207,15 @@ mkdir -p "$HOME/.config"
 
 echo "[+] Copiando configuración a ~/.config/ ..."
 mkdir -p "$HOME/.config" || true
-cp -r "~/blackbspwm/config/"* "$HOME/.config/" 2>/dev/null || true
+
+CONFIG_SOURCE="$HOME/blackbspwm/config"
+
+if [ -d "$CONFIG_SOURCE" ]; then
+    echo "[+] Copiando archivos de configuración desde $CONFIG_SOURCE..."
+    cp -r "$CONFIG_SOURCE"/* "$HOME/.config/" 2>/dev/null || true
+else
+    echo "[!] No se encontró el directorio de configuración: $CONFIG_SOURCE"
+fi
 
 mkdir -p "$HOME/.bin"
 cp -r "$CONFIG_DIR/home/.bin/"* "$HOME/.bin/" 2>/dev/null || true

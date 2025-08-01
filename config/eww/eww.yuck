@@ -22,9 +22,9 @@
 (defpoll volume_value :interval "1s" "scripts/Volume --vol")
 (defpoll WIFIICON :interval "15s" `scripts/Network --icon`)
 (defpoll NETSTAT :interval "15s" `scripts/Network --stat`)
-(defpoll battery_status :interval "10s" "scripts/battery battery_status")
-(defpoll battery_icon :run-while battery_status :interval "0.5s" "scripts/battery icon")
-(defpoll battery_percentage :run-while battery_status :interval "15s" "scripts/battery percent")
+(defpoll battery_status :interval "10s" "scripts/Battery battery_status")
+(defpoll battery_icon :run-while battery_status :interval "0.5s" "scripts/Battery icon")
+(defpoll battery_percentage :run-while battery_status :interval "15s" "scripts/Battery percent")
 
 ;; =======================================================================================
 ;; WIDGETS - LAUNCHER

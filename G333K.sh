@@ -77,7 +77,6 @@ sudo pacman -Rns --noconfirm i3-wm i3-gaps polybar || true
 echo "[+] Instalando paquetes con pacman..."
 sudo pacman -S --noconfirm --needed \
 tmux \
-st \
 alsa-utils \
 base-devel \
 bat \
@@ -152,6 +151,7 @@ echo "LibreWolf instalado correctamente"
 # -------------------------
 #     INSTALAR EWW (AUR)
 # -------------------------
+yay -S --noconfirm st-git
 
 echo "[+] Instalando EWW desde AUR..."
 yay -S --noconfirm eww || true

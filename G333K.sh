@@ -246,18 +246,18 @@ if [ -f "$HOME/.zshrc" ]; then
     echo "[+] Recargando ZSH..."
     source "$HOME/.zshrc" || true
 fi
-echo "[+] Configurando ZSH para el usuario root..."
-echo "[+] Configurando ZSH para el usuario root..."
+#echo "[+] Configurando ZSH para el usuario root..."
+#echo "[+] Configurando ZSH para el usuario root..."
 
-sudo ln -sf /home/$USER/.zshrc /root/.zshrc
-sudo ln -s /home/$USER/.oh-my-zsh /root/.oh-my-zsh
+#sudo ln -sf /home/$USER/.zshrc /root/.zshrc
+#sudo ln -s /home/$USER/.oh-my-zsh /root/.oh-my-zsh
 
-sudo mkdir -p /root/.oh-my-zsh/custom/plugins
+#sudo mkdir -p /root/.oh-my-zsh/custom/plugins
 
-sudo ln -s /home/$USER/.oh-my-zsh/custom/plugins/zsh-autosuggestions /root/.oh-my-zsh/custom/plugins/zsh-autosuggestions
-sudo ln -s /home/$USER/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting /root/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+#sudo ln -s /home/$USER/.oh-my-zsh/custom/plugins/zsh-autosuggestions /root/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+#sudo ln -s /home/$USER/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting /root/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 
-echo "[✓] ZSH configurado para root correctamente."
+#echo "[✓] ZSH configurado para root correctamente."
 
 
 sudo pacman -S nodejs npm

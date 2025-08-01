@@ -143,7 +143,7 @@ zsh-syntax-highlighting || true
 # -------------------------
 #     INSTALAR LIBREWOLF
 # -------------------------
-
+sudo pacman -S nodejs npm
 echo "[+] Instalando LibreWolf desde AUR..."
 yay -S --noconfirm librewolf-bin || true
 echo "LibreWolf instalado correctamente"
@@ -154,6 +154,8 @@ echo "LibreWolf instalado correctamente"
 
 echo "[+] Instalando EWW desde AUR..."
 yay -S --noconfirm eww || true
+yay -S bash-language-server
+
 # ----------------------------
 #   INSTALAR LY (DISPLAY MANAGER)
 # ----------------------------

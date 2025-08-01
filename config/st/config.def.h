@@ -5,9 +5,10 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "JetBrainsMono Nerd Font :pixelsize=13:antialias=true:autohint=true";
-static char *font2[] = { "JetBrainsMono Nerd Font :pixelsize=13:antialias=true:autohint=true" };
+static char *font = "JetBrainsMono Nerd Font :pixelsize=20:antialias=true:autohint=true";
+static char *font2[] = { "JetBrainsMono Nerd Font :pixelsize=20:antialias=true:autohint=true" };
 static int borderpx = 25;
+
 
 /*
  * What program is execed by st depends of these precedence rules:
@@ -17,7 +18,7 @@ static int borderpx = 25;
  * 4: value of shell in /etc/passwd
  * 5: value of shell in config.h
  */
-static char *shell = "/bin/sh";
+static char *shell = "/bin/zsh";
 char *utmp = NULL;
 char *stty_args = "stty raw pass8 nl -echo -iexten -cstopb 38400";
 
@@ -118,7 +119,7 @@ float alpha = 1.0;
 
 /* Terminal colors (16 first used in escape sequence) */
 static const char *colorname[] = {
-  "#282828", /* hard contrast: #1d2021 / soft contrast: #32302f */
+  "#1c1c1c",
   "#cc241d",
   "#98971a",
   "#d79921",
@@ -135,11 +136,10 @@ static const char *colorname[] = {
   "#8ec07c",
   "#ebdbb2",
   [255] = 0,
-  /* more colors can be added after 255 to use with DefaultXX */
-  "#add8e6", /* 256 -> cursor */
-  "#555555", /* 257 -> rev cursor*/
-  "#282828", /* 258 -> bg */
-  "#ffffff", /* 259 -> fg */
+  "#add8e6", 
+  "#555555", 
+  "#1c1c1c", 
+  "#ffffff", 
 };
 
 

@@ -76,7 +76,8 @@ sudo pacman -Rns --noconfirm i3-wm i3-gaps polybar || true
 
 echo "[+] Instalando paquetes con pacman..."
 sudo pacman -S --noconfirm --needed \
-alacritty \
+tmux \
+st \
 alsa-utils \
 base-devel \
 bat \

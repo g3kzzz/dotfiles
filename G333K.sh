@@ -264,7 +264,6 @@ sudo pacman -S nodejs npm
 yay -S bash-language-server
 echo "[✓] ZSH configurado para root correctamente."
 #git clone https://git.suckless.org/st ~/.config/st
-cp -r "$HOME/blackbspwm/config/st" "$HOME/.config/"
 cd "$HOME/.config/st"
 sudo make clean install
 

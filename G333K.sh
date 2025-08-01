@@ -83,7 +83,6 @@ base-devel \
 bat \
 brightnessctl \
 bspwm \
-clipcat \
 dbus \
 dunst \
 eza \
@@ -140,7 +139,6 @@ xorg-xwininfo \
 xsettingsd \
 libnotify \
 xf86-input-libinput \
-zsh \
 zsh-autosuggestions \
 zsh-syntax-highlighting || true
 # -------------------------

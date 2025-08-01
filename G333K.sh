@@ -151,7 +151,6 @@ echo "LibreWolf instalado correctamente"
 # -------------------------
 #     INSTALAR EWW (AUR)
 # -------------------------
-yay -S --noconfirm st-git
 
 echo "[+] Instalando EWW desde AUR..."
 yay -S --noconfirm eww || true

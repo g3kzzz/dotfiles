@@ -2,7 +2,7 @@
 ;; VARIABLES
 ;; =======================================================================================
 (defvar browser "librewolf")
-(defvar terminal "st") 
+(defvar terminal "st -e pwsh")
 (defvar burp "burpsuite") 
 (defvar volum false)
 (defvar notify false)

@@ -173,7 +173,7 @@ scale trough {
         }
     }
 }
-.burp {
+.terminalpowershell {
     font-family: "Iosevka Nerd Font";
     font-size: 20px;
     margin-top: 0.3rem;
@@ -183,7 +183,7 @@ scale trough {
 
     button {
         font-size: 1em;
-        color: $cyan;
+        color: #FF0000;
 
         &:hover {
             color: $blue;
@@ -209,4 +209,3 @@ scale trough {
         }
     }
 }
-

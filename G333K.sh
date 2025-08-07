@@ -128,6 +128,7 @@ xdo \
 zsh \
 xdotool \
 xorg \
+firefox \
 xorg-xdpyinfo \
 xorg-xinit \
 xorg-xkill \
@@ -138,12 +139,6 @@ xorg-xwininfo \
 xsettingsd \
 libnotify \
 xf86-input-libinput || true
-# -------------------------
-#     INSTALAR LIBREWOLF
-# -------------------------
-echo "[+] Instalando LibreWolf desde AUR..."
-yay -S --noconfirm librewolf-bin || true
-echo "LibreWolf instalado correctamente"
 
 # -------------------------
 #     INSTALAR EWW (AUR)
@@ -233,7 +228,7 @@ cp -r "$CONFIG_DIR/home/.bin/"* "$HOME/.bin/" 2>/dev/null || true
 # -------------------------
 
 echo "[+] Creando carpetas de usuario..."
-mkdir -p "$HOME/Documents" "$HOME/Downloads" "$HOME/Music" "$HOME/Videos" "$HOME/Pictures/Clipboard"
+mkdir -p "$HOME/Documents" "$HOME/CTF" "$HOME/Downloads" "$HOME/Music" "$HOME/Videos" "$HOME/Pictures/Clipboard"
 
 # -------------------------
 #     LIMPIEZA Y FINAL
@@ -246,19 +241,6 @@ if [ -f "$HOME/.zshrc" ]; then
     echo "[+] Recargando ZSH..."
     source "$HOME/.zshrc" || true
 fi
-#echo "[+] Configurando ZSH para el usuario root..."
-#echo "[+] Configurando ZSH para el usuario root..."
-
-#sudo ln -sf /home/$USER/.zshrc /root/.zshrc
-#sudo ln -s /home/$USER/.oh-my-zsh /root/.oh-my-zsh
-
-#sudo mkdir -p /root/.oh-my-zsh/custom/plugins
-
-#sudo ln -s /home/$USER/.oh-my-zsh/custom/plugins/zsh-autosuggestions /root/.oh-my-zsh/custom/plugins/zsh-autosuggestions
-#sudo ln -s /home/$USER/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting /root/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-
-#echo "[✓] ZSH configurado para root correctamente."
-
 
 sudo pacman -S nodejs npm
 yay -S bash-language-server

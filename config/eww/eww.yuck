@@ -1,9 +1,9 @@
 ;; =======================================================================================
 ;; VARIABLES
 ;; =======================================================================================
-(defvar browser "librewolf")
-(defvar terminal "st -e pwsh")
-(defvar burp "burpsuite") 
+(defvar browser "firefox")
+(defvar terminal "st -e pwsh") 
+(defvar terminal2 "st -e tmux") 
 (defvar volum false)
 (defvar notify false)
 (defvar power false)
@@ -48,7 +48,7 @@
 (defwidget imagenbox []
 	(box :orientation "v"
 		(eventbox :cursor "pointer"
-			(button :style "background-image: url('/home/g333k/.config/eww/images/user-image.png');"
+			(button :style "background-image: url('/home/g3k/.config/eww/images/user-image.png');"
 			        :class "imagen_widget"
 			        :tooltip "${NETSTAT}"
 			        :onclick "OpenApps --usercard")
@@ -59,14 +59,24 @@
 ;; =======================================================================================
 ;; WIDGETS - APPS
 ;; =======================================================================================
-(defwidget terminal []
+(defwidget terminalpowershell []
+  (box :class "terminal" :orientation "h" :space-evenly "false"
+    (button :tooltip "Terminal" 
+            :class "terminalpowershell" 
+            :onclick "notify-send 'Terminal: ${terminal}' ; ${terminal} &"
+            "")
+  )
+)
+(defwidget terminallinux []
   (box :class "terminal" :orientation "h" :space-evenly "false"
     (button :tooltip "Terminal" 
             :class "terminal" 
-            :onclick "notify-send 'Terminal: ${terminal}' ; ${terminal} &"
+            :onclick "notify-send 'Terminal: ${terminal2}' ; ${terminal2} &"
             "")
   )
 )
+
+
 
 (defwidget browser []
   (box :class "browser" :orientation "h" :space-evenly "false"
@@ -74,15 +84,6 @@
             :class "browser" 
             :onclick "notify-send 'Browser: ${browser}' ; ${browser} &"
             "")
-  )
-)
-
-(defwidget burp []
-  (box :class "burp" :orientation "h" :space-evenly "false"
-    (button :tooltip "BurpSuite" 
-            :class "burp" 
-            :onclick "notify-send 'Launching BurpSuite' ; ${burp} &"
-            "")
   )
 )
 
@@ -196,9 +197,9 @@
   (box :orientation "v"
        :space-evenly false
        :class "control"
-    (terminal)
+    (terminallinux)
+    (terminalpowershell)
     (browser)
-    (burp)
   )
 )
 
@@ -257,4 +258,3 @@
                    :side "left")
   :wm-ignore false
   (bar :monitor monitor))
-

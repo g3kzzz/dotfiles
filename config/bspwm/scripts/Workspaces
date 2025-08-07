@@ -1,11 +1,5 @@
 #!/bin/bash
-# =============================================================
-#     🧠 Hacking Workspace Launcher — BSPWM Edition
-# =============================================================
-
-WORKDIR="$HOME/Documents/nvim_labs"
-LINK_URL="https://ucsmedu-my.sharepoint.com/:x:/g/personal/fabian_huamani_estudiante_ucsm_edu_pe/EV6NXjfRpOVAmjnUccIuJw8BGK7hcPaQGCXeztaA_wrOAw?e=uIGdTU"
-LIBREWOLF_PROFILE_DIR="$HOME/.librewolf-hack-profile"
+WORKDIR="$HOME/CTF"
 
 # Crear el directorio del proyecto si no existe
 mkdir -p "$WORKDIR"
@@ -20,14 +14,9 @@ bspc desktop -f ^2
 sh -c 'cd ~ && exec st -e tmux' &
 sleep 1
 
-# --- Escritorio 3: LibreWolf con enlace específico ---
+# --- Escritorio 3: Firefox sin URL ---
 bspc desktop -f ^3
-
-# Crear perfil temporal si no existe
-mkdir -p "$LIBREWOLF_PROFILE_DIR"
-
-# Lanzar LibreWolf con perfil aislado y URL fija
-librewolf --profile "$LIBREWOLF_PROFILE_DIR" --no-remote "$LINK_URL" &
+firefox & 
 sleep 2
 
 # --- Escritorio 4: BurpSuite ---
@@ -35,9 +24,9 @@ bspc desktop -f ^4
 burpsuite &
 sleep 2
 
-# --- Escritorio 5: Neovim en carpeta de proyectos, sin archivo abierto ---
+# --- Escritorio 5: Neovim en carpeta de proyectos ---
 bspc desktop -f ^5
-alacritty -e bash -c "cd \"$WORKDIR\" && nvim" &
+st -e bash -c "cd \"$WORKDIR\" && nvim" &
 sleep 2
 
 # --- Volver al escritorio 1 ---

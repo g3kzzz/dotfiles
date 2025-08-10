@@ -192,7 +192,7 @@ fi
 # -------------------------
 
 CONFIG_DIR="$HOME/.config/i3naro_temp"
-REPO_URL="https://github.com/g333k/blackbspwm.git"
+REPO_URL="https://github.com/g333k/G333kBox.git"
 
 echo "[+] Clonando repositorio $REPO_URL ..."
 rm -rf "$CONFIG_DIR"

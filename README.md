@@ -1,6 +1,3 @@
-<p align="center">
-  <img src="cap.png" alt="G333kBox" width="800"/>
-</p>
 
 # G333kBox 🚀
 
@@ -23,20 +20,9 @@ Este entorno está diseñado para ser ligero, funcional y visualmente atractivo,
 - **tmux**: multiplexor de terminal para sesiones persistentes.
 
 ---
-
-## Estructura del directorio 📁
-
-home/
-│
-├── .bin/ # Scripts y binarios personalizados
-├── .zshrc # Configuración personalizada para Zsh
-├── ErrorHistoryrepair_zsh_plugins # Plugins de Zsh para reparación y manejo de historial
-├── G333K.sh # Script principal de configuración o setup
-├── README.md # Este archivo
-├── VMfullScreen # Configuraciones para máquina virtual en pantalla completa
-├── cap.png # Captura o imagen destacada del entorno
-└── wallpapers/ # Fondo(s) de pantalla usados en el entorno
-
+<p align="center">
+  <img src="cap.png" alt="G333kBox" width="800"/>
+</p>
 
 ---
 

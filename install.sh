@@ -138,6 +138,8 @@ xorg-xsetroot \
 xorg-xwininfo \
 xsettingsd \
 libnotify \
+nodejs \
+npm \
 xf86-input-libinput || true
 
 # -------------------------

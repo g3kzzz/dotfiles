@@ -6,22 +6,22 @@
   all: unset;
 }
 
-$background: #061115;
-$foreground: #dadada;
-$contrastbg: #22292b;
+$background: #000000;       // fondo principal oscuro
+$foreground: #ffffff;       // texto base brillante
+$contrastbg: #1c1c1c;       //contraste oscuro para widgets y barras
 
 $ambar: #FFBF00;
 $gray1: #BFBFBF;
 $gray2: #999999;
 
-$black: #1c1c1c;
-$gray: #1c1e27;
-$red: #dd6777;
-$green: #90ceaa;
-$yellow: #ecd3a0;
-$blue: #86aaec;
-$magenta: #c296eb;
-$cyan: #93cee9;
+$black: #0a0a0a;
+$gray: #1e1e1e;
+$red: #FF3333;       // rojo fosforescente
+$green: #00FF88;     // verde fosforescente
+$yellow: #FFFF33;    // amarillo fosforescente
+$blue: #3399FF;      // azul intenso
+$magenta: #FF33FF;   // magenta fuerte
+$cyan: #33FFFF;      // cyan brillante
 $white: $foreground;
 $archlogo: #0f94d2;
 $none: #00000000;
@@ -30,26 +30,23 @@ $none: #00000000;
    BARRA PRINCIPAL
 ==================================================================================*/
 
-
 .eww_bar {
   background-color: $background;
   padding: 0.2rem;
-  border-radius:8px;
+  border-radius: 8px;
   min-width: 30px;
   min-height: 700px;
 }
 
 /* ===============================================================================
-   RESET Y COLORES BASE
+   ICONOS Y WIDGETS
 ==================================================================================*/
-
-
 
 .launcher_icon {
   color: $archlogo;
   font-family: "Material Design Icons Desktop";
   font-size: 1em;
-  padding: 1.2rem 0; 
+  padding: 1.5rem 0; 
 }
 
 .imagen_widget {
@@ -57,36 +54,32 @@ $none: #00000000;
   background-size: 40px;
   min-height: 40px;
   min-width: 40px;
-  margin: 0 0 0 0 ; 
+  margin-top: 0.7rem;
   background-position: center;
   border-radius: 25px;
-  
-  margin-bottom: 0.7rem;
-  margin-top: 0.7rem;
+  margin: 0.7rem 1rem;
 }
 
 /* ===============================================================================
-   RESET Y COLORES BASE
+   WORKSPACES
 ==================================================================================*/
-
 
 .works {
   font-family: "Material Design Icons Desktop";
   padding: 5px 16px;
-  background-color: $contrastbg;
+  background-color: $background ;
   border-radius: 8px;
-  
 }
 
 .workspace-focused {
   font-size: 19px;
-  color: $ambar;
+  color: $yellow;   // amarillo fosforescente
   margin: 5px 2px;
 }
 
 .workspace-occupied {
   font-size: 19px;
-  color: $gray1;
+  color: $cyan;     // cyan fosforescente
   margin: 5px 3px;
 }
 
@@ -97,14 +90,14 @@ $none: #00000000;
 }
 
 /* ===============================================================================
-   RESET Y COLORES BASE
+   CONTROLS Y ICONOS DE TRAY
 ==================================================================================*/
 
 .control { 
   background: $contrastbg;
   border-radius: 8px;
   padding: 2px 2px;
-  margin: 0.5rem 0.7rem 0.5rem 0.7rem;
+  margin: 0.5rem 0.7rem;
 }
 
 .trayicon {
@@ -113,13 +106,12 @@ $none: #00000000;
   min-height: 35px;
   min-width: 35px;
   border-radius: 25px;
-  margin: 0.5rem 0.3rem 0.5rem 0.3rem;
+  margin: 0.5rem 0.3rem;
 }
 
 /* ===============================================================================
-   RESET Y COLORES BASE
+   VOLUMEN
 ==================================================================================*/
-
 
 scale trough {
   all: unset;
@@ -131,12 +123,12 @@ scale trough {
 }
 
 .volbar trough highlight {
-  background: linear-gradient(#66BB6A, #FDD835,#FFA726, #EF5350);
+  background: linear-gradient($green, $yellow, $ambar, $red);
   border-radius: 5px;
 }
 
 /* ===============================================================================
-   RESET Y COLORES BASE
+   RELOJ
 ==================================================================================*/
 
 .time {
@@ -148,45 +140,38 @@ scale trough {
   border-radius: 8px;
   padding: 5px 2px;
   margin: 0.5rem 0.7rem 0.9rem 0.7rem;
-
 }
 
 /* ===============================================================================
-   RESET Y COLORES BASE
+   TERMINALES
 ==================================================================================*/
-
 
 .terminal {
     font-family: "Iosevka Nerd Font";
     font-size: 20px;
-    margin-top: 0.5rem;
-    margin-right: 0.2em;
-    margin-bottom: 0.2em;
-    margin-left: 0.3em;
+    margin: 0.3rem 0.2em 0.2em 0.3em;
 
     button {
         font-size: 1em;
-        color: $red;
+        color: $green;     // terminal normal verde fosforescente
 
         &:hover {
             color: $blue;
         }
     }
 }
+
 .terminalpowershell {
     font-family: "Iosevka Nerd Font";
     font-size: 20px;
-    margin-top: 0.3rem;
-    margin-right: 0.2em;
-    margin-bottom: 0.4em;
-    margin-left: 0.3em;
+    margin: 0.3rem 0.2em 0.2em 0.3em;
 
     button {
         font-size: 1em;
-        color: #FF0000;
+        color: $magenta;  // PowerShell magenta fosforescente
 
         &:hover {
-            color: $blue;
+            color: $cyan;
         }
     }
 }
@@ -194,11 +179,7 @@ scale trough {
 .browser {
     font-family: "Iosevka Nerd Font";
     font-size: 20px;
-    margin-top: 0.3rem;
-    margin-right: 0.2em;
-    margin-bottom: 0.3em;
-    margin-left: 0.3em;
-
+    margin: 0.3rem 0.2em 0.3em 0.3em;
 
     button {
         font-size: 1em;

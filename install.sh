@@ -90,6 +90,7 @@ eza \
 feh \
 flameshot \
 fzf \
+alacritty \
 git \
 gnome-themes-extra \
 jq \
@@ -249,8 +250,6 @@ fi
 sudo pacman -S nodejs npm
 yay -S bash-language-server
 echo "[✓] ZSH configurado para root correctamente."
-#git clone https://git.suckless.org/st ~/.config/st
-cd "$HOME/.config/st"
-sudo make clean install
+
 
 echo -e "${GREEN}[✔] Todo listo. El entorno ha sido configurado correctamente.${RESET}"

@@ -9,7 +9,6 @@ fi
 
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME=""
-
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 source $ZSH/oh-my-zsh.sh
 
@@ -56,9 +55,9 @@ function short_path {
 }
 
 # ----------------------------
-# Prompt personalizado
+# Prompt personalizado con Git
 # ----------------------------
-PS1='%F{45}🎭%f  %F{201}%n%f  $(dir_icon) %F{45}$(short_path)%f%F{129}${vcs_info_msg_0_}%f  %F{213}❯%f '
+PROMPT='%F{196}┌─[%f%F{51}%n@%m%f%F{196}]─[%f%F{226}%~%f%F{196}]${vcs_info_msg_0_}%f'$'\n''%F{196}└──╼%f %F{46}$%f '
 
 # ----------------------------
 # Colores para archivos (LS_COLORS)
@@ -70,9 +69,7 @@ export LS_COLORS
 # Alias: cat y ls bonitos
 # ----------------------------
 alias cat="bat --theme='Solarized (dark)'"
-
 alias ls='eza --icons=always --color=always'
-
 alias ll='eza --icons=always --color=always -la'
 
 # ----------------------------
@@ -89,5 +86,3 @@ ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=196'
 # ----------------------------
 # PATH extra
 # ----------------------------
-export PATH="$HOME/.bin:$PATH"
-

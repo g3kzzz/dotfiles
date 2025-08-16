@@ -4,7 +4,10 @@
 **G333kBox** es un entorno personalizado basado en **Arch Linux** con **bspwm** modificado y configurado para máxima eficiencia y estética minimalista.
 
 ---
-
+## Errores principales 🛠️
+Aveces no se copia la carpeta config a ~/.config, ni home a /home/user/
+Copiar manualmente
+y Cuando inicies bspwm, abre terminal y recargar bspwm con: bspwm wm -r
 ## Características principales 🛠️
 
 Este entorno está diseñado para ser ligero, funcional y visualmente atractivo, integrando herramientas y módulos esenciales para un flujo de trabajo fluido.

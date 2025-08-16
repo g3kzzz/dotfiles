@@ -1,0 +1,71 @@
+# ~/.config/alacritty/alacritty.toml
+
+[window]
+padding = { x = 25, y = 25 }   # equivalente al borderpx
+decorations = "full"
+opacity = 0.92                  # alpha = 1.0 (opaco)
+dynamic_padding = true
+
+[font]
+normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
+size = 14.0
+
+[cursor]
+style = "Beam"                 # Cursor en forma de barra "|"
+unfocused_hollow = false
+
+[scrolling]
+history = 10000
+multiplier = 3                 # como scrollincrement = 3
+
+[colors.primary]
+background = "#000000"         # bg
+foreground = "#ffffff"         # fg
+
+[colors.cursor]
+text = "#000000"
+cursor = "#add8e6"             # cursor color (256 en st)
+
+[colors.normal]
+black   = "#000000"
+red     = "#ff0000"
+green   = "#33ff00"
+yellow  = "#ffff00"
+blue    = "#0066ff"
+magenta = "#cc00ff"
+cyan    = "#00ffff"
+white   = "#d0d0d0"
+
+[colors.bright]
+black   = "#808080"
+red     = "#ff0000"
+green   = "#33ff00"
+yellow  = "#ffff00"
+blue    = "#0066ff"
+magenta = "#cc00ff"
+cyan    = "#00ffff"
+white   = "#ffffff"
+
+# --- KEYBINDINGS ---
+[keyboard]
+bindings = [
+  # Zoom
+  { key = ",", mods = "Alt", action = "IncreaseFontSize" },
+  { key = ".", mods = "Alt", action = "DecreaseFontSize" },
+  { key = "G", mods = "Alt", action = "ResetFontSize" },
+
+  # Copiar / Pegar
+  { key = "C", mods = "Control|Shift", action = "Copy" },
+  { key = "V", mods = "Control|Shift", action = "Paste" },
+  { key = "Insert", mods = "Shift", action = "Paste" },
+
+  # Scroll
+  { key = "J", mods = "Alt", action = "ScrollLineDown" },
+  { key = "K", mods = "Alt", action = "ScrollLineUp" },
+  { key = "Down", mods = "Alt", action = "ScrollLineDown" },
+  { key = "Up", mods = "Alt", action = "ScrollLineUp" },
+  { key = "D", mods = "Alt", action = "ScrollPageDown" },
+  { key = "U", mods = "Alt", action = "ScrollPageUp" },
+  { key = "PageDown", mods = "Shift", action = "ScrollPageDown" },
+  { key = "PageUp", mods = "Shift", action = "ScrollPageUp" },
+]

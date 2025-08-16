@@ -2,8 +2,8 @@
 ;; VARIABLES
 ;; =======================================================================================
 (defvar browser "firefox")
-(defvar terminal "st -e pwsh") 
-(defvar terminal2 "st -e tmux") 
+(defvar terminal "alacritty -e pwsh") 
+(defvar terminal2 "alacritty -e tmux") 
 (defvar volum false)
 (defvar notify false)
 (defvar power false)

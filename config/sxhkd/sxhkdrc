@@ -53,7 +53,7 @@ super + r
 
 # HTB VPN - Terminal flotante
 super + 6
-        st -c FloatingTerm -g 80x20 -e ~/.config/bspwm/scripts/HTB
+    alacritty --class FloatingTerm -e ~/.config/bspwm/scripts/HTB
 
 # Lanzar BurpSuite personalizado
 super + 7

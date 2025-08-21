@@ -206,9 +206,8 @@ mkdir -p "$HOME/Documents" "$HOME/CTF" "$HOME/Downloads" "$HOME/Music" "$HOME/Vi
 
 git clone https://github.com/g333k/g3kwm-dotfiles || true
 cp -r g3kwm-dotfiles/config/* ~/.config/ || true
-cd /home/$USER
-cp -r g3kwm-dotfiles/home/.zshrc ~/ || true
 
+cp -f g3kwm-dotfiles/home/.zshrc ~/.zshrc 
 if [ -f "$HOME/.zshrc" ]; then
     echo " [+] Reloading ZSH..."
     source "$HOME/.zshrc" || true

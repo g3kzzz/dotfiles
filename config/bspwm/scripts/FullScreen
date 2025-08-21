@@ -1,14 +1,20 @@
+#!/bin/bash
+
 # Detectar todos los monitores conectados
 MONITORES=$(xrandr | awk '/ connected/{print $1}')
 
 for MON in $MONITORES; do
-    # Detectar resolución máxima del monitor
+    # Detectar la resolución más grande del monitor (ordenar por ancho y alto)
     MAX_RES=$(xrandr | awk -v m="$MON" '
-        $1 == m {
-            getline
-            print $1; exit
-        }')
-    
+        $1 == m {flag=1; next}
+        flag && /^[ ]+[0-9]+x[0-9]+/ {
+            print $1
+        }
+        flag && !/^[ ]/ {flag=0}
+    ' | sort -t x -k1,1n -k2,2n | tail -1)
+
     # Aplicar fullscreen
-    xrandr --output "$MON" --mode "$MAX_RES" --primary
+    if [ -n "$MAX_RES" ]; then
+        xrandr --output "$MON" --mode "$MAX_RES" --primary
+    fi
 done

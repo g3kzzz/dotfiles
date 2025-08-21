@@ -1,66 +1,95 @@
+# G3K Dotfiles 🚀  
 
-# G333kBox 🚀
+**G3K Dotfiles** es una colección de configuraciones y scripts diseñados para crear un entorno altamente eficiente, minimalista y estéticamente cuidado sobre **Arch Linux**.  
 
-**G333kBox** es un entorno personalizado basado en **Arch Linux** con **bspwm** modificado y configurado para máxima eficiencia y estética minimalista.
-
----
-## Errores principales 🛠️
-Aveces no se copia la carpeta config a ~/.config, ni home a /home/user/
-Copiar manualmente
-y Cuando inicies bspwm, abre terminal y recargar bspwm con: bspwm wm -r
-## Características principales 🛠️
-
-Este entorno está diseñado para ser ligero, funcional y visualmente atractivo, integrando herramientas y módulos esenciales para un flujo de trabajo fluido.
-
-- **bspwm**: gestor de ventanas dinámico y minimalista.  
-- **dunst**: notificaciones ligeras y configurables.  
-- **eww**: widgets y paneles personalizables.  
-- **nvim**: editor de texto moderno y potente (Neovim).  
-- **picom**: compositor para transparencias y efectos visuales.  
-- **rofi**: lanzador de aplicaciones y switcher de ventanas.  
-- **st**: terminal simple y eficiente (simple terminal).  
-- **sxhkd**: gestor de atajos de teclado para bspwm.  
-- **tmux**: multiplexor de terminal para sesiones persistentes.
+Incluye un **instalador automatizado** que despliega un ecosistema de trabajo completo, basado en **bspwm**, **zsh** y un conjunto de herramientas seleccionadas para optimizar productividad y fluidez.  
 
 ---
+
+## 📦 Componentes principales
+
+El entorno configura y gestiona automáticamente:  
+
+- **Gestor de ventanas:** [bspwm](https://github.com/baskerville/bspwm)  
+- **Notificaciones:** [dunst](https://github.com/dunst-project/dunst)  
+- **Widgets y paneles:** [eww](https://github.com/elkowar/eww)  
+- **Editor de texto:** [neovim](https://neovim.io/)  
+- **Compositor gráfico:** [picom](https://github.com/yshui/picom)  
+- **Lanzador de aplicaciones:** [rofi](https://github.com/davatorium/rofi)  
+- **Terminal:** [alacritty](https://github.com/alacritty/alacritty)  
+- **Multiplexor de terminal:** [tmux](https://github.com/tmux/tmux)  
+- **Gestor de atajos de teclado:** [sxhkd](https://github.com/baskerville/sxhkd)  
+
+Además de configuraciones personalizadas para:  
+- **Oh My Zsh** con plugins (`zsh-autosuggestions`, `zsh-syntax-highlighting`)  
+- **NetworkManager** y servicios esenciales  
+- **LY Display Manager**  
+- **Entorno Node.js + bash-language-server**  
+
+---
+
+## 🖼️ Estética y personalización  
+
+Este entorno busca combinar **ligereza** y **productividad** con un diseño **limpio y moderno**.  
+Incluye:  
+- Configuraciones de terminal, notificaciones y paneles  
+- Wallpapers preconfigurados  
+- Alias y ajustes en `.zshrc` para flujo de trabajo rápido  
+
 <p align="center">
-  <img src="cap.png" alt="G333kBox" width="800"/>
+  <img src="cap.png" alt="G3K Dotfiles" width="800"/>
 </p>
 
 ---
 
-## Personalización y estética 🎨
+## ⚡ Instalación
 
-G333kBox incorpora muchos íconos y emojis para que la interfaz sea no solo funcional sino también agradable a la vista. La configuración visual está cuidada para mantener un ambiente cómodo y moderno.
+1. Clona el repositorio:  
+   ```bash
+   git clone https://github.com/g333k/g3kpwm.git
+   cd g3kpwm
 
----
+    Da permisos de ejecución al instalador:
 
-## Instalación y uso 🚧
+chmod +x G333K.sh
 
-1. Clona este repositorio o descarga los archivos.  
-2. Coloca los scripts en tu directorio home.  
-3. Asegúrate de tener instalados los módulos listados en las características.  
-4. Ejecuta `G333K.sh` para configurar y arrancar el entorno.  
-5. Personaliza `.zshrc` y otros archivos según tus necesidades.
+Ejecuta el instalador:
 
----
+    ./G333K.sh
 
-## Notas adicionales 📌
+    Sigue las instrucciones en pantalla.
 
-- Este entorno está orientado para usuarios que prefieren un sistema ligero y minimalista con un enfoque en productividad.  
-- No incluye configuraciones avanzadas fuera de los módulos listados, para mantener la simplicidad.  
-- Las configuraciones pueden ser adaptadas para otros gestores de ventanas, pero está optimizado para **bspwm**.
+    ⚠️ El script no debe ejecutarse como root. Usa un usuario normal con privilegios sudo.
 
----
+📂 Estructura del repositorio
 
-## Contacto 🤝
+g3kpwm/
+│── G333K.sh          # Instalador principal
+│── config/           # Configuraciones de aplicaciones
+│   ├── alacritty
+│   ├── bspwm
+│   ├── dunst
+│   ├── eww
+│   ├── nvim
+│   ├── picom
+│   ├── rofi
+│   ├── sxhkd
+│   └── tmux
+│── home/             # Archivos en $HOME (ej. .zshrc)
+│── wallpapers/       # Fondos de pantalla
+│── cap.png           # Captura de ejemplo
 
-Si quieres compartir ideas o mejoras para G333kBox, no dudes en contactarme o abrir una issue en el repositorio.
+📌 Notas adicionales
 
----
+    Optimizado para Arch Linux y derivados.
 
-¡Disfruta tu entorno! ⚡️
+    Puede adaptarse a otros gestores de ventanas, pero está diseñado específicamente para bspwm.
 
----
+    Todas las configuraciones pueden personalizarse libremente en ~/.config/ y ~/.zshrc.
 
-*Creado por Genaro (aka G333k)*
+🤝 Contribuciones
+
+Si tienes ideas o mejoras, puedes abrir un issue o un pull request en el repositorio.
+👤 Autor
+
+Creado con 💻 por Genaro (aka G333k)

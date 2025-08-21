@@ -45,7 +45,7 @@ super + shift + {1-5}
 
 # Terminal (Normal y flotante)
 super + Return
-    sh -c 'cd ~ && exec alacritty -e tmux'
+    sh -c 'cd ~ && exec alacritty'
 
 # Editor de configuración (Rice)
 super + r

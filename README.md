@@ -1,40 +1,40 @@
 # G3K Dotfiles 🚀  
 
-**G3K Dotfiles** es una colección de configuraciones y scripts diseñados para crear un entorno altamente eficiente, minimalista y estéticamente cuidado sobre **Arch Linux**.  
+**G3K Dotfiles** is a curated collection of configurations and scripts designed to provide a highly efficient, minimal, and visually appealing environment on **Arch Linux**.  
 
-Incluye un **instalador automatizado** que despliega un ecosistema de trabajo completo, basado en **bspwm**, **zsh** y un conjunto de herramientas seleccionadas para optimizar productividad y fluidez.  
+It includes an **automated installer** that sets up a complete workflow ecosystem powered by **bspwm**, **zsh**, and a carefully chosen set of tools to boost productivity and maintain simplicity.  
 
 ---
 
-## 📦 Componentes principales
+## 📦 Main Components
 
-El entorno configura y gestiona automáticamente:  
+The environment automatically configures:  
 
-- **Gestor de ventanas:** [bspwm](https://github.com/baskerville/bspwm)  
-- **Notificaciones:** [dunst](https://github.com/dunst-project/dunst)  
-- **Widgets y paneles:** [eww](https://github.com/elkowar/eww)  
-- **Editor de texto:** [neovim](https://neovim.io/)  
-- **Compositor gráfico:** [picom](https://github.com/yshui/picom)  
-- **Lanzador de aplicaciones:** [rofi](https://github.com/davatorium/rofi)  
+- **Window Manager:** [bspwm](https://github.com/baskerville/bspwm)  
+- **Notifications:** [dunst](https://github.com/dunst-project/dunst)  
+- **Widgets & Panels:** [eww](https://github.com/elkowar/eww)  
+- **Text Editor:** [neovim](https://neovim.io/)  
+- **Compositor:** [picom](https://github.com/yshui/picom)  
+- **Application Launcher:** [rofi](https://github.com/davatorium/rofi)  
 - **Terminal:** [alacritty](https://github.com/alacritty/alacritty)  
-- **Multiplexor de terminal:** [tmux](https://github.com/tmux/tmux)  
-- **Gestor de atajos de teclado:** [sxhkd](https://github.com/baskerville/sxhkd)  
+- **Terminal Multiplexer:** [tmux](https://github.com/tmux/tmux)  
+- **Keybinding Manager:** [sxhkd](https://github.com/baskerville/sxhkd)  
 
-Además de configuraciones personalizadas para:  
-- **Oh My Zsh** con plugins (`zsh-autosuggestions`, `zsh-syntax-highlighting`)  
-- **NetworkManager** y servicios esenciales  
+Additional setup includes:  
+- **Oh My Zsh** with plugins (`zsh-autosuggestions`, `zsh-syntax-highlighting`)  
+- **NetworkManager** and essential services  
 - **LY Display Manager**  
-- **Entorno Node.js + bash-language-server**  
+- **Node.js + bash-language-server**  
 
 ---
 
-## 🖼️ Estética y personalización  
+## 🎨 Aesthetic & Customization  
 
-Este entorno busca combinar **ligereza** y **productividad** con un diseño **limpio y moderno**.  
-Incluye:  
-- Configuraciones de terminal, notificaciones y paneles  
-- Wallpapers preconfigurados  
-- Alias y ajustes en `.zshrc` para flujo de trabajo rápido  
+This setup combines **lightweight performance** with a **modern and clean look**.  
+Features include:  
+- Custom configurations for terminal, notifications, and panels  
+- Preconfigured wallpapers  
+- Shell aliases and tweaks in `.zshrc` for a faster workflow  
 
 <p align="center">
   <img src="cap.png" alt="G3K Dotfiles" width="800"/>
@@ -42,54 +42,37 @@ Incluye:
 
 ---
 
-## ⚡ Instalación
+## ⚡ Installation
 
-1. Clona el repositorio:  
+1. Clone the repository:  
    ```bash
    git clone https://github.com/g333k/g3kpwm.git
    cd g3kpwm
 
-    Da permisos de ejecución al instalador:
+    Make the installer executable:
 
 chmod +x G333K.sh
 
-Ejecuta el instalador:
+Run the installer:
 
     ./G333K.sh
+''
+    Follow the on-screen instructions.
+''
+    ⚠️ Do not run the script as root. Use a normal user with sudo privileges.
 
-    Sigue las instrucciones en pantalla.
+📌 Notes
+''
+    Optimized for Arch Linux and derivatives.
+''
+    It can be adapted to other window managers, but it is specifically optimized for bspwm.
+''
+    All configurations can be freely customized in ~/.config/ and ~/.zshrc.
 
-    ⚠️ El script no debe ejecutarse como root. Usa un usuario normal con privilegios sudo.
+🤝 Contributing
 
-📂 Estructura del repositorio
+Contributions, suggestions, and improvements are welcome!
+Feel free to open an issue or a pull request.
+👤 Author
 
-g3kpwm/
-│── G333K.sh          # Instalador principal
-│── config/           # Configuraciones de aplicaciones
-│   ├── alacritty
-│   ├── bspwm
-│   ├── dunst
-│   ├── eww
-│   ├── nvim
-│   ├── picom
-│   ├── rofi
-│   ├── sxhkd
-│   └── tmux
-│── home/             # Archivos en $HOME (ej. .zshrc)
-│── wallpapers/       # Fondos de pantalla
-│── cap.png           # Captura de ejemplo
-
-📌 Notas adicionales
-
-    Optimizado para Arch Linux y derivados.
-
-    Puede adaptarse a otros gestores de ventanas, pero está diseñado específicamente para bspwm.
-
-    Todas las configuraciones pueden personalizarse libremente en ~/.config/ y ~/.zshrc.
-
-🤝 Contribuciones
-
-Si tienes ideas o mejoras, puedes abrir un issue o un pull request en el repositorio.
-👤 Autor
-
-Creado con 💻 por Genaro (aka G333k)
+Created with 💻 by Genaro (aka G333k)

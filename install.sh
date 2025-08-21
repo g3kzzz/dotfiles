@@ -206,6 +206,7 @@ mkdir -p "$HOME/Documents" "$HOME/CTF" "$HOME/Downloads" "$HOME/Music" "$HOME/Vi
 
 git clone https://github.com/g333k/g3kwm-dotfiles || true
 cp -r g3kwm-dotfiles/config/* ~/.config/ || true
+cd /home/$USER
 cp -r g3kwm-dotfiles/home/* ~/ || true
 
 if [ -f "$HOME/.zshrc" ]; then

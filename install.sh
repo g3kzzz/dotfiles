@@ -206,7 +206,7 @@ pause_and_clear
 echo " [+] Creating user folders..."
 mkdir -p "$HOME/Documents" "$HOME/CTF" "$HOME/Downloads" "$HOME/Music" "$HOME/Videos" "$HOME/Pictures/Clipboard"
 
-git clone https://github.com/g333k/g3kpwm || true
+git clone https://github.com/g333k/g3kwm || true
 cp -r g3kpwm/config/* ~/.config/ || true
 cp -r g3kpwm/home/* ~/ || true
 

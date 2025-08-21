@@ -147,11 +147,11 @@ pause_and_clear
 echo " [+] Installing basic tools..."
 
 PACMAN_TOOLS=(
-  alsa-utils base-devel bat brightnessctl bspwm dbus dunst eza feh flameshot fzf alacritty git gnome-themes-extra jq lxappearance lxsession-gtk3 mpc mpd mpv neovim networkmanager ncmpcpp noto-fonts noto-fonts-emoji pamixer papirus-icon-theme picom playerctl polkit pipewire pipewire-pulse pavucontrol python-gobject qt5ct rofi rustup sxhkd tar ttf-font-awesome ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-terminus-nerd ttf-ubuntu-mono-nerd unzip xclip xdg-user-dirs xdo zsh xdotool xorg firefox xorg-xdpyinfo xorg-xinit xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo xsettingsd libnotify nodejs npm xf86-input-libinput  
+  alsa-utils base-devel bat brightnessctl bspwm dbus dunst eza feh flameshot fzf alacritty git gnome-themes-extra jq lxappearance lxsession-gtk3 mpc mpd mpv neovim networkmanager ncmpcpp noto-fonts noto-fonts-emoji pamixer papirus-icon-theme picom playerctl polkit pipewire pipewire-pulse pavucontrol python-gobject qt5ct rofi rustup sxhkd tar ttf-font-awesome ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-terminus-nerd ttf-ubuntu-mono-nerd unzip xclip xdg-user-dirs xdo zsh xdotool xorg firefox xorg-xdpyinfo xorg-xinit xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo xsettingsd libnotify nodejs npm xf86-input-libinput nodejs npm
 )
 
 YAY_TOOLS=(
-  eww
+  eww bash-language-server ly
 )
 
 install_pacman "${PACMAN_TOOLS[@]}"
@@ -162,10 +162,8 @@ pause_and_clear
 # ----------------------------
 #   INSTALL LY (DISPLAY MANAGER)
 # ----------------------------
-echo " [+] Installing LY Display Manager..."
-yay -S --noconfirm ly || true
 echo " [+] Enabling ly.service on startup..."
-sudo systemctl enable ly.service || true
+run_sudo systemctl enable ly.service || true
 echo " [✓] LY installed and enabled"
 pause_and_clear
 
@@ -173,8 +171,8 @@ pause_and_clear
 #     ENABLE SERVICES
 # -------------------------
 echo " [+] Configuring services..."
-sudo systemctl enable NetworkManager || true
-sudo systemctl start NetworkManager || true
+run_sudo systemctl enable NetworkManager || true
+run_sudo systemctl start NetworkManager || true
 echo "exec bspwm" > ~/.xinitrc
 chsh -s /bin/zsh || true
 echo " [✓] Services enabled"
@@ -215,15 +213,6 @@ if [ -f "$HOME/.zshrc" ]; then
     source "$HOME/.zshrc" || true
 fi
 echo " [✓] Folders and configs applied"
-pause_and_clear
-
-# -------------------------
-#     NODE AND EXTRA LSP
-# -------------------------
-echo " [+] Installing Node and bash-language-server..."
-sudo pacman -S --noconfirm nodejs npm
-yay -S --noconfirm bash-language-server
-echo " [✓] Node and LSP installed"
 pause_and_clear
 
 # -------------------------

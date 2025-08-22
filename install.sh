@@ -1,182 +1,190 @@
 #!/bin/bash
-
-set -euo pipefail
-
-GREEN='\033[1;32m'
-RESET='\033[0m'
-
-# -------------------------
-#     ANIMACIÓN TREN
-# -------------------------
-
-smoke_frames=(
-"   (   )"
-"   (    )"
-"   (     )"
-"   (    )"
-"   (   )"
-"   ."
-"    "
-)
-
-print_train() {
-    clear
-    local pos=$1
-    local space=$(printf "%${pos}s" "")
-    echo "${space} $$$$$$\   $$$$$$\   $$$$$$\   $$$$$$\  $$\       $$$$$$$\   $$$$$$\  $$\   $$\ "
-    echo "${space}$$  __$$\ $$ ___$$\ $$ ___$$\ $$ ___$$\ $$ |      $$  __$$\ $$  __$$\ $$ |  $$ |"
-    echo "${space}$$ /  \__|\_/   $$ |\_/   $$ |\_/   $$ |$$ |  $$\ $$ |  $$ |$$ /  $$ |\$$\ $$  |"
-    echo "${space}$$ |$$$$\   $$$$$ /   $$$$$ /   $$$$$ / $$ | $$  |$$$$$$$\ |$$ |  $$ | \$$$$  / "
-    echo "${space}$$ |\_$$ |  \___$$\   \___$$\   \___$$\ $$$$$$  / $$  __$$\ $$ |  $$ | $$  $$<  "
-    echo "${space}$$ |  $$ |$$\   $$ |$$\   $$ |$$\   $$ |$$  _$$<  $$ |  $$ |$$ |  $$ |$$  /\$$\ "
-    echo "${space}\$$$$$$  |\$$$$$$  |\$$$$$$  |\$$$$$$  |$$ | \$$\ $$$$$$$  | $$$$$$  |$$ /  $$ |"
-    echo "${space} \______/  \______/  \______/  \______/ \__|  \__|\_______/  \______/ \__|  \__/ "
-    echo
-    echo
-    echo
-}
+set -e
 
 
-for i in {0..20}; do
-    frame=$((i % ${#smoke_frames[@]}))
-    print_train "$i" "$frame"
-    sleep 0.1
-done
-for ((i=20; i>=0; i--)); do
-    frame=$((i % ${#smoke_frames[@]}))
-    print_train "$i" "$frame"
-    sleep 0.1
-done
-
-clear
-echo -e "${GREEN}[✔] Animación finalizada. Iniciando el script...${RESET}"
-
-# -------------------------
-#     INSTALAR YAY
-# -------------------------
-
-if ! command -v yay &> /dev/null; then
-    echo "[+] Instalando yay desde AUR..."
-    sudo pacman -S --noconfirm --needed git base-devel || true
-    cd /tmp
-    git clone https://aur.archlinux.org/yay.git || true
-    cd yay
-    makepkg -si --noconfirm || true
-    cd ~
+# --- ROOT RESTRICTION ---
+if [[ $EUID -eq 0 ]]; then
+  echo "[!] Do not run this script directly as root."
+  echo "[!] Run it as a normal user."
+  exit 1
 fi
 
-# -------------------------
-#     ELIMINAR i3 Y POLYBAR
-# -------------------------
 
-echo "[+] Eliminando i3 y polybar..."
-sudo pacman -Rns --noconfirm i3-wm i3-gaps polybar || true
 
-# -------------------------
-#     INSTALAR PAQUETES
-# -------------------------
+# =============================
+#   G3K Installer
+# =============================
 
-echo "[+] Instalando paquetes con pacman..."
-sudo pacman -S --needed \
-tmux \
-alsa-utils \
-base-devel \
-bat \
-brightnessctl \
-bspwm \
-dbus \
-dunst \
-eza \
-feh \
-flameshot \
-fzf \
-alacritty \
-git \
-gnome-themes-extra \
-jq \
-lxappearance \
-lxsession-gtk3 \
-mpc \
-mpd \
-mpv \
-neovim \
-networkmanager \
-ncmpcpp \
-noto-fonts \
-noto-fonts-emoji \
-pamixer \
-papirus-icon-theme \
-picom \
-playerctl \
-polkit \
-pipewire \
-pipewire-pulse \
-pavucontrol \
-python-gobject \
-qt5ct \
-rofi \
-rustup \
-sxhkd \
-tar \
-ttf-font-awesome \
-ttf-inconsolata \
-ttf-jetbrains-mono \
-ttf-jetbrains-mono-nerd \
-ttf-terminus-nerd \
-ttf-ubuntu-mono-nerd \
-unzip \
-xclip \
-xdg-user-dirs \
-xdo \
-zsh \
-xdotool \
-xorg \
-firefox \
-xorg-xdpyinfo \
-xorg-xinit \
-xorg-xkill \
-xorg-xprop \
-xorg-xrandr \
-xorg-xsetroot \
-xorg-xwininfo \
-xsettingsd \
-libnotify \
-nodejs \
-npm \
-xf86-input-libinput || true
+# --- FUNCTION FOR ANIMATION ---
+slow_print() {
+  local text="$1"
+  for ((i=0; i<${#text}; i++)); do
+    echo -n "${text:$i:1}"
+    sleep 0.000
+  done
+  echo
+}
 
-# -------------------------
-#     INSTALAR EWW (AUR)
-# -------------------------
+# --- ASCII BANNER ---
+banner="
+ 
+    █████████   ████████   ████████   ████████  █████   ████
+   ███░░░░░███ ███░░░░███ ███░░░░███ ███░░░░███░░███   ███░ 
+  ███     ░░░ ░░░    ░███░░░    ░███░░░    ░███ ░███  ███   
+ ░███            ██████░    ██████░    ██████░  ░███████    
+ ░███    █████  ░░░░░░███  ░░░░░░███  ░░░░░░███ ░███░░███   
+ ░░███  ░░███  ███   ░███ ███   ░███ ███   ░███ ░███ ░░███  
+  ░░█████████ ░░████████ ░░████████ ░░████████  █████ ░░████
+   ░░░░░░░░░   ░░░░░░░░   ░░░░░░░░   ░░░░░░░░  ░░░░░   ░░░░ 
+     
+                      Made by: g333k
+             Repo: https://github.com/g333k/g3kpwm
+"
 
-echo "[+] Instalando EWW desde AUR..."
-yay -S --noconfirm eww || true
+clear
+slow_print "$banner"
+sleep 1
+
+echo " ============================================================"
+echo "              Welcome to the G3K Installer"
+echo " ============================================================"
+echo
+echo " [!] This script will perform the following changes:"
+echo "   - Install essential packages with pacman"
+echo "   - Install extra packages with yay (AUR)"
+echo "   - Configure bspwm, zsh, oh-my-zsh and plugins"
+echo "   - Configure LY display manager"
+echo "   - Configure NetworkManager and services"
+echo "   - Create standard user folders"
+echo "   - Configure Node.js and bash-language-server"
+echo "   - Replicate the configuration for root"
+echo
+echo "============================================================"
+echo
+
+read -p " Do you want to continue with the installation? (y/n): " confirm
+
+if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
+  echo " [!] Installation cancelled by the user."
+  exit 0
+fi
+
+clear
+echo " [+] Starting installation..."
+sleep 2
+
+
+# =============================
+# PASSWORD HANDLING
+# =============================
+echo -n " [+] Enter your sudo password: "
+read -s SUDO_PASS
+echo
+
+run_sudo() {
+  echo "$SUDO_PASS" | sudo -S "$@"
+}
+
+# =============================
+# AUXILIARY FUNCTIONS
+# =============================
+
+pause_and_clear() {
+  sleep 2
+  clear
+}
+
+install_pacman() {
+  for pkg in "$@"; do
+    if pacman -Qi "$pkg" &>/dev/null; then
+      echo " [✓] $pkg already installed"
+    else
+      if echo "$SUDO_PASS" | sudo -S pacman -S --needed --noconfirm "$pkg" &>/dev/null; then
+        echo " [✓] $pkg installed"
+      else
+        echo " [!] Failed to install $pkg with pacman"
+      fi
+    fi
+  done
+}
+
+install_yay() {
+  for pkg in "$@"; do
+    if yay -Qi "$pkg" &>/dev/null; then
+      echo " [✓] $pkg already installed"
+    else
+      if yay -S --needed --noconfirm "$pkg" &>/dev/null; then
+        echo " [✓] $pkg installed"
+      else
+        echo " [!] Failed to install $pkg with yay"
+      fi
+    fi
+  done
+}
+
+cd /home/$USER
+
+# =============================
+# YAY INSTALL
+# =============================
+echo " [+] Checking YAY..."
+if ! command -v yay &>/dev/null; then
+  echo " [+] Installing yay..."
+  cd /tmp
+  git clone https://aur.archlinux.org/yay.git &>/dev/null
+  cd yay
+  makepkg -si --noconfirm <<<"$SUDO_PASS" &>/dev/null
+  cd ~
+  echo " [✓] yay installed"
+else
+  echo " [✓] yay already installed"
+fi
+pause_and_clear
+
+# =============================
+# INSTALLING TOOLS
+# =============================
+echo " [+] Installing basic tools..."
+
+PACMAN_TOOLS=(
+  alsa-utils base-devel bat brightnessctl bspwm dbus dunst eza feh flameshot fzf alacritty git gnome-themes-extra jq lxappearance lxsession-gtk3 mpc mpd mpv neovim networkmanager ncmpcpp noto-fonts noto-fonts-emoji pamixer papirus-icon-theme picom playerctl polkit pipewire pipewire-pulse pavucontrol python-gobject qt5ct rofi rustup sxhkd tar ttf-font-awesome ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-terminus-nerd ttf-ubuntu-mono-nerd unzip xclip xdg-user-dirs xdo zsh xdotool xorg firefox xorg-xdpyinfo xorg-xinit xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo xsettingsd libnotify nodejs npm xf86-input-libinput  
+)
+
+YAY_TOOLS=(
+  eww
+)
+
+install_pacman "${PACMAN_TOOLS[@]}"
+install_yay "${YAY_TOOLS[@]}"
+echo " [✓] Tools installed"
+pause_and_clear
 
 # ----------------------------
-#   INSTALAR LY (DISPLAY MANAGER)
+#   INSTALL LY (DISPLAY MANAGER)
 # ----------------------------
-
-echo "[+] Instalando LY Display Manager..."
+echo " [+] Installing LY Display Manager..."
 yay -S --noconfirm ly || true
-echo "[+] Habilitando ly.service para el arranque..."
+echo " [+] Enabling ly.service on startup..."
 sudo systemctl enable ly.service || true
-echo "Display Manager" "LY instalado y habilitado correctamente"
+echo " [✓] LY installed and enabled"
+pause_and_clear
 
 # -------------------------
-#     HABILITAR SERVICIOS
+#     ENABLE SERVICES
 # -------------------------
-
+echo " [+] Configuring services..."
 sudo systemctl enable NetworkManager || true
 sudo systemctl start NetworkManager || true
 echo "exec bspwm" > ~/.xinitrc
 chsh -s /bin/zsh || true
+echo " [✓] Services enabled"
+pause_and_clear
 
 # -------------------------
-#     INSTALAR OH-MY-ZSH
+#     INSTALL OH-MY-ZSH
 # -------------------------
-
+echo " [+] Installing Oh My Zsh and plugins..."
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
-    echo "[+] Instalando Oh My Zsh..."
     RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" || true
 fi
 
@@ -189,67 +197,70 @@ fi
 if [ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]; then
   git clone https://github.com/zsh-users/zsh-syntax-highlighting "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
 fi
+echo " [✓] Oh My Zsh configured"
+pause_and_clear
 
 # -------------------------
-#     CONFIGURACIÓN DOTFILES
+#     STANDARD FOLDERS
 # -------------------------
-
-CONFIG_DIR="$HOME/.config/i3naro_temp"
-REPO_URL="https://github.com/g333k/G333kBox.git"
-
-echo "[+] Clonando repositorio $REPO_URL ..."
-rm -rf "$CONFIG_DIR"
-git clone "$REPO_URL" "$CONFIG_DIR" || true
-
-echo "[+] Copiando configuraciones a ~/.config ..."
-
-mkdir -p "$HOME/.config"
-
-echo "[+] Copiando configuración a ~/.config/ ..."
-mkdir -p "$HOME/.config" || true
-
-CONFIG_SOURCE="$HOME/blackbspwm/config"
-
-if [ -d "$CONFIG_SOURCE" ]; then
-    echo "[+] Copiando archivos de configuración desde $CONFIG_SOURCE..."
-    cp -r "$CONFIG_SOURCE"/* "$HOME/.config/" 2>/dev/null || true
-else
-    echo "[!] No se encontró el directorio de configuración: $CONFIG_SOURCE"
-fi
-
-CONFIG_SOURCE2="$HOME/blackbspwm/home"
-
-if [ -d "$CONFIG_SOURCE2" ]; then
-    echo "[+] Copiando archivos de configuración desde $CONFIG_SOURCE..."
-    cp -r "$CONFIG_SOURCE2"/* "$HOME/" 2>/dev/null || true
-else
-    echo "[!] No se encontró el directorio de configuración: $CONFIG_SOURCE"
-fi
-mkdir -p "$HOME/.bin"
-cp -r "$CONFIG_DIR/home/.bin/"* "$HOME/.bin/" 2>/dev/null || true
-
-# -------------------------
-#     CARPETAS ESTÁNDAR
-# -------------------------
-
-echo "[+] Creando carpetas de usuario..."
+echo " [+] Creating user folders..."
 mkdir -p "$HOME/Documents" "$HOME/CTF" "$HOME/Downloads" "$HOME/Music" "$HOME/Videos" "$HOME/Pictures/Clipboard"
 
-# -------------------------
-#     LIMPIEZA Y FINAL
-# -------------------------
-
-echo "[+] Eliminando temporales..."
-rm -rf "$CONFIG_DIR"
+git clone https://github.com/g333k/g3kpwm || true
+cp -r g3kpwm/config/* ~/.config/ || true
+cp -r g3kpwm/home/* ~/ || true
 
 if [ -f "$HOME/.zshrc" ]; then
-    echo "[+] Recargando ZSH..."
+    echo " [+] Reloading ZSH..."
     source "$HOME/.zshrc" || true
 fi
+echo " [✓] Folders and configs applied"
+pause_and_clear
 
-sudo pacman -S nodejs npm
-yay -S bash-language-server
-echo "[✓] ZSH configurado para root correctamente."
+# -------------------------
+#     NODE AND EXTRA LSP
+# -------------------------
+echo " [+] Installing Node and bash-language-server..."
+sudo pacman -S --noconfirm nodejs npm
+yay -S --noconfirm bash-language-server
+echo " [✓] Node and LSP installed"
+pause_and_clear
+
+# -------------------------
+#     CONFIGURE ROOT
+# -------------------------
+echo " [+] Applying configuration for root as well..."
+
+run_sudo chsh -s /bin/zsh root
+
+run_sudo cp -r ~/.oh-my-zsh /root/ || true
+run_sudo cp -r ~/.zshrc /root/ || true
+run_sudo cp -r ~/.config /root/ || true
+
+if ! run_sudo test -d /root/.oh-my-zsh; then
+    run_sudo sh -c "RUNZSH=no sh -c \"\$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\""
+fi
+
+ROOT_ZSH_CUSTOM="/root/.oh-my-zsh/custom"
+if ! run_sudo test -d "$ROOT_ZSH_CUSTOM/plugins/zsh-autosuggestions"; then
+  run_sudo git clone https://github.com/zsh-users/zsh-autosuggestions "$ROOT_ZSH_CUSTOM/plugins/zsh-autosuggestions"
+fi
+if ! run_sudo test -d "$ROOT_ZSH_CUSTOM/plugins/zsh-syntax-highlighting"; then
+  run_sudo git clone https://github.com/zsh-users/zsh-syntax-highlighting "$ROOT_ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+fi
+
+echo " [✓] Configuration replicated for root"
+pause_and_clear
 
 
-echo -e "${GREEN}[✔] Todo listo. El entorno ha sido configurado correctamente.${RESET}"
+
+
+# -------------------------
+#     FINAL
+# -------------------------
+echo " ============================================================"
+echo " [✓] All done."
+echo " [✓] The environment has been configured"
+echo "============================================================"
+pause_and_clear
+

@@ -3,7 +3,7 @@
 [window]
 padding = { x = 25, y = 25 }   # equivalente al borderpx
 decorations = "full"
-opacity = 0.92                  # alpha = 1.0 (opaco)
+opacity = 1.0                  # alpha = 1.0 (opaco)
 dynamic_padding = true
 
 [font]
@@ -69,3 +69,4 @@ bindings = [
   { key = "PageDown", mods = "Shift", action = "ScrollPageDown" },
   { key = "PageUp", mods = "Shift", action = "ScrollPageUp" },
 ]
+

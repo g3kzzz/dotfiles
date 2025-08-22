@@ -1,82 +1,14 @@
+# Detectar todos los monitores conectados
+MONITORES=$(xrandr | awk '/ connected/{print $1}')
 
-# Guardamos la salida de xrandr
-XRANDR_OUTPUT=$(xrandr)
-
-# Función para obtener resolución y frecuencia de un monitor
-get_monitor_info() {
-    echo "$XRANDR_OUTPUT" | awk -v monitor="$1" '
-        $1 == monitor && $2 == "connected" {
+for MON in $MONITORES; do
+    # Detectar resolución máxima del monitor
+    MAX_RES=$(xrandr | awk -v m="$MON" '
+        $1 == m {
             getline
-            print $1, $2
-        }
-    ' | tr -d '*+'
-}
-
-# Lista de monitores conectados
-MONITORES=$(echo "$XRANDR_OUTPUT" | awk '$2 == "connected" {print $1}')
-NUM_MONITORES=$(echo "$MONITORES" | wc -w)
-
-# Si no detecta monitores, salimos
-[ "$NUM_MONITORES" -eq 0 ] && {
-    echo "[!] No se detectaron monitores"
-    exit 1
-}
-
-# Función auxiliar para configurar un monitor
-setup_monitor() {
-    monitor=$1
-    modo=$2
-    tasa=$3
-    shift 3
-    xrandr --output "$monitor" --mode "$modo" --rate "$tasa" "$@" --auto
-}
-
-# Reiniciar escritorios de bspwm antes de asignar
-bspc wm -r
-
-# Configuración según cantidad de monitores
-case $NUM_MONITORES in
-    1)
-        set -- $MONITORES
-        mon1=$1
-        set -- $(get_monitor_info "$mon1")
-        setup_monitor "$mon1" "$1" "$2" --primary --pos 0x0
-        bspc monitor "$mon1" -d 1 2 3 4 5 6
-        ;;
-    2)
-        set -- $MONITORES
-        mon1=$1 mon2=$2
-        set -- $(get_monitor_info "$mon1"); setup_monitor "$mon1" "$1" "$2" --primary --pos 0x0
-        set -- $(get_monitor_info "$mon2"); setup_monitor "$mon2" "$1" "$2" --right-of "$mon1"
-        bspc monitor "$mon1" -d 1 2 3 4
-        bspc monitor "$mon2" -d 5 6 7 8
-        bspc wm -O "$mon1" "$mon2"
-        ;;
-    3)
-        set -- $MONITORES
-        mon1=$1 mon2=$2 mon3=$3
-        set -- $(get_monitor_info "$mon1"); setup_monitor "$mon1" "$1" "$2" --primary --pos 0x0
-        set -- $(get_monitor_info "$mon2"); setup_monitor "$mon2" "$1" "$2" --left-of "$mon1"
-        set -- $(get_monitor_info "$mon3"); setup_monitor "$mon3" "$1" "$2" --right-of "$mon1"
-        bspc monitor "$mon1" -d 1 2 3
-        bspc monitor "$mon2" -d 4 5 6
-        bspc monitor "$mon3" -d 7 8 9
-        bspc wm -O "$mon2" "$mon1" "$mon3"
-        ;;
-    4)
-        set -- $MONITORES
-        mon1=$1 mon2=$2 mon3=$3 mon4=$4
-        set -- $(get_monitor_info "$mon1"); setup_monitor "$mon1" "$1" "$2" --primary --pos 0x0
-        set -- $(get_monitor_info "$mon2"); setup_monitor "$mon2" "$1" "$2" --left-of "$mon1"
-        set -- $(get_monitor_info "$mon3"); setup_monitor "$mon3" "$1" "$2" --right-of "$mon1"
-        set -- $(get_monitor_info "$mon4"); setup_monitor "$mon4" "$1" "$2" --above "$mon1"
-        bspc monitor "$mon1" -d 1 2 3
-        bspc monitor "$mon2" -d 4 5
-        bspc monitor "$mon3" -d 6 7
-        bspc monitor "$mon4" -d 8 9
-        bspc wm -O "$mon2" "$mon1" "$mon3" "$mon4"
-        ;;
-    *)
-        echo "[!] Advertencia: más de 4 monitores no soportados"
-        ;;
-esac
+            print $1; exit
+        }')
+    
+    # Aplicar fullscreen
+    xrandr --output "$MON" --mode "$MAX_RES" --primary
+done

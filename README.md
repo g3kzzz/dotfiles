@@ -1,7 +1,6 @@
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
 ![bspwm](https://img.shields.io/badge/bspwm-1e1e2e?style=for-the-badge&logo=bspwm&logoColor=white)
 ![Arch Linux](https://img.shields.io/badge/Arch%20Linux-1793D1?style=for-the-badge&logo=arch-linux&logoColor=white)
-
 # G3K Dotfiles 🚀
 
 **G3K Dotfiles** is a curated collection of configurations and scripts designed to provide a highly efficient, minimal, and visually appealing environment on **Arch Linux** 🏔️🐧.

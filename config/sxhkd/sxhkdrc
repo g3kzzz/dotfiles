@@ -70,8 +70,7 @@ super + s
 
 # Captura con selector GUI
 super + shift + s
-    flameshot gui & sleep 10 && pkill flameshot
-
+        flameshot gui -p ~/Pictures/Clipboard/$(date +'%Y-%m-%d_%H-%M-%S').png
 
 # ╭──────────────────────────────────────────────╮
 # │       Apagar, reiniciar, cerrar sesión       │

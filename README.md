@@ -49,21 +49,21 @@ You can install the environment directly from the remote script. Choose **one** 
 ### Using curl
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/g333k/g3kwm-dotfiles/refs/heads/main/install.sh -o install.sh
+curl -fsSL https://raw.githubusercontent.com/g333k/dotfiles/refs/heads/main/install.sh -o install.sh
 chmod +x install.sh
 ./install.sh
 ```
 
 ### Using wget
 ```bash
-wget https://raw.githubusercontent.com/g333k/g3kwm-dotfiles/refs/heads/main/install.sh -O install.sh
+wget https://raw.githubusercontent.com/g333k/dotfiles/refs/heads/main/install.sh -O install.sh
 chmod +x install.sh
 ./install.sh
 ```
 
 ### Alternative one-liner (curl)
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/g333k/g3kwm-dotfiles/refs/heads/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/g333k/dotfiles/refs/heads/main/install.sh)
 ```
 
 

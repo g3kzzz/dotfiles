@@ -1,31 +1,50 @@
+
+
+
+
+
 # ~/.config/alacritty/alacritty.toml
 
+# ========================
+#        WINDOW
+# ========================
 [window]
 padding = { x = 25, y = 25 }   # equivalente al borderpx
 decorations = "full"
 opacity = 1.0                  # alpha = 1.0 (opaco)
 dynamic_padding = true
 
+# ========================
+#         FONT
+# ========================
 [font]
 normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
-size = 14.0
+size = 10.0
 
+# ========================
+#        CURSOR
+# ========================
 [cursor]
 style = "Beam"                 # Cursor en forma de barra "|"
 unfocused_hollow = false
 
+# ========================
+#       SCROLLING
+# ========================
 [scrolling]
 history = 10000
-multiplier = 3                 # como scrollincrement = 3
+multiplier = 3                 # equivalente a scrollincrement = 3
 
+# ========================
+#         COLORS
+# ========================
 [colors.primary]
-background = "#181f21"         # bg
-
-foreground = "#a5b6cf"         # fg
+background = "#010101"         # Fondo
+foreground = "#a5b6cf"         # Texto
 
 [colors.cursor]
 text = "#000000"
-cursor = "#add8e6"             # cursor color (256 en st)
+cursor = "#add8e6"             # Color del cursor
 
 [colors.normal]
 black   = "#000000"
@@ -47,20 +66,22 @@ magenta = "#cc00ff"
 cyan    = "#00ffff"
 white   = "#ffffff"
 
-# --- KEYBINDINGS ---
+# ========================
+#       KEYBINDINGS
+# ========================
 [keyboard]
 bindings = [
-  # Zoom
+  # --- Zoom ---
   { key = ",", mods = "Alt", action = "IncreaseFontSize" },
   { key = ".", mods = "Alt", action = "DecreaseFontSize" },
   { key = "G", mods = "Alt", action = "ResetFontSize" },
 
-  # Copiar / Pegar
+  # --- Copiar / Pegar ---
   { key = "C", mods = "Control|Shift", action = "Copy" },
   { key = "V", mods = "Control|Shift", action = "Paste" },
   { key = "Insert", mods = "Shift", action = "Paste" },
 
-  # Scroll
+  # --- Scroll ---
   { key = "J", mods = "Alt", action = "ScrollLineDown" },
   { key = "K", mods = "Alt", action = "ScrollLineUp" },
   { key = "Down", mods = "Alt", action = "ScrollLineDown" },
@@ -70,6 +91,4 @@ bindings = [
   { key = "PageDown", mods = "Shift", action = "ScrollPageDown" },
   { key = "PageUp", mods = "Shift", action = "ScrollPageUp" },
 ]
-
-
 

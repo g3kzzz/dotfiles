@@ -19,8 +19,9 @@ history = 10000
 multiplier = 3                 # como scrollincrement = 3
 
 [colors.primary]
-background = "#000000"         # bg
-foreground = "#ffffff"         # fg
+background = "#181f21"         # bg
+
+foreground = "#a5b6cf"         # fg
 
 [colors.cursor]
 text = "#000000"
@@ -69,4 +70,6 @@ bindings = [
   { key = "PageDown", mods = "Shift", action = "ScrollPageDown" },
   { key = "PageUp", mods = "Shift", action = "ScrollPageUp" },
 ]
+
+
 

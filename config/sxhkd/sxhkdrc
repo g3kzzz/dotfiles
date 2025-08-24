@@ -51,9 +51,9 @@ super + Return
 super + r
     RiceEditor
 
-# HTB VPN - Terminal flotante
+# HTB VPN - Terminal flotant
 super + 6
-    alacritty --class FloatingTerm -e ~/.config/bspwm/scripts/HTB
+    alacritty --class FloatingTerm --title "HTB VPN" --config-file ~/.config/alacritty/alacritty-vpn.toml -e ~/.config/bspwm/scripts/HTB
 
 # Lanzar BurpSuite personalizado
 super + 7
@@ -133,3 +133,4 @@ super + d
 # Cerrar todas las ventanas del escritorio actual
 super + ctrl + x
     bspc query -N -d | xargs -I id -n 1 bspc node id -c
+

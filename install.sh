@@ -204,10 +204,10 @@ pause_and_clear
 echo " [+] Creating user folders..."
 mkdir -p "$HOME/Documents" "$HOME/CTF" "$HOME/Downloads" "$HOME/Music" "$HOME/Videos" "$HOME/Pictures/Clipboard"
 
-git clone https://github.com/g333k/g3kwm-dotfiles || true
-cp -r g3kwm-dotfiles/config/* ~/.config/ || true
+git clone https://github.com/g333k/dotfiles || true
+cp -r dotfiles/config/* ~/.config/ || true
 
-cp -f g3kwm-dotfiles/home/.zshrc ~/.zshrc 
+cp -f dotfiles/home/.zshrc ~/.zshrc 
 if [ -f "$HOME/.zshrc" ]; then
     echo " [+] Reloading ZSH..."
     source "$HOME/.zshrc" || true

@@ -77,12 +77,22 @@ sleep 2
 # =============================
 # PASSWORD HANDLING
 # =============================
-echo -n " [+] Enter your sudo password: "
-read -s SUDO_PASS
-echo
+while true; do
+    echo -n "🔑 Ingresa tu contraseña de sudo: "
+    read -s SUDO_PASS
+    echo
+    # Validar contraseña
+    if echo "$SUDO_PASS" | sudo -S -v &>/dev/null; then
+        echo "✅ Contraseña correcta"
+        break
+    else
+        echo "❌ Contraseña incorrecta, intenta de nuevo."
+    fi
+done
 
+# Función sudo personalizada
 run_sudo() {
-  echo "$SUDO_PASS" | sudo -S "$@"
+    echo "$SUDO_PASS" | sudo -S "$@"
 }
 
 # =============================

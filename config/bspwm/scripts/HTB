@@ -1,41 +1,97 @@
-#!/bin/sh
+#!/bin/bash
 # ===============================================
-#       ⠀⠀⢀⣴⣿⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-#       ⠀⢠⣿⣿⢿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-#       ⢀⡾⠋⠀⣰⣿⣿⠻⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-#       ⠘⠀⠀⢠⣿⣿⠃⠀⠈⠻⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-#       ⠀⠀⠀⢸⣿⡇⠀⠀⠀⣼⣉⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⠀
-#       ⠀⠀⠀⢹⣿⡇⠀⠀⠀⣿⣿⣿⣿⣿⣷⡄⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⠟⣿⠉⠁
-#       ⠀⠀⠀⠸⣿⣿⣄⠀⠀⠘⢿⣿⡵⠋⠙⢿⣦⡀⠀⠀⣤⣠⠀⣠⣿⡅⠀⣿⠀⠀
-#       ⠀⠀⠀⠀⠈⠻⢿⣿⣶⣤⣄⣀⠀⠀⠀⠈⠻⣷⣄⣠⣿⣿⡼⠋⠛⣡⡼⠋⠀⠀
-#       ⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠛⠻⠿⠿⠷⠶⠶⠾⣿⡿⠋⠻⣟⠉⠁⠀⠀⠀⠀⠀
-#       ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡠⠶⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-# Author: g3k
-# Rep: https://github.com/IamGenarov/blackbspwm
+#        VPN Manager Interactivo Mejorado
 # ===============================================
 
-VPN_CONFIG="$HOME/.config/bspwm/scripts/src/htb.ovpn"
+SRC_DIR="$HOME/.config/bspwm/scripts/src"
 LOGFILE="$HOME/.htb-vpn.log"
+
+# Colores ANSI
+RED="\e[31m"
+GREEN="\e[32m"
+YELLOW="\e[33m"
+CYAN="\e[36m"
+BOLD="\e[1m"
+RESET="\e[0m"
+
 ICON_VPN_ON="🔐"
 ICON_VPN_OFF="📴"
 
-if pgrep -x openvpn >/dev/null; then
-    notify-send "HTB VPN" "$ICON_VPN_OFF Desconectando..."
+# Animación de carga simple
+loading() {
+    local msg="$1"
+    echo -ne "${CYAN}${msg} ${RESET}"
+    for c in '/' '-' '\' '|'; do
+        echo -ne "\b$c"
+        sleep 0.2
+    done
+    echo -e "\b "
+}
+
+# Detectar si VPN está activa
+vpn_status() {
+    if ip a | grep -q tun0; then
+        echo -e "${GREEN}[✔] VPN Conectada${RESET}"
+        return 0
+    else
+        echo -e "${YELLOW}[✖] VPN Desconectada${RESET}"
+        return 1
+    fi
+}
+
+# Mostrar menú
+choose_vpn() {
+    cd "$SRC_DIR" || exit 1
+    OVPN_FILES=(*.ovpn)
+    if [ ${#OVPN_FILES[@]} -eq 0 ]; then
+        echo -e "${RED}❌ No se encontraron archivos .ovpn${RESET}"
+        exit 1
+    fi
+
+    echo -e "${CYAN}==============================================${RESET}"
+    echo -e "${BOLD} Archivos VPN disponibles:${RESET}"
+    echo -e "${CYAN}==============================================${RESET}"
+    for i in "${!OVPN_FILES[@]}"; do
+        printf "${GREEN}[%d]${RESET} %s\n" $((i+1)) "${OVPN_FILES[$i]}"
+    done
+    echo -e "${CYAN}==============================================${RESET}"
+
+    while true; do
+        read -rp "Selecciona una VPN por número: " choice
+        if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "${#OVPN_FILES[@]}" ]; then
+            VPN_CONFIG="$SRC_DIR/${OVPN_FILES[$((choice-1))]}"
+            echo -e "${GREEN}[✔] Seleccionaste: ${OVPN_FILES[$((choice-1))]}${RESET}"
+            break
+        else
+            echo -e "${RED}Opción inválida, intenta nuevamente.${RESET}"
+        fi
+    done
+}
+
+# Conectar VPN
+connect_vpn() {
+    loading "Conectando VPN..."
+    sudo openvpn --config "$VPN_CONFIG" --daemon --log "$LOGFILE"
+    sleep 3
+    vpn_status
+}
+
+# Desconectar VPN
+disconnect_vpn() {
+    loading "Desconectando VPN..."
     sudo pkill openvpn
     sleep 2
-    if ip a | grep -q tun0; then
-        notify-send "HTB VPN" "❌ Falló la desconexión"
-    else
-        notify-send "HTB VPN" "$ICON_VPN_OFF VPN desconectada"
-    fi
+    vpn_status
+}
+
+# --- MAIN ---
+echo -e "Estado actual: $(vpn_status)"
+
+choose_vpn
+
+if ip a | grep -q tun0; then
+    disconnect_vpn
 else
-    notify-send "HTB VPN" "$ICON_VPN_ON Conectando..."
-    sudo openvpn --config "$VPN_CONFIG" --daemon --log "$LOGFILE"
-    sleep 5
-    if ip a | grep -q tun0; then
-        notify-send "HTB VPN" "$ICON_VPN_ON Conectado correctamente"
-    else
-        notify-send "HTB VPN" "❌ Error al conectar, revisa $LOGFILE"
-    fi
+    connect_vpn
 fi
 

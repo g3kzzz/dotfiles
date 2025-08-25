@@ -1,94 +1,42 @@
-
-
-
-
-
-# ~/.config/alacritty/alacritty.toml
-
-# ========================
-#        WINDOW
-# ========================
-[window]
-padding = { x = 25, y = 25 }   # equivalente al borderpx
-decorations = "full"
-opacity = 1.0                  # alpha = 1.0 (opaco)
-dynamic_padding = true
-
-# ========================
-#         FONT
-# ========================
-[font]
-normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
-size = 10.0
-
-# ========================
-#        CURSOR
-# ========================
-[cursor]
-style = "Beam"                 # Cursor en forma de barra "|"
-unfocused_hollow = false
-
-# ========================
-#       SCROLLING
-# ========================
-[scrolling]
-history = 10000
-multiplier = 3                 # equivalente a scrollincrement = 3
-
-# ========================
-#         COLORS
-# ========================
-[colors.primary]
-background = "#010101"         # Fondo
-foreground = "#a5b6cf"         # Texto
-
 [colors.cursor]
-text = "#000000"
-cursor = "#add8e6"             # Color del cursor
+cursor = "0xffffff"
+text = "0x000000"
 
-[colors.normal]
-black   = "#000000"
-red     = "#ff0000"
-green   = "#33ff00"
-yellow  = "#ffff00"
-blue    = "#0066ff"
-magenta = "#cc00ff"
-cyan    = "#00ffff"
-white   = "#d0d0d0"
+[colors.primary]
+background = "0x000000"  # Fondo negro
+foreground = "0xe0e0e0"  # Texto gris claro
 
-[colors.bright]
-black   = "#808080"
-red     = "#ff0000"
-green   = "#33ff00"
-yellow  = "#ffff00"
-blue    = "#0066ff"
-magenta = "#cc00ff"
-cyan    = "#00ffff"
-white   = "#ffffff"
+[font]
+size = 9.0
 
-# ========================
-#       KEYBINDINGS
-# ========================
-[keyboard]
-bindings = [
-  # --- Zoom ---
-  { key = ",", mods = "Alt", action = "IncreaseFontSize" },
-  { key = ".", mods = "Alt", action = "DecreaseFontSize" },
-  { key = "G", mods = "Alt", action = "ResetFontSize" },
+[font.normal]
+family = "JetBrainsMono Nerd Font"
+style = "Regular"
 
-  # --- Copiar / Pegar ---
-  { key = "C", mods = "Control|Shift", action = "Copy" },
-  { key = "V", mods = "Control|Shift", action = "Paste" },
-  { key = "Insert", mods = "Shift", action = "Paste" },
+[font.bold]
+family = "JetBrainsMono Nerd Font"
+style = "Bold"
 
-  # --- Scroll ---
-  { key = "J", mods = "Alt", action = "ScrollLineDown" },
-  { key = "K", mods = "Alt", action = "ScrollLineUp" },
-  { key = "Down", mods = "Alt", action = "ScrollLineDown" },
-  { key = "Up", mods = "Alt", action = "ScrollLineUp" },
-  { key = "D", mods = "Alt", action = "ScrollPageDown" },
-  { key = "U", mods = "Alt", action = "ScrollPageUp" },
-  { key = "PageDown", mods = "Shift", action = "ScrollPageDown" },
-  { key = "PageUp", mods = "Shift", action = "ScrollPageUp" },
-]
+[font.italic]
+family = "JetBrainsMono Nerd Font"
+style = "Italic"
+[terminal.shell]
+program = "/bin/zsh"
+
+[window]
+decorations = "none"
+dynamic_padding = true
+opacity = 0.95  # Transparencia más sutil
+
+[window.padding]
+x = 25
+y = 15
+
+[cursor]
+style = "Beam"
+[terminal]
+
+
+
+
 

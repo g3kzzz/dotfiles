@@ -1,12 +1,12 @@
 #!/bin/bash
 # ===============================================
-#        VPN Manager Interactivo Mejorado
+#        Improved Interactive VPN Manager
 # ===============================================
 
 SRC_DIR="$HOME/.config/bspwm/scripts/src"
 LOGFILE="$HOME/.htb-vpn.log"
 
-# Colores ANSI
+# ANSI Colors
 RED="\e[31m"
 GREEN="\e[32m"
 YELLOW="\e[33m"
@@ -17,7 +17,7 @@ RESET="\e[0m"
 ICON_VPN_ON="🔐"
 ICON_VPN_OFF="📴"
 
-# Animación de carga simple
+# Simple loading animation
 loading() {
     local msg="$1"
     echo -ne "${CYAN}${msg} ${RESET}"
@@ -28,28 +28,45 @@ loading() {
     echo -e "\b "
 }
 
-# Detectar si VPN está activa
+# Detect if VPN is active
 vpn_status() {
     if ip a | grep -q tun0; then
-        echo -e "${GREEN}[✔] VPN Conectada${RESET}"
-        return 0
+        return 0   # connected
     else
-        echo -e "${YELLOW}[✖] VPN Desconectada${RESET}"
-        return 1
+        return 1   # disconnected
     fi
 }
 
-# Mostrar menú
+# Display status with colors
+print_status() {
+    if vpn_status; then
+        echo -e "${GREEN}[✔] VPN Connected${RESET}"
+    else
+        echo -e "${YELLOW}[✖] VPN Disconnected${RESET}"
+    fi
+}
+
+# Status notification
+notify_vpn() {
+    local status="$1"
+    if [ "$status" -eq 0 ]; then
+        notify-send -u normal "VPN Connected" "VPN connection established successfully 🔐"
+    else
+        notify-send -u critical "VPN Disconnected" "VPN disconnected or failed to connect 📴"
+    fi
+}
+
+# Show VPN files menu
 choose_vpn() {
     cd "$SRC_DIR" || exit 1
     OVPN_FILES=(*.ovpn)
     if [ ${#OVPN_FILES[@]} -eq 0 ]; then
-        echo -e "${RED}❌ No se encontraron archivos .ovpn${RESET}"
+        echo -e "${RED}❌ No .ovpn files found${RESET}"
         exit 1
     fi
 
     echo -e "${CYAN}==============================================${RESET}"
-    echo -e "${BOLD} Archivos VPN disponibles:${RESET}"
+    echo -e "${BOLD} Available VPN Files:${RESET}"
     echo -e "${CYAN}==============================================${RESET}"
     for i in "${!OVPN_FILES[@]}"; do
         printf "${GREEN}[%d]${RESET} %s\n" $((i+1)) "${OVPN_FILES[$i]}"
@@ -57,41 +74,53 @@ choose_vpn() {
     echo -e "${CYAN}==============================================${RESET}"
 
     while true; do
-        read -rp "Selecciona una VPN por número: " choice
+        read -rp "Select a VPN by number: " choice
         if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "${#OVPN_FILES[@]}" ]; then
             VPN_CONFIG="$SRC_DIR/${OVPN_FILES[$((choice-1))]}"
-            echo -e "${GREEN}[✔] Seleccionaste: ${OVPN_FILES[$((choice-1))]}${RESET}"
+            echo -e "${GREEN}[✔] You selected: ${OVPN_FILES[$((choice-1))]}${RESET}"
             break
         else
-            echo -e "${RED}Opción inválida, intenta nuevamente.${RESET}"
+            echo -e "${RED}Invalid option, please try again.${RESET}"
         fi
     done
 }
 
-# Conectar VPN
+# Connect VPN
 connect_vpn() {
-    loading "Conectando VPN..."
+    loading "Connecting VPN..."
     sudo openvpn --config "$VPN_CONFIG" --daemon --log "$LOGFILE"
-    sleep 3
+    sleep 5
     vpn_status
+    notify_vpn $?
+    print_status
 }
 
-# Desconectar VPN
+# Disconnect VPN
 disconnect_vpn() {
-    loading "Desconectando VPN..."
+    loading "Disconnecting VPN..."
     sudo pkill openvpn
-    sleep 2
+    sleep 3
     vpn_status
+    notify_vpn $?
+    print_status
 }
 
 # --- MAIN ---
-echo -e "Estado actual: $(vpn_status)"
+echo -e "Current status:"
+print_status
 
-choose_vpn
-
-if ip a | grep -q tun0; then
-    disconnect_vpn
+if vpn_status; then
+    # Already connected → offer to disconnect
+    read -rp "Do you want to disconnect the VPN? (y/n): " ans
+    if [[ "$ans" =~ ^[yY]$ ]]; then
+        disconnect_vpn
+    else
+        echo -e "${YELLOW}Operation cancelled.${RESET}"
+    fi
 else
+    # Not connected → choose file and connect
+    choose_vpn
     connect_vpn
 fi
+
 

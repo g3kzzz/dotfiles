@@ -119,31 +119,13 @@
 ;; WIDGET - VOLUMEN
 ;; =======================================================================================
 (defwidget volum []
-  (eventbox :onhover "${EWW_CMD} update volum=true"
-            :onhoverlost "${EWW_CMD} update volum=false"
-            :cursor "pointer"
-    (box :orientation "v"
-         :space-evenly "false"
-         :spacing "2"
-      (revealer :transition "slideup"
-                :reveal volum
-                :duration "550ms"
-        (scale :class "volbar"
-               :value {volume_value ?: "0"}
-               :onchange "pamixer --set-volume {}"
-               :orientation "v"
-               :flipped true
-               :tooltip "Volumen: ${volume_value}%"
-               :max 101
-               :min 0))
-      (button :style "background-image: url('${volume_icon}');"
-              :class "trayicon"
-              :onrightclick "OpenApps --soundcontrol"
-              :onclick "scripts/Volume --toggle-muted")
-    )
+  (eventbox :cursor "pointer"
+    (button :style "background-image: url('${volume_icon}');"
+            :class "trayicon"
+            :onrightclick "OpenApps --soundcontrol"
+            :onclick "scripts/Volume --toggle-muted")
   )
 )
-
 ;; =======================================================================================
 ;; WIDGET - HORA
 ;; =======================================================================================
@@ -258,3 +240,4 @@
                    :side "left")
   :wm-ignore false
   (bar :monitor monitor))
+

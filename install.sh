@@ -191,7 +191,7 @@ echo " [+] Configuring services..."
 run_sudo systemctl enable NetworkManager || true
 run_sudo systemctl start NetworkManager || true
 echo "exec bspwm" > ~/.xinitrc
-chsh -s /bin/zsh || true
+run_sudo chsh -s /bin/zsh "$USER"
 echo " [✓] Services enabled"
 pause_and_clear
 

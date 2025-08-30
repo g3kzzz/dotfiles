@@ -78,17 +78,18 @@ sleep 2
 # PASSWORD HANDLING
 # =============================
 while true; do
-    echo -n "🔑 Ingresa tu contraseña de sudo: "
+    echo -n "🔑 Enter your sudo password: "
     read -s SUDO_PASS
     echo
-    # Validar contraseña
+    # Validate password
     if echo "$SUDO_PASS" | sudo -S -v &>/dev/null; then
-        echo "✅ Contraseña correcta"
+        echo "✅ Password accepted"
         break
     else
-        echo "❌ Contraseña incorrecta, intenta de nuevo."
+        echo "❌ Wrong password, try again."
     fi
 done
+
 
 
 # =============================

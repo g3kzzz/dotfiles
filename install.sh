@@ -95,7 +95,7 @@ done
 # SUDOERS TEMPORAL PARA YAY
 # =============================
 TMP_SUDOERS="/etc/sudoers.d/99_g3k_tmp"
-echo "$USER ALL=(ALL) NOPASSWD: /usr/bin/pacman, /usr/bin/makepkg" | sudo tee "$TMP_SUDOERS" >/dev/null
+echo "$USER ALL=(ALL) NOPASSWD: /usr/bin/pacman, /usr/bin/makepkg, /usr/bin/chsh" | sudo tee "$TMP_SUDOERS" >/dev/null
 
 # Función sudo personalizada
 run_sudo() {

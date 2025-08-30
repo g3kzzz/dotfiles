@@ -90,6 +90,13 @@ while true; do
     fi
 done
 
+
+# =============================
+# SUDOERS TEMPORAL PARA YAY
+# =============================
+TMP_SUDOERS="/etc/sudoers.d/99_g3k_tmp"
+echo "$USER ALL=(ALL) NOPASSWD: /usr/bin/pacman, /usr/bin/makepkg" | sudo tee "$TMP_SUDOERS" >/dev/null
+
 # Función sudo personalizada
 run_sudo() {
     echo "$SUDO_PASS" | sudo -S "$@"
@@ -271,6 +278,12 @@ sed -i "s/WORKSPACE/$WORKSPACE/g" "$CONFIG"
 
 echo " [✓] Workspace set to: $WORKSPACE"
 pause_and_clear
+# =============================
+# LIMPIEZA DE SUDOERS
+# =============================
+echo " [+] Cleaning up sudoers rule..."
+run_sudo rm -f /etc/sudoers.d/99_g3k_tmp
+echo " [✓] Sudoers restored"
 
 
 # -------------------------

@@ -77,7 +77,41 @@ dunst -conf "${HOME}/.config/dunst/dunstrc" &
 eww daemon --config "${HOME}/.config/eww"
 sleep 1
 eww open bar --config "${HOME}/.config/eww" --arg monitor="$(bspc query -M --names | head -n 1)"
-xautolock -time 2 -locker "i3lock -c 000000" &
+
+xautolock -time 5 -locker "i3lock \
+  --insidever-color=#44475add \
+  --insidewrong-color=#44475add \
+  --inside-color=#44475add \
+  --ringver-color=#50fa7bdd \
+  --ringwrong-color=#ff5555dd \
+  --ring-color=#6272a4dd \
+  --line-uses-ring \
+  --keyhl-color=#ff79c6dd \
+  --bshl-color=#ffb86cdd \
+  --separator-color=#44475add \
+  --verif-color=#50fa7b \
+  --wrong-color=#ff5555 \
+  --modif-color=#ff5555 \
+  --layout-color=#6272a4 \
+  --date-color=#6272a4 \
+  --time-color=#6272a4 \
+  --screen 1 \
+  --blur 1 \
+  --clock \
+  --indicator \
+  --time-str='%H:%M:%S' \
+  --date-str='%A %e %B %Y' \
+  --verif-text='Checking...' \
+  --wrong-text='Wrong pswd' \
+  --noinput='No Input' \
+  --lock-text='Locking...' \
+  --lockfailed='Lock Failed' \
+  --radius=120 \
+  --ring-width=10 \
+  --pass-media-keys \
+  --pass-screen-keys \
+  --pass-volume-keys" &
+
 
 # Picom with delay to avoid black screen
 (sleep 1 && picom --config "${HOME}/.config/picom/picom.conf") &

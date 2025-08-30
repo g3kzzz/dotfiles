@@ -190,7 +190,43 @@ pause_and_clear
 echo " [+] Configuring services..."
 run_sudo systemctl enable NetworkManager || true
 run_sudo systemctl start NetworkManager || true
-echo "exec bspwm" > ~/.xinitrc
+
+# -------------------------
+#     CONFIGURE .xinitrc
+# -------------------------
+echo " [+] Configuring ~/.xinitrc with welcome animation..."
+
+cat > ~/.xinitrc <<'EOF'
+#!/bin/bash
+
+# -------------------------
+#  WELCOME ANIMATION
+# -------------------------
+slow_print() {
+    local text="$1"
+    for ((i=0; i<${#text}; i++)); do
+        echo -n "${text:$i:1}"
+        sleep 0.05
+    done
+    echo
+}
+
+# Display "Hack the world!" with animated dots
+welcome_msg="Hack the world"
+for i in {1..3}; do
+    clear
+    slow_print "${welcome_msg}$(printf '.%.0s' $(seq 1 $i))"
+    sleep 0.5
+done
+sleep 1
+clear
+
+exec bspwm
+EOF
+
+echo " [✓] ~/.xinitrc configured successfully"
+
+
 run_sudo chsh -s /bin/zsh "$USER"
 echo " [✓] Services enabled"
 pause_and_clear

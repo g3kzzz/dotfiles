@@ -1,5 +1,5 @@
 ;; Workspaces ;;;; Workspaces ;;
-(deflisten workspace0 "scripts/WorkSpaces Virtual-1")
+(deflisten workspace0 "scripts/WorkSpaces WORKSPACE")
 ;; Workspaces Widgets ;;
 (defwidget workspace0 [] (literal :content workspace0))
 ;; Workspaces Main Widget ;;
@@ -7,5 +7,5 @@
    (box    :orientation "v"
            :space-evenly "false"
            :valign "start"
-           (box :visible { monitor=="Virtual-1" } (workspace0))
+           (box :visible { monitor=="WORKSPACE" } (workspace0))
 ))

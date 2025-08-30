@@ -164,11 +164,11 @@ pause_and_clear
 echo " [+] Installing basic tools..."
 
 PACMAN_TOOLS=(
-  alsa-utils base-devel bat brightnessctl thunar tmux bspwm dbus dunst eza feh flameshot fzf alacritty git gnome-themes-extra jq lxappearance lxsession-gtk3 mpc mpd mpv neovim networkmanager ncmpcpp noto-fonts noto-fonts-emoji pamixer papirus-icon-theme picom playerctl polkit pipewire pipewire-pulse pavucontrol python-gobject qt5ct rofi rustup sxhkd tar ttf-font-awesome ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-terminus-nerd ttf-ubuntu-mono-nerd unzip xclip xdg-user-dirs xdo zsh xdotool xorg firefox xorg-xdpyinfo xorg-xinit xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo xsettingsd libnotify nodejs npm xf86-input-libinput nodejs npm
+  alsa-utils base-devel bat i3lock brightnessctl thunar tmux bspwm dbus dunst eza feh flameshot fzf alacritty git gnome-themes-extra jq lxappearance lxsession-gtk3 mpc mpd mpv neovim networkmanager ncmpcpp noto-fonts noto-fonts-emoji pamixer papirus-icon-theme picom playerctl polkit pipewire pipewire-pulse pavucontrol python-gobject qt5ct rofi rustup sxhkd tar ttf-font-awesome ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-terminus-nerd ttf-ubuntu-mono-nerd unzip xclip xdg-user-dirs xdo zsh xdotool xorg firefox xorg-xdpyinfo xorg-xinit xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo xsettingsd libnotify nodejs npm xf86-input-libinput nodejs npm
 )
 
 YAY_TOOLS=(
-  eww bash-language-server ly
+  eww bash-language-server ly xautolock
 )
 
 install_pacman "${PACMAN_TOOLS[@]}"

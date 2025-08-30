@@ -255,6 +255,25 @@ pause_and_clear
 
 
 # -------------------------
+#     CONFIGURE EWW WORKSPACE
+# -------------------------
+
+echo " [+] Configuring eww workspace..."
+
+CONFIG="$HOME/.config/eww/workspaces.yuck"
+WORKSPACE=$(xrandr --listmonitors | awk 'NR==2 {print $4}')
+
+if [ -z "$WORKSPACE" ]; then
+    WORKSPACE="eDP-1"
+fi
+
+sed -i "s/WORKSPACE/$WORKSPACE/g" "$CONFIG"
+
+echo " [✓] Workspace set to: $WORKSPACE"
+pause_and_clear
+
+
+# -------------------------
 #     FINAL
 # -------------------------
 echo " ============================================================"

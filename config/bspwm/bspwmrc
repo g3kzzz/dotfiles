@@ -77,9 +77,11 @@ dunst -conf "${HOME}/.config/dunst/dunstrc" &
 eww daemon --config "${HOME}/.config/eww"
 sleep 1
 eww open bar --config "${HOME}/.config/eww" --arg monitor="$(bspc query -M --names | head -n 1)"
+xautolock -time 2 -locker "i3lock -c 000000" &
 
 # Picom with delay to avoid black screen
 (sleep 1 && picom --config "${HOME}/.config/picom/picom.conf") &
+
 
 # Wallpaper
 feh --bg-fill "${HOME}/.config/wallpapers/g333k.png"

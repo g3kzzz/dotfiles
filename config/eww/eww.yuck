@@ -59,14 +59,7 @@
 ;; =======================================================================================
 ;; WIDGETS - APPS
 ;; =======================================================================================
-(defwidget terminalpowershell []
-  (box :class "terminal" :orientation "h" :space-evenly "false"
-    (button :tooltip "Terminal" 
-            :class "terminalpowershell" 
-            :onclick "notify-send 'Terminal: ${terminal}' ; ${terminal} &"
-            "")
-  )
-)
+
 (defwidget terminallinux []
   (box :class "terminal" :orientation "h" :space-evenly "false"
     (button :tooltip "Terminal" 
@@ -180,7 +173,7 @@
        :space-evenly false
        :class "control"
     (terminallinux)
-    (terminalpowershell)
+    
     (browser)
   )
 )
@@ -240,4 +233,6 @@
                    :side "left")
   :wm-ignore false
   (bar :monitor monitor))
+
+
 

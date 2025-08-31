@@ -1,7 +1,7 @@
 ;; =======================================================================================
 ;; VARIABLES
 ;; =======================================================================================
-(defvar browser "firefox")
+(defvar browser "librewolf")
 (defvar terminal "alacritty -e pwsh") 
 (defvar terminal2 "alacritty -e tmux") 
 (defvar volum false)

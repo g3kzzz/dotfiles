@@ -37,8 +37,8 @@ banner="
   ░░█████████ ░░████████ ░░████████ ░░████████  █████ ░░████
    ░░░░░░░░░   ░░░░░░░░   ░░░░░░░░   ░░░░░░░░  ░░░░░   ░░░░ 
      
-                      Made by: g333k
-             Repo: https://github.com/g333k/dotfiles
+                      Made by: g3kzzz
+             Repo: https://github.com/g3kzzz/dotfiles
 "
 
 clear
@@ -227,7 +227,7 @@ pause_and_clear
 echo " [+] Creating user folders..."
 mkdir -p "$HOME/Documents" "$HOME/CTF" "$HOME/Downloads" "$HOME/Music" "$HOME/Videos" "$HOME/Pictures/Clipboard"
 
-git clone https://github.com/g333k/dotfiles || true
+git clone https://github.com/g3kzzz/dotfiles || true
 cp -r dotfiles/config/* ~/.config/ || true
 
 cp -f dotfiles/home/.zshrc ~/.zshrc 

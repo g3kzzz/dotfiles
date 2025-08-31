@@ -1,6 +1,6 @@
 configuration {
     modi:                       "drun";
-    font:                       "Rubik 10";
+    font:                       "JetBrainsMono Nerd Font 10";
     display-drun:               "";
     drun-display-format:        "{icon}  {name}";
     sidebar-mode:               false;

@@ -33,8 +33,8 @@ banner="
 |  --  |   -   | |   | |    ___|_|   |_|       |    ___|__     |
 |_____/|_______| |___| |___|   |_______|_______|_______|_______|
                                                                                  
-                       Made by: g3kzzz
-           Repo: https://github.com/g3kzzz/dotfiles
+                        Made by: g3kzzz
+            Repo: https://github.com/g3kzzz/dotfiles            
 "
 
 clear
@@ -47,16 +47,18 @@ echo " ============================================================"
 echo
 echo " [!] This script will perform the following changes:"
 echo "   - Install essential packages with pacman"
-echo "   - Install extra packages with yay (AUR)"
-echo "   - Configure bspwm, zsh, oh-my-zsh and plugins"
-echo "   - Configure LY display manager"
-echo "   - Configure NetworkManager and services"
-echo "   - Create standard user folders"
-echo "   - Configure Node.js and bash-language-server"
-echo "   - Replicate the configuration for root"
+echo "   - Install additional packages from AUR with yay"
+echo "   - Configure bspwm window manager and Xorg"
+echo "   - Set up zsh, Oh My Zsh and plugins"
+echo "   - Enable and start NetworkManager"
+echo "   - Create standard user directories"
+echo "   - Apply custom dotfiles and configs"
+echo "   - Replicate zsh and configs for root"
+echo "   - Configure eww workspace for your monitor"
 echo
-echo "============================================================"
+echo " ============================================================"
 echo
+
 
 read -p " Do you want to continue with the installation? (y/n): " confirm
 

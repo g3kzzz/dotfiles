@@ -9,6 +9,8 @@ It includes an automated installer that sets up a complete workflow ecosystem po
 <p align="center">
   <img src="cap1.png" alt="Captura"/>
 </p>
+
+
 ---
 
 

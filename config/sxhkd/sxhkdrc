@@ -31,17 +31,6 @@ super + shift + {1-5}
 # ╭──────────────────────────────────────────────╮
 # │                Aplicaciones                  │
 # ╰──────────────────────────────────────────────╯
-# Click derecho para abrir jgmenu
-#~button3
-#  xqp 0 $(xdo id -N Bspwm -n root) && jgmenu --csv-file=~/.config/bspwm/src/config/jgmenu.txt --config-file=~/.config/bspwm/src/config/jgmenurc
-
-#~button3
-#  xqp 0 $(xdo id -N Bspwm -n root) && eval $(xdotool getmouselocation --shell) && jgmenu --no-standalone --at=$X,$Y --csv-file=$HOME/.config/bspwm/scripts/jgmenu.txt --config-file=$HOME/.config/bspwm/scripts/jgmenurc
-#~button3
-#  xqp 0 $(xdo id -N Bspwm -n root) && eval $(xdotool getmouselocation --shell) && jgmenu --no-standalone --at=$X,$Y --csv-file=$HOME/.config/bspwm/scripts/jgmenu.txt --config-file=$HOME/.config/bspwm/scripts/jgmenurc
-~button3
-  xqp 0 $(xdo id -N Bspwm -n root) && eval $(xdotool getmouselocation --shell) && jgmenu --no-standalone --at=$X,$Y --csv-file=$HOME/.config/bspwm/scripts/jgmenu.txt --config-file=$HOME/.config/bspwm/scripts/jgmenurc
-
 
 # Terminal (Normal y flotante)
 super + Return
@@ -55,22 +44,18 @@ super + r
 super + 6
     alacritty --class FloatingTerm --title "HTB VPN" --config-file ~/.config/alacritty/alacritty.toml -e ~/.config/bspwm/scripts/HTB
 
-# Lanzar BurpSuite personalizado
-super + 7
-    ~/.config/bspwm/scripts/Burpsuite
-super + 8
-    ~/.config/bspwm/scripts/workspace
 # ╭──────────────────────────────────────────────╮
 # │                 Capturas                     │
 # ╰──────────────────────────────────────────────╯
 
-# Captura completa
+# Captura completa (numerada real)
 super + s
-    flameshot full -p ~/Pictures/Clipboard && pkill flameshot
+    sh -c 'DIR=~/Pictures/Clipboard; mkdir -p "$DIR"; n=$(ls "$DIR" 2>/dev/null | grep -Eo "^img[0-9]+\.png$" | sed "s/[^0-9]//g" | sort -n | tail -1); [ -z "$n" ] && n=0; next=$((n+1)); while [ -e "$DIR/img$next.png" ]; do next=$((next+1)); done; flameshot full -p "$DIR/img$next.png" && pkill flameshot'
 
-# Captura con selector GUI
+# Captura con selector GUI (numerada real)
 super + shift + s
-        flameshot gui -p ~/Pictures/Clipboard/$(date +'%Y-%m-%d_%H-%M-%S').png
+    sh -c 'DIR=~/Pictures/Clipboard; mkdir -p "$DIR"; n=$(ls "$DIR" 2>/dev/null | grep -Eo "^img[0-9]+\.png$" | sed "s/[^0-9]//g" | sort -n | tail -1); [ -z "$n" ] && n=0; next=$((n+1)); while [ -e "$DIR/img$next.png" ]; do next=$((next+1)); done; flameshot gui -p "$DIR/img$next.png"'
+
 
 # ╭──────────────────────────────────────────────╮
 # │       Apagar, reiniciar, cerrar sesión       │

@@ -67,19 +67,19 @@ $none: #00000000;
 .works {
   font-family: "Material Design Icons Desktop";
   padding: 5px 16px;
-  background-color: $background ;
+  background-color: $contrastbg ;
   border-radius: 8px;
 }
 
 .workspace-focused {
   font-size: 19px;
-  color: $yellow;   // amarillo fosforescente
+  color: #8ea6c4;   // amarillo fosforescente
   margin: 5px 2px;
 }
 
 .workspace-occupied {
   font-size: 19px;
-  color: $cyan;     // cyan fosforescente
+  color: #6e8db4;     // cyan fosforescente
   margin: 5px 3px;
 }
 
@@ -149,10 +149,10 @@ scale trough {
 
     button {
         font-size: 1em;
-        color: $green;     // terminal normal verde fosforescente
+        color: #6e8db4;     // terminal normal verde fosforescente
 
         &:hover {
-            color: $blue;
+            color: $green;
         }
     }
 }
@@ -164,7 +164,7 @@ scale trough {
 
     button {
         font-size: 1em;
-        color: $magenta;  // PowerShell magenta fosforescente
+        color: #6e8db4;  // PowerShell magenta fosforescente
 
         &:hover {
             color: $cyan;
@@ -179,10 +179,10 @@ scale trough {
 
     button {
         font-size: 1em;
-        color: $yellow;
+        color: #6e8db4;
 
         &:hover {
-            color: $blue;
+            color: $green;
         }
     }
 }

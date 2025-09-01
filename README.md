@@ -8,7 +8,11 @@
 It includes an automated installer that sets up a complete workflow ecosystem powered by **bspwm** 🖥️, **zsh** 🐚, and a carefully chosen set of tools to boost productivity and maintain simplicity.
 
 ---
+# i3naro - Entorno gráfico rápido y minimalista con i3
 
+<p align="center">
+  <img src="cap1.png" alt="Captura"/>
+</p>
 ## 📦 Main Components
 
 The environment automatically configures:

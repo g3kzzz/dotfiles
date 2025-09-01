@@ -3,11 +3,11 @@ cursor = "0xffffff"
 text = "0x000000"
 
 [colors.primary]
-background = "0x000000"  # Fondo negro
+background = "#1a1b26"  # Fondo negro
 foreground = "0xe0e0e0"  # Texto gris claro
 
 [font]
-size = 8.0
+size = 13.0
 
 [font.normal]
 family = "JetBrainsMono Nerd Font"
@@ -26,7 +26,7 @@ program = "/bin/zsh"
 [window]
 decorations = "none"
 dynamic_padding = true
-opacity = 0.95  # Transparencia más sutil
+opacity = 1.0  # Transparencia más sutil
 
 [window.padding]
 x = 25
@@ -35,6 +35,9 @@ y = 15
 [cursor]
 style = "Beam"
 [terminal]
+
+
+
 
 
 

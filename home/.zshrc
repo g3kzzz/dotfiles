@@ -53,7 +53,7 @@ function short_path {
 # ----------------------------
 # Prompt personalizado con Git
 # ----------------------------
-PROMPT='%F{white}┌─[%f%F{201}%n%f%F{45} ✘ %m%f%F{white}]─[%f%F{201}%~%f%F{white}]%F{129}${vcs_info_msg_0_}%f'$'\n''%F{white}└──╼%f%(?.%F{45} $.%F{213} $)%f '
+PROMPT='%F{blue}┌─[%f%F{magenta}%n%f%F{cyan} ✘ %m%f%F{blue}]─[%f%F{red}%~%f%F{blue}]%F{yellow}${vcs_info_msg_0_}%f'$'\n''%F{blue}└──╼%f%(?.%F{green} .%F{red} )%f '
 
 # ----------------------------
 # Colores para archivos (LS_COLORS)

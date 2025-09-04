@@ -1,3 +1,4 @@
+
 ;; =======================================================================================
 ;; VARIABLES
 ;; =======================================================================================
@@ -48,7 +49,7 @@
 (defwidget imagenbox []
 	(box :orientation "v"
 		(eventbox :cursor "pointer"
-			(button :style "background-image: url('/home/g333k/.config/eww/images/user-image.png');"
+			(button :style "background-image: url('/home/g3kzzz/.config/eww/images/user-image.png');"
 			        :class "imagen_widget"
 			        :tooltip "${NETSTAT}"
 			        :onclick "OpenApps --usercard")
@@ -89,7 +90,14 @@
 			(button :style "background-image: url('${WIFIICON}');"
 			        :class "trayicon"
 			        :tooltip "${NETSTAT}"
-			        :onclick "OpenApps --netmanager")
+				:onclick "IP=$(ip -o -4 addr show tun0 2>/dev/null | awk '{print $4}' | cut -d/ -f1); \
+if [ -z \"$IP\" ]; then IP=$(ip -o -4 addr show eth0 2>/dev/null | awk '{print $4}' | cut -d/ -f1); fi; \
+if [ -z \"$IP\" ]; then IP=$(ip -o -4 addr show wlan0 2>/dev/null | awk '{print $4}' | cut -d/ -f1); fi; \
+if [ -z \"$IP\" ]; then IP=\"No red\"; fi; \
+printf \"%s\" \"$IP\" | xclip -selection clipboard"
+	
+	
+			)
 		)
 	)
 )
@@ -233,6 +241,7 @@
                    :side "left")
   :wm-ignore false
   (bar :monitor monitor))
+
 
 
 

@@ -3,7 +3,7 @@ cursor = "0xffffff"
 text = "0x000000"
 
 [colors.primary]
-background = "#1a1b26"  # Fondo negro
+background = "#000000"  # Fondo negro
 foreground = "0xe0e0e0"  # Texto gris claro
 
 [font]
@@ -35,6 +35,7 @@ y = 15
 [cursor]
 style = "Beam"
 [terminal]
+
 
 
 

@@ -1,0 +1,12 @@
+(defwindow bar [monitor]
+  :monitor monitor
+  :geometry (geometry :x "10px"
+                      :y "0%"
+                      :anchor "left center"
+                      :height "90%"
+                      :width "47px")
+  :reserve (struts :distance "5px"
+                   :side "left")
+  :wm-ignore false
+  (bar :monitor monitor))
+

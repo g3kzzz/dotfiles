@@ -1,0 +1,18 @@
+(defwidget terminallinux []
+  (box :class "terminal" :orientation "h" :space-evenly "false"
+    (button :tooltip "Terminal" 
+            :class "terminal" 
+            :onclick "notify-send 'Terminal: ${terminal2}' ; ${terminal2} &"
+            "")
+  )
+)
+
+(defwidget browser []
+  (box :class "browser" :orientation "h" :space-evenly "false"
+    (button :tooltip "LibreWolf" 
+            :class "browser" 
+            :onclick "notify-send 'Browser: ${browser}' ; ${browser} &"
+            "")
+  )
+)
+

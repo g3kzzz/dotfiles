@@ -1,0 +1,28 @@
+;; =======================================================================================
+;; VARIABLES
+;; =======================================================================================
+(defvar browser "librewolf")
+(defvar terminal "alacritty -e pwsh") 
+(defvar terminal2 "alacritty -e tmux") 
+(defvar volum false)
+(defvar notify false)
+(defvar power false)
+(defvar pac false)
+
+;; =======================================================================================
+;; INCLUDES
+;; =======================================================================================
+(include "src/yuck/polls.yuck")
+(include "workspaces.yuck") ;; ya lo tenías externo
+
+;;(include "src/yuck/launcher.yuck")
+(include "src/yuck/imagenbox.yuck")
+(include "src/yuck/apps.yuck")
+(include "src/yuck/wifi.yuck")
+(include "src/yuck/battery.yuck")
+(include "src/yuck/volume.yuck")
+(include "src/yuck/time.yuck")
+(include "src/yuck/tray.yuck")
+(include "src/yuck/layout.yuck")
+(include "src/yuck/window.yuck")
+

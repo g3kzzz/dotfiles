@@ -1,0 +1,29 @@
+/* ===============================================================================
+   WORKSPACES
+==================================================================================*/
+
+.works {
+  font-family: "Material Design Icons Desktop";
+  padding: 5px 16px;
+  background-color: $contrastbg ;
+  border-radius: 8px;
+}
+
+.workspace-focused {
+  font-size: 19px;
+  color: #8ea6c4;
+  margin: 5px 2px;
+}
+
+.workspace-occupied {
+  font-size: 19px;
+  color: #6e8db4;
+  margin: 5px 3px;
+}
+
+.workspace-empty {
+  font-size: 19px;
+  color: $gray2;
+  margin: 5px 2px;
+}
+

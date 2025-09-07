@@ -1,0 +1,63 @@
+(defwidget top []
+  (box :orientation "v"
+       :space-evenly "false"
+       :valign "start"
+    (imagenbox)
+    (control_2)
+  )
+)
+
+(defwidget bottom []
+  (box :orientation "v"
+       :space-evenly "false"))
+
+(defwidget control_2 []
+  (box :orientation "v"
+       :space-evenly false
+       :class "control"
+    (terminallinux)
+    (browser)
+  )
+)
+
+(defwidget control []
+  (box :orientation "v"
+       :space-evenly false
+       :class "control"
+    (volum)
+    (wifi)
+    (battery)
+  )
+)
+
+(defwidget center [monitor]
+  (box :orientation "v"
+       :space-evenly "false"
+       :valign "center"
+    (workspaces :monitor monitor)
+  )
+)
+
+(defwidget end []
+  (box :orientation "v"
+       :space-evenly "false"
+       :valign "end"
+       :spacing 5
+    (systemtray)
+    (bottom)
+    (control)
+    (time)
+  )
+)
+
+(defwidget bar [monitor]
+  (box :class "eww_bar"
+       :orientation "v"
+       :vexpand "false"
+       :hexpand "false"
+    (top)
+    (center :monitor monitor)
+    (end)
+  )
+)
+

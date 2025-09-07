@@ -1,0 +1,11 @@
+(defwidget battery []
+  (box :orientation "v"
+       :visible {battery_status ?: "false"}
+    (eventbox :cursor "pointer"
+      (button :class "trayicon"
+              :style "background-image: url('${battery_icon}');"
+              :tooltip "Batería: ${battery_percentage}%")
+    )
+  )
+)
+

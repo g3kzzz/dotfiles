@@ -1,0 +1,19 @@
+(defwidget time []
+  (box :orientation "v"
+       :class "time"
+       :valign "end"
+    (eventbox :cursor "pointer"
+      (button :onclick "OpenApps --calendar"
+              :class "time-hour"
+              "${formattime(EWW_TIME, "%H")}"
+      )
+    )
+    (eventbox :cursor "pointer"
+      (button :onclick "OpenApps --calendar"
+              :class "time-min"
+              "${formattime(EWW_TIME, "%M")}"
+      )
+    )
+  )
+)
+

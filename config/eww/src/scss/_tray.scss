@@ -1,0 +1,20 @@
+/* ===============================================================================
+   CONTROLS Y ICONOS DE TRAY
+==================================================================================*/
+
+.control { 
+  background: $contrastbg;
+  border-radius: 8px;
+  padding: 2px 2px;
+  margin: 0.5rem 0.7rem;
+}
+
+.trayicon {
+  background-repeat: no-repeat;
+  background-size: 35px;
+  min-height: 35px;
+  min-width: 35px;
+  border-radius: 25px;
+  margin: 0.5rem 0.3rem;
+}
+

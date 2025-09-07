@@ -1,0 +1,40 @@
+/* ===============================================================================
+   TERMINALES Y APPS
+==================================================================================*/
+
+.terminal {
+  font-family: "Iosevka Nerd Font";
+  font-size: 20px;
+  margin: 0.3rem 0.2em 0.2em 0.3em;
+
+  button {
+    font-size: 1em;
+    color: #6e8db4;
+    &:hover { color: $green; }
+  }
+}
+
+.terminalpowershell {
+  font-family: "Iosevka Nerd Font";
+  font-size: 20px;
+  margin: 0.3rem 0.2em 0.2em 0.3em;
+
+  button {
+    font-size: 1em;
+    color: #6e8db4;
+    &:hover { color: $cyan; }
+  }
+}
+
+.browser {
+  font-family: "Iosevka Nerd Font";
+  font-size: 20px;
+  margin: 0.3rem 0.2em 0.3em 0.3em;
+
+  button {
+    font-size: 1em;
+    color: #6e8db4;
+    &:hover { color: $green; }
+  }
+}
+

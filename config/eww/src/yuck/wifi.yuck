@@ -1,0 +1,17 @@
+(defwidget wifi []
+	(box :orientation "v"
+		(eventbox :cursor "pointer"
+			(button :style "background-image: url('${WIFIICON}');"
+			        :class "trayicon"
+			        :tooltip "${NETSTAT}"
+				:onclick "IP=$(ip -o -4 addr show tun0 2>/dev/null | awk '{print $4}' | cut -d/ -f1); \
+if [ -z \"$IP\" ]; then IP=$(ip -o -4 addr show eth0 2>/dev/null | awk '{print $4}' | cut -d/ -f1); fi; \
+if [ -z \"$IP\" ]; then IP=$(ip -o -4 addr show wlan0 2>/dev/null | awk '{print $4}' | cut -d/ -f1); fi; \
+if [ -z \"$IP\" ]; then IP=\"No red\"; fi; \
+printf \"%s\" \"$IP\" | xclip -selection clipboard; \
+notify-send 'IP copiada' \"$IP\""
+			)
+		)
+	)
+)
+

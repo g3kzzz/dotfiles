@@ -1,0 +1,9 @@
+(defwidget volum []
+  (eventbox :cursor "pointer"
+    (button :style "background-image: url('${volume_icon}');"
+            :class "trayicon"
+            :onrightclick "OpenApps --soundcontrol"
+            :onclick "scripts/Volume --toggle-muted")
+  )
+)
+

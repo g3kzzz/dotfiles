@@ -9,52 +9,10 @@ plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 source $ZSH/oh-my-zsh.sh
 
 # ----------------------------
-# Git branch con icono
-# ----------------------------
-autoload -Uz vcs_info
-
-precmd() {
-  vcs_info
-}
-
-zstyle ':vcs_info:*' enable git
-zstyle ':vcs_info:git:*' formats '%F{220}[%F{198}%f %F{220}%b%f]%f'
-zstyle ':vcs_info:git:*' actionformats '%F{220}[%F{198}%f %F{220}%b%f %F{196}|%a%f]%f'
-
-# ----------------------------
-# Icono de directorio
-# ----------------------------
-function dir_icon {
-  if [[ "$PWD" == "$HOME" ]]; then
-    echo "%F{45}%f"
-  else
-    echo "%F{45}%f"
-  fi
-}
-
-# ----------------------------
-# Ruta acortada ~/Do/Pr/ etc.
-# ----------------------------
-function short_path {
-  local full_path="${PWD/#$HOME/~}"
-  local IFS='/'
-  local -a parts result
-
-  for part in ${(s:/:)full_path}; do
-    if [[ "$part" == "~" || "$part" == "" ]]; then
-      result+="$part"
-    else
-      result+="${part[1,2]}"
-    fi
-  done
-  echo "${(j:/:)result}/"
-}
-
-# ----------------------------
 # Prompt personalizado con Git
 # ----------------------------
-PROMPT='%B%F{34}┌─[%f%F{63}%n%f %F{cyan}✘%f %F{63}%m%f%F{34}]─[%f%F{196}%~%f%F{34}]${vcs_info_msg_0_}%f%b'$'\n''%B%F{34}└──╼%f %F{34}$%f%b '
-
+PS1="%{$fg[blue]%}%B[%b%{$fg[cyan]%}%n%{$fg[grey]%}%B %F{cyan}✘%f %b%{$fg[cyan]%}%m%{$fg[blue]%}%B]-%b%{$fg[blue]%}%B[%b%{$fg[white]%}%~%{$fg[blue]%}%B]%b
+%{$fg[cyan]%}%B>>>%b%{$reset_color%} "
 # ----------------------------
 # Colores para archivos (LS_COLORS)
 # ----------------------------

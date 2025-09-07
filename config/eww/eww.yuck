@@ -1,4 +1,3 @@
-
 ;; =======================================================================================
 ;; VARIABLES
 ;; =======================================================================================
@@ -84,6 +83,7 @@
 ;; =======================================================================================
 ;; WIDGET - WIFI
 ;; =======================================================================================
+
 (defwidget wifi []
 	(box :orientation "v"
 		(eventbox :cursor "pointer"
@@ -94,9 +94,8 @@
 if [ -z \"$IP\" ]; then IP=$(ip -o -4 addr show eth0 2>/dev/null | awk '{print $4}' | cut -d/ -f1); fi; \
 if [ -z \"$IP\" ]; then IP=$(ip -o -4 addr show wlan0 2>/dev/null | awk '{print $4}' | cut -d/ -f1); fi; \
 if [ -z \"$IP\" ]; then IP=\"No red\"; fi; \
-printf \"%s\" \"$IP\" | xclip -selection clipboard"
-	
-	
+printf \"%s\" \"$IP\" | xclip -selection clipboard; \
+notify-send 'IP copiada' \"$IP\""
 			)
 		)
 	)
@@ -241,7 +240,6 @@ printf \"%s\" \"$IP\" | xclip -selection clipboard"
                    :side "left")
   :wm-ignore false
   (bar :monitor monitor))
-
 
 
 

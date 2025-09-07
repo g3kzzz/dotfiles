@@ -6,9 +6,9 @@
   all: unset;
 }
 
-$background: #061115;       // fondo principal oscuro
+$background: #0a0a0a;       // fondo principal oscuro
 $foreground: #FFFFFF;       // texto base brillante
-$contrastbg: #1c252c;       //contraste oscuro para widgets y barras
+$contrastbg: #1c1c1c;       //contraste oscuro para widgets y barras
 
 $ambar: #FFBF00;
 $gray1: #BFBFBF;
@@ -186,3 +186,4 @@ scale trough {
         }
     }
 }
+

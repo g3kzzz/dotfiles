@@ -117,6 +117,7 @@ xautolock -time 15 -locker "i3lock \
 # Picom with delay to avoid black screen
 (sleep 1 && picom --config "${HOME}/.config/picom/picom.conf") &
 
+# Wallpaper aleatorio (img1.png a img5.png)
+WALLPAPER_NUM=$((RANDOM % 3 + 1))
+feh --bg-fill "${HOME}/.config/wallpapers/img${WALLPAPER_NUM}.png"
 
-# Wallpaper
-feh --bg-fill "${HOME}/.config/wallpapers/g333k.png"

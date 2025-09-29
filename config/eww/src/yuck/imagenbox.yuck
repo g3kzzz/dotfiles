@@ -1,7 +1,7 @@
 (defwidget imagenbox []
 	(box :orientation "v"
 		(eventbox :cursor "pointer"
-			(button :style "background-image: url('/home/g3kzzz/.config/eww/images/user-image.png');"
+			(button :style "background-image: url('/home/g3kzzz/.config/eww/images/user-image1.png');"
 			        :class "imagen_widget"
 			        :tooltip "${NETSTAT}"
 			        :onclick "OpenApps --usercard")

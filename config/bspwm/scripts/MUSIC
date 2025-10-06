@@ -13,7 +13,7 @@ if pgrep -f "mpv.*$MUSIC_DIR" >/dev/null; then
     notify-send "Music Stopped" "Playlist has been stopped 🎵"
 else
     echo "Starting playlist..."
-    $PLAYER --shuffle "$MUSIC_DIR"/*.mp3 >/dev/null 2>&1 &
+    # Loop infinite, no video, shuffle
+    $PLAYER --no-video --loop=inf --shuffle "$MUSIC_DIR"/*.mp3 >/dev/null 2>&1 &
     notify-send "Music Started" "Playlist is now playing 🎶"
 fi
-

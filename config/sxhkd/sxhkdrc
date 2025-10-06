@@ -62,6 +62,8 @@ super + shift + s
 # ╰──────────────────────────────────────────────╯
 ctrl + super + alt + {p,r,q,l,k,s}
     {systemctl poweroff, systemctl reboot, bspc quit, ScreenLocker, xkill, SoftReload}
+super + 7
+    ~/.config/bspwm/scripts/MUSIC
 
 
 # ╭──────────────────────────────────────────────╮

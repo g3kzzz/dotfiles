@@ -1,0 +1,19 @@
+#!/bin/bash
+# ===============================================
+#        Music Playlist Toggle (BSPWM + sxhkd)
+# ===============================================
+
+MUSIC_DIR="$HOME/.config/music"
+PLAYER="mpv"
+
+# Check if mpv is already running for this playlist
+if pgrep -f "mpv.*$MUSIC_DIR" >/dev/null; then
+    echo "Music is already playing. Stopping..."
+    pkill -f "mpv.*$MUSIC_DIR"
+    notify-send "Music Stopped" "Playlist has been stopped 🎵"
+else
+    echo "Starting playlist..."
+    $PLAYER --shuffle "$MUSIC_DIR"/*.mp3 >/dev/null 2>&1 &
+    notify-send "Music Started" "Playlist is now playing 🎶"
+fi
+

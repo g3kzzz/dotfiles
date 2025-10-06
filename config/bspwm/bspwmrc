@@ -121,3 +121,8 @@ xautolock -time 15 -locker "i3lock \
 WALLPAPER_NUM=$((RANDOM % 3 + 1))
 feh --bg-fill "${HOME}/.config/wallpapers/img${WALLPAPER_NUM}.png"
 
+# -------------------------
+# Lanzar Picom + Eww Bar
+# -------------------------
+~/.config/bspwm/scripts/eww.sh &
+

@@ -223,11 +223,11 @@ pause_and_clear
 #     STANDARD FOLDERS
 # -------------------------
 echo " [+] Creating user folders..."
-mkdir -p "$HOME/Documents" "$HOME/CTF" "$HOME/Downloads" "$HOME/Music" "$HOME/Videos" "$HOME/Pictures/Clipboard"
+mkdir -p "$HOME/Documents" "$HOME/Desktop" "$HOME/CTF" "$HOME/Downloads" "$HOME/Music" "$HOME/Videos" "$HOME/Pictures/Clipboard"
 
 git clone https://github.com/g3kzzz/dotfiles || true
 cp -r dotfiles/config/* ~/.config/ || true
-
+cp -r dotfiles/home/.librewolf ~/ || true 
 cp -f dotfiles/home/.zshrc ~/.zshrc 
 if [ -f "$HOME/.zshrc" ]; then
     echo " [+] Reloading ZSH..."
@@ -284,34 +284,8 @@ echo " [✓] Workspace set to: $WORKSPACE"
 pause_and_clear
 
 
-# -------------------------
-#     RESTORE LIBREWOLF BACKUP
-# -------------------------
-echo " [+] Restoring LibreWolf backup..."
-# ==============================
-# 🦊 LibreWolf profile restore
-# ==============================
+# ---------
 
-LIBREWOLF_DIR="$HOME/.librewolf"
-BACKUP_FILE="$HOME/dotfiles/home/librewolf-backup.tar.gz"
-
-# Crear directorio si no existe
-mkdir -p "$LIBREWOLF_DIR"
-
-if [ -f "$BACKUP_FILE" ]; then
-  echo " [*] Restoring LibreWolf profile from backup..."
-
-  # Extraer manteniendo la estructura original
-  tar -xzf "$BACKUP_FILE" -C "$LIBREWOLF_DIR"
-
-  echo " [✓] LibreWolf profile restored successfully."
-  echo " [i] Files in $LIBREWOLF_DIR:"
-  ls -la "$LIBREWOLF_DIR"
-else
-  echo " [!] Backup file not found: $BACKUP_FILE"
-fi
-
-pause_and_clear
 
 # =============================
 # LIMPIEZA DE SUDOERS

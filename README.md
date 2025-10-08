@@ -7,7 +7,7 @@
 
 It includes an automated installer that sets up a complete workflow ecosystem powered by **bspwm** 🖥️, **zsh** 🐚, and a carefully chosen set of tools to boost productivity and maintain simplicity.
 <p align="center">
-  <img src="cap1.png" alt="Captura"/>
+  <img src="c.png" alt="Captura"/>
 </p>
 
 

@@ -173,7 +173,7 @@ pause_and_clear
 # STEP 6 - INSTALL PACKAGES
 # ============================================================
 PACMAN_TOOLS=(
-  xorg xorg-xinit bspwm lxdm sxhkd picom feh alacritty zsh tmux eza bat xclip brightnessctl pamixer rofi thunar ttf-jetbrains-mono papirus-icon-theme picom gnome-themes-extra dunst libnotify flameshot
+  xorg xorg-xinit bspwm lxdm sxhkd picom feh ttf-fira-code adobe-source-code-pro-fonts ttf-inconsolata ttf-hack ttf-cascadia-code ttf-ibm-plex alacritty zsh tmux eza bat xclip brightnessctl pamixer rofi thunar  gvfs gvfs-mtp tumbler ffmpegthumbnailer ttf-jetbrains-mono papirus-icon-theme picom gnome-themes-extra dunst libnotify flameshot
 )
 
 YAY_TOOLS=( eww bash-language-server xautolock i3lock-color librewolf-bin )

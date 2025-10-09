@@ -37,9 +37,6 @@ BANNER="
 show_banner() {
   clear
   echo -e "$BANNER"
-  echo " ============================================================"
-  echo "              Welcome to the G3K Installer"
-  echo " ============================================================"
   echo
 }
 

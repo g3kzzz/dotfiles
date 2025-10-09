@@ -1,0 +1,96 @@
+#!/bin/bash
+# =====================================================
+#         🎧 Music Playlist Manager (BSPWM)
+#               — by g3k / minimal cyan —
+# =====================================================
+
+MUSIC_DIR="$HOME/.config/music"
+PLAYER="mpv"
+CYAN="\e[36m"
+RESET="\e[0m"
+BOLD="\e[1m"
+NOTIFY_ID=6666
+
+# ───────────────────────────────────────────────
+# Función: animación simple
+# ───────────────────────────────────────────────
+loading() {
+  local msg="$1"
+  echo -ne "${CYAN}${msg}${RESET}"
+  for c in '.' '..' '...'; do
+    echo -ne "\r${CYAN}${msg}${c}${RESET}"
+    sleep 0.3
+  done
+  echo -e "\r${CYAN}${msg}... listo!${RESET}"
+}
+
+# ───────────────────────────────────────────────
+# Función: notificación (sin imagen)
+# ───────────────────────────────────────────────
+notify_cyan() {
+  local title="$1"
+  local message="$2"
+  dunstify -r "$NOTIFY_ID" -u normal -t 3000 -h string:x-dunst-stack-tag:music "$title" "$message"
+}
+
+# ───────────────────────────────────────────────
+# Función: validar carpeta y archivos
+# ───────────────────────────────────────────────
+validate_music_dir() {
+  if [ ! -d "$MUSIC_DIR" ]; then
+    echo -e "${CYAN}⚠ Carpeta no encontrada:${RESET} $MUSIC_DIR"
+    notify_cyan "Music Player" "⚠ Carpeta no encontrada en $MUSIC_DIR"
+    exit 1
+  fi
+
+  local mp3_count
+  mp3_count=$(find "$MUSIC_DIR" -maxdepth 1 -type f -iname "*.mp3" | wc -l)
+  if [ "$mp3_count" -eq 0 ]; then
+    echo -e "${CYAN}⚠ No hay archivos MP3 en:${RESET} $MUSIC_DIR"
+    notify_cyan "Music Player" "⚠ No se encontraron archivos MP3"
+    exit 1
+  fi
+}
+
+# ───────────────────────────────────────────────
+# Función: verificar si mpv está activo
+# ───────────────────────────────────────────────
+is_playing() {
+  pgrep -f "mpv.*$MUSIC_DIR" >/dev/null
+}
+
+# ───────────────────────────────────────────────
+# MAIN
+# ───────────────────────────────────────────────
+clear
+echo -e "${CYAN}╔══════════════════════════════════════════════╗${RESET}"
+echo -e "${CYAN}║        MUSIC PLAYLIST MANAGER 🎵             ║${RESET}"
+echo -e "${CYAN}╚══════════════════════════════════════════════╝${RESET}"
+echo
+
+validate_music_dir
+
+if is_playing; then
+  echo -e "${CYAN}🎶 Reproducción activa — deteniendo...${RESET}"
+  loading "Deteniendo música"
+  pkill -f "mpv.*$MUSIC_DIR"
+  if ! is_playing; then
+    echo -e "${CYAN}✅ Música detenida.${RESET}"
+    notify_cyan "Music Player" "Música detenida correctamente 🎵"
+  else
+    echo -e "${CYAN}✖ Error al detener la música.${RESET}"
+    notify_cyan "Music Player" "Error al detener reproducción ⚠"
+  fi
+else
+  echo -e "${CYAN}🎧 Iniciando playlist...${RESET}"
+  loading "Cargando MPV"
+  nohup "$PLAYER" --no-video --loop=inf --shuffle "$MUSIC_DIR"/*.mp3 >/dev/null 2>&1 &
+  sleep 1
+  if is_playing; then
+    echo -e "${CYAN}✅ Playlist iniciada correctamente.${RESET}"
+    notify_cyan "Music Player" "Playlist en reproducción 🎶"
+  else
+    echo -e "${CYAN}✖ Error al iniciar playlist.${RESET}"
+    notify_cyan "Music Player" "No se pudo iniciar la playlist ⚠"
+  fi
+fi

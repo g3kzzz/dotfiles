@@ -1,0 +1,47 @@
+#! /bin/sh
+
+
+export XDG_CURRENT_DESKTOP='bspwm'
+export _JAVA_AWT_WM_NONREPARENTING=1
+
+
+pgrep -x sxhkd > /dev/null || sxhkd &
+
+
+bspc monitor -d I II III IV V
+
+
+bspc config top_padding           10
+bspc config bottom_padding        10
+bspc config right_padding         5
+bspc config left_padding          81
+bspc config window_gap 13   
+bspc config split_ratio           0.53
+bspc config single_monocle        true
+bspc config automatic_scheme      longest_side
+bspc config initial_polarity      second_child
+bspc config removal_adjustment    true
+bspc config focus_follows_pointer true
+bspc config pointer_follows_focus false
+bspc config pointer_follows_monitor true
+bspc config pointer_motion_interval 7
+bspc config pointer_modifier      mod4
+bspc config pointer_action1       move
+bspc config pointer_action2       resize_side
+bspc config pointer_action3       resize_corner
+bspc config border_width          0
+bspc rule -a FloatingTerm state=floating center=true
+bspc config external_rules_command "${HOME}/.config/bspwm/scripts/rules"
+
+
+eww daemon --config "${HOME}/.config/eww"
+sleep 3
+eww open bar --config "${HOME}/.config/eww" --arg monitor="$(bspc query -M --names | head -n 1)"
+
+
+pgrep -x dunst >/dev/null || dunst &
+
+
+WALLPAPER_NUM=$((RANDOM % 3 + 1))
+feh --bg-fill "${HOME}/.config/wallpapers/img${WALLPAPER_NUM}.png"
+

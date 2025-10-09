@@ -79,12 +79,6 @@ pause_and_clear() {
 # STEP 1 - SHOW LOGO AND ASK CONFIRMATION
 # ============================================================
 show_banner
-
-echo " [!] This script will perform the following changes:"
-echo "   - Install essential packages (pacman + yay)"
-echo "   - Configure bspwm, Xorg, ZSH, Oh-My-Zsh"
-echo "   - Setup NetworkManager and services"
-echo "   - Apply dotfiles and sync for root"
 echo
 read -p " Do you want to continue with the installation? (Y/n): " confirm
 confirm=${confirm,,}  # lowercase

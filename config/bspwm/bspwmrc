@@ -34,6 +34,9 @@ bspc rule -a FloatingTerm state=floating center=true
 bspc config external_rules_command "${HOME}/.config/bspwm/scripts/rules"
 
 
+"$HOME/.config/bspwm/scripts/workspaces"
+
+
 eww daemon --config "${HOME}/.config/eww"
 sleep 3
 eww open bar --config "${HOME}/.config/eww" --arg monitor="$(bspc query -M --names | head -n 1)"

@@ -1,0 +1,40 @@
+#!/bin/bash
+# ====================================================
+# Generador dinámico de workspaces.yuck según monitores
+# ====================================================
+
+YUCK_FILE="$HOME/.config/eww/workspaces.yuck"
+BACKUP_FILE="$YUCK_FILE.bak"
+
+# Hacer copia de seguridad
+cp "$YUCK_FILE" "$BACKUP_FILE"
+
+# Detectar todos los monitores conectados
+MONITORS=($(xrandr --listmonitors | awk 'NR>1 {print $4}'))
+
+# Encabezado fijo del archivo
+cat > "$YUCK_FILE" <<'EOF'
+;;;; Workspaces ;;;;
+EOF
+
+# Generar deflisten y widgets para cada monitor
+for i in "${!MONITORS[@]}"; do
+    MON="${MONITORS[$i]}"
+    echo "(deflisten workspace$i \"scripts/WorkSpaces $MON\")" >> "$YUCK_FILE"
+done
+
+echo ";; Workspaces Widgets ;;" >> "$YUCK_FILE"
+for i in "${!MONITORS[@]}"; do
+    echo "(defwidget workspace$i [] (literal :content workspace$i))" >> "$YUCK_FILE"
+done
+
+echo ";; Workspaces Main Widget ;;" >> "$YUCK_FILE"
+echo "(defwidget workspaces [monitor]" >> "$YUCK_FILE"
+echo "   (box :orientation \"v\" :space-evenly \"false\" :valign \"start\"" >> "$YUCK_FILE"
+for i in "${!MONITORS[@]}"; do
+    MON="${MONITORS[$i]}"
+    echo "       (box :visible { monitor==\"$MON\" } (workspace$i))" >> "$YUCK_FILE"
+done
+echo "   ))" >> "$YUCK_FILE"
+
+echo "Archivo workspaces.yuck regenerado según monitores conectados."

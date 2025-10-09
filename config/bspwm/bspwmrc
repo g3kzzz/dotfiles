@@ -45,3 +45,5 @@ pgrep -x dunst >/dev/null || dunst &
 WALLPAPER_NUM=$((RANDOM % 3 + 1))
 feh --bg-fill "${HOME}/.config/wallpapers/img${WALLPAPER_NUM}.png"
 
+sleep 2
+pidof picom >/dev/null || picom --config "$HOME/.config/picom/picom.conf" -b &

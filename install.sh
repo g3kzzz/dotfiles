@@ -213,7 +213,7 @@ pause_and_clear
 # STEP 9 - DOTFILES & USER FOLDERS
 # ============================================================
 echo " [+] Creating folders and applying dotfiles..."
-mkdir -p "$HOME"/{Documents,Desktop,CTF,Downloads,Music,Videos,Pictures/Clipboard}
+mkdir -p "$HOME"/{Documents,Desktop,CTF,Downloads,Pictures/Clipboard}
 git clone https://github.com/g3kzzz/dotfiles || true
 cp -r dotfiles/config/* ~/.config/ || true
 cp -r dotfiles/home/.librewolf ~/ || true 
@@ -229,16 +229,6 @@ run_sudo chsh -s /bin/zsh root
 run_sudo cp -r ~/.oh-my-zsh /root/ || true
 run_sudo cp -r ~/.zshrc /root/ || true
 run_sudo cp -r ~/.config /root/ || true
-pause_and_clear
-
-# ============================================================
-# STEP 11 - EWW CONFIGURATION
-# ============================================================
-echo " [+] Configuring eww workspace..."
-CONFIG="$HOME/.config/eww/workspaces.yuck"
-WORKSPACE=$(xrandr --listmonitors | awk 'NR==2 {print $4}')
-[[ -z "$WORKSPACE" ]] && WORKSPACE="eDP-1"
-sed -i "s/WORKSPACE/$WORKSPACE/g" "$CONFIG"
 pause_and_clear
 
 # ============================================================

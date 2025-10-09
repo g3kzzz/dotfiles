@@ -1,32 +1,26 @@
 #!/bin/bash
 set -e
 
+# ============================================================
+#                    G3K INSTALLER (v2)
+#                Author: g3kzzz | Arch Linux
+# ============================================================
 
-# --- ROOT RESTRICTION ---
+# -------------------------
+# ROOT RESTRICTION
+# -------------------------
 if [[ $EUID -eq 0 ]]; then
   echo "[!] Do not run this script directly as root."
   echo "[!] Run it as a normal user."
   exit 1
 fi
 
-
-
-# =============================
-#   G3K Installer
-# =============================
-
-# --- FUNCTION FOR ANIMATION ---
-slow_print() {
-  local text="$1"
-  for ((i=0; i<${#text}; i++)); do
-    echo -n "${text:$i:1}"
-    sleep 0.000
-  done
-  echo
-}
-
-# --- ASCII BANNER ---
-banner="
+# -------------------------
+# GLOBAL VARIABLES
+# -------------------------
+TMP_SUDOERS="/etc/sudoers.d/99_g3k_tmp"
+MUSIC_DIR="$HOME/.config/music"
+BANNER="
  
  _____  _______ _______ _______ _______ _____   _______ _______ 
 |     \|       |_     _|    ___|_     _|     |_|    ___|     __|
@@ -37,88 +31,111 @@ banner="
             Repo: https://github.com/g3kzzz/dotfiles            
 "
 
-clear
-slow_print "$banner"
-sleep 1
+# -------------------------
+# DISPLAY BANNER (persistent)
+# -------------------------
+show_banner() {
+  clear
+  echo -e "$BANNER"
+  echo " ============================================================"
+  echo "              Welcome to the G3K Installer"
+  echo " ============================================================"
+  echo
+}
 
-echo " ============================================================"
-echo "              Welcome to the G3K Installer"
-echo " ============================================================"
-echo
+# -------------------------
+# CLEAR BELOW LOGO ONLY
+# -------------------------
+clear_below_logo() {
+  tput cup 15 0  # Mueve el cursor a la línea 15
+  tput ed         # Limpia desde esa posición hacia abajo
+}
+
+# -------------------------
+# SLOW PRINT FUNCTION
+# -------------------------
+slow_print() {
+  local text="$1"
+  for ((i=0; i<${#text}; i++)); do
+    echo -n "${text:$i:1}"
+    sleep 0.000
+  done
+  echo
+}
+
+# -------------------------
+# SUDO FUNCTION (password reuse)
+# -------------------------
+run_sudo() {
+  echo "$SUDO_PASS" | sudo -S "$@"
+}
+
+# -------------------------
+# PAUSE & CLEAN BELOW LOGO
+# -------------------------
+pause_and_clear() {
+  sleep 1.5
+  clear_below_logo
+}
+
+# ============================================================
+# STEP 1 - SHOW LOGO AND ASK CONFIRMATION
+# ============================================================
+show_banner
+
 echo " [!] This script will perform the following changes:"
-echo "   - Install essential packages with pacman"
-echo "   - Install additional packages from AUR with yay"
-echo "   - Configure bspwm window manager and Xorg"
-echo "   - Set up zsh, Oh My Zsh and plugins"
-echo "   - Enable and start NetworkManager"
-echo "   - Create standard user directories"
-echo "   - Apply custom dotfiles and configs"
-echo "   - Replicate zsh and configs for root"
-echo "   - Configure eww workspace for your monitor"
+echo "   - Install essential packages (pacman + yay)"
+echo "   - Configure bspwm, Xorg, ZSH, Oh-My-Zsh"
+echo "   - Setup NetworkManager and services"
+echo "   - Apply dotfiles and sync for root"
 echo
-echo " ============================================================"
-echo
+read -p " Do you want to continue with the installation? (Y/n): " confirm
+confirm=${confirm,,}  # lowercase
 
-
-read -p " Do you want to continue with the installation? (y/n): " confirm
-
-if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
-  echo " [!] Installation cancelled by the user."
+if [[ -z "$confirm" || "$confirm" == "y" || "$confirm" == "yes" ]]; then
+  echo " [+] Continuing installation..."
+  sleep 1
+else
+  echo " [!] Installation cancelled by user."
   exit 0
 fi
 
-clear
-echo " [+] Starting installation..."
-sleep 2
+clear_below_logo
 
-
-# =============================
-# PASSWORD HANDLING
-# =============================
+# ============================================================
+# STEP 2 - PASSWORD HANDLING
+# ============================================================
 while true; do
-    echo -n "🔑 Enter your sudo password: "
-    read -s SUDO_PASS
-    echo
-    # Validate password
-    if echo "$SUDO_PASS" | sudo -S -v &>/dev/null; then
-        echo "✅ Password accepted"
-        break
-    else
-        echo "❌ Wrong password, try again."
-    fi
+  echo -n "🔑 Enter your sudo password: "
+  read -s SUDO_PASS
+  echo
+  if echo "$SUDO_PASS" | sudo -S -v &>/dev/null; then
+    echo "✅ Password accepted"
+    break
+  else
+    echo "❌ Wrong password, try again."
+  fi
 done
+pause_and_clear
 
-
-
-# =============================
-# SUDOERS TEMPORAL PARA YAY
-# =============================
-TMP_SUDOERS="/etc/sudoers.d/99_g3k_tmp"
+# ============================================================
+# STEP 3 - TEMPORARY SUDOERS FOR INSTALLATION
+# ============================================================
 echo "$USER ALL=(ALL) NOPASSWD: /usr/bin/pacman, /usr/bin/makepkg, /usr/bin/chsh" | sudo tee "$TMP_SUDOERS" >/dev/null
 
-# Función sudo personalizada
-run_sudo() {
-    echo "$SUDO_PASS" | sudo -S "$@"
-}
-
-# =============================
-# AUXILIARY FUNCTIONS
-# =============================
-
-pause_and_clear() {
-  sleep 2
-  clear
-}
-
+# ============================================================
+# STEP 4 - PACKAGE INSTALL FUNCTIONS
+# ============================================================
 install_pacman() {
   for pkg in "$@"; do
     if pacman -Qi "$pkg" &>/dev/null; then
       echo " [✓] $pkg already installed"
     else
+      echo " [+] Installing $pkg..."
       if echo "$SUDO_PASS" | sudo -S pacman -S --needed --noconfirm "$pkg" &>/dev/null; then
         echo " [✓] $pkg installed"
       else
-        echo " [!] Failed to install $pkg with pacman"
+        echo " [!] Failed to install $pkg"
       fi
     fi
   done
@@ -129,27 +146,25 @@ install_yay() {
     if yay -Qi "$pkg" &>/dev/null; then
       echo " [✓] $pkg already installed"
     else
+      echo " [+] Installing $pkg..."
       if yay -S --needed --noconfirm "$pkg" &>/dev/null; then
         echo " [✓] $pkg installed"
       else
-        echo " [!] Failed to install $pkg with yay"
+        echo " [!] Failed to install $pkg"
       fi
     fi
   done
 }
 
-cd /home/$USER
-
-# =============================
-# YAY INSTALL
-# =============================
+# ============================================================
+# STEP 5 - YAY INSTALLATION
+# ============================================================
 echo " [+] Checking YAY..."
 if ! command -v yay &>/dev/null; then
   echo " [+] Installing yay..."
   cd /tmp
   git clone https://aur.archlinux.org/yay.git &>/dev/null
-  cd yay
-  makepkg -si --noconfirm <<<"$SUDO_PASS" &>/dev/null
+  cd yay && makepkg -si --noconfirm <<<"$SUDO_PASS" &>/dev/null
   cd ~
   echo " [✓] yay installed"
 else
@@ -157,150 +172,94 @@ else
 fi
 pause_and_clear
 
-# =============================
-# INSTALLING TOOLS
-# =============================
-echo " [+] Installing basic tools..."
-
+# ============================================================
+# STEP 6 - INSTALL PACKAGES
+# ============================================================
 PACMAN_TOOLS=(
-  alsa-utils base-devel bat brightnessctl thunar tmux bspwm dbus dunst eza feh flameshot fzf alacritty git gnome-themes-extra jq lxappearance lxsession-gtk3 mpc mpd mpv neovim networkmanager ncmpcpp noto-fonts noto-fonts-emoji pamixer papirus-icon-theme picom playerctl polkit pipewire pipewire-pulse pavucontrol python-gobject qt5ct rofi rustup sxhkd tar ttf-font-awesome ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-terminus-nerd ttf-ubuntu-mono-nerd unzip xclip xdg-user-dirs xdo zsh xdotool xorg xorg-xdpyinfo xorg-xinit xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo xsettingsd libnotify nodejs npm xf86-input-libinput nodejs npm lightdm lightdm-gtk-greeter
+  alsa-utils base-devel bat brightnessctl thunar tmux bspwm dbus dunst eza feh flameshot fzf alacritty git gnome-themes-extra jq
+  lxappearance lxsession-gtk3 mpc mpd mpv neovim networkmanager ncmpcpp noto-fonts noto-fonts-emoji pamixer papirus-icon-theme picom
+  playerctl polkit pipewire pipewire-pulse pavucontrol python-gobject qt5ct rofi rustup sxhkd tar ttf-font-awesome ttf-jetbrains-mono
+  ttf-jetbrains-mono-nerd ttf-terminus-nerd ttf-ubuntu-mono-nerd unzip xclip xdg-user-dirs xdo zsh xdotool xorg xorg-xdpyinfo xorg-xinit
+  xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo xsettingsd libnotify nodejs npm xf86-input-libinput lightdm lightdm-gtk-greeter
 )
 
-YAY_TOOLS=(
-  eww bash-language-server xautolock i3lock-color librewolf-bin
-)
-echo " [+] PACMAN TOOLS..."
+YAY_TOOLS=( eww bash-language-server xautolock i3lock-color librewolf-bin )
+
+echo " [+] Installing PACMAN tools..."
 install_pacman "${PACMAN_TOOLS[@]}"
 pause_and_clear
-echo " [+] YAY TOOLS..."
+
+echo " [+] Installing YAY tools..."
 install_yay "${YAY_TOOLS[@]}"
-echo " [✓] Tools installed"
 pause_and_clear
 
-# ----------------------------
-#   INSTALL LightDM (DISPLAY MANAGER)
-# ----------------------------
-echo " [+] Enabling LightDM on startup..."
+# ============================================================
+# STEP 7 - SERVICES & CONFIG
+# ============================================================
+echo " [+] Enabling LightDM and NetworkManager..."
 run_sudo systemctl enable lightdm.service || true
-echo " [✓] LightDM installed and enabled"
-pause_and_clear
-
-# -------------------------
-#     ENABLE SERVICES
-# -------------------------
-echo " [+] Configuring services..."
 run_sudo systemctl enable NetworkManager || true
 run_sudo systemctl start NetworkManager || true
-
 echo "exec bspwm" > ~/.xinitrc
-
-
 run_sudo chsh -s /bin/zsh "$USER"
-echo " [✓] Services enabled"
 pause_and_clear
 
-# -------------------------
-#     INSTALL OH-MY-ZSH
-# -------------------------
+# ============================================================
+# STEP 8 - ZSH & PLUGINS
+# ============================================================
 echo " [+] Installing Oh My Zsh and plugins..."
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
-    RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" || true
+  RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" || true
 fi
 
 ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
-
-if [ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]; then
-  git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
-fi
-
-if [ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]; then
-  git clone https://github.com/zsh-users/zsh-syntax-highlighting "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
-fi
-echo " [✓] Oh My Zsh configured"
+git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions" 2>/dev/null || true
+git clone https://github.com/zsh-users/zsh-syntax-highlighting "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" 2>/dev/null || true
 pause_and_clear
 
-# -------------------------
-#     STANDARD FOLDERS
-# -------------------------
-echo " [+] Creating user folders..."
-mkdir -p "$HOME/Documents" "$HOME/Desktop" "$HOME/CTF" "$HOME/Downloads" "$HOME/Music" "$HOME/Videos" "$HOME/Pictures/Clipboard"
-
+# ============================================================
+# STEP 9 - DOTFILES & USER FOLDERS
+# ============================================================
+echo " [+] Creating folders and applying dotfiles..."
+mkdir -p "$HOME"/{Documents,Desktop,CTF,Downloads,Music,Videos,Pictures/Clipboard}
 git clone https://github.com/g3kzzz/dotfiles || true
 cp -r dotfiles/config/* ~/.config/ || true
 cp -r dotfiles/home/.librewolf ~/ || true 
 cp -f dotfiles/home/.zshrc ~/.zshrc 
-if [ -f "$HOME/.zshrc" ]; then
-    echo " [+] Reloading ZSH..."
-    source "$HOME/.zshrc" || true
-fi
-echo " [✓] Folders and configs applied"
+source "$HOME/.zshrc" || true
 pause_and_clear
 
-# -------------------------
-#     CONFIGURE ROOT
-# -------------------------
-echo " [+] Applying configuration for root as well..."
-
+# ============================================================
+# STEP 10 - ROOT CONFIG SYNC
+# ============================================================
+echo " [+] Applying configuration for root..."
 run_sudo chsh -s /bin/zsh root
-
 run_sudo cp -r ~/.oh-my-zsh /root/ || true
 run_sudo cp -r ~/.zshrc /root/ || true
 run_sudo cp -r ~/.config /root/ || true
-
-if ! run_sudo test -d /root/.oh-my-zsh; then
-    run_sudo sh -c "RUNZSH=no sh -c \"\$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\""
-fi
-
-ROOT_ZSH_CUSTOM="/root/.oh-my-zsh/custom"
-if ! run_sudo test -d "$ROOT_ZSH_CUSTOM/plugins/zsh-autosuggestions"; then
-  run_sudo git clone https://github.com/zsh-users/zsh-autosuggestions "$ROOT_ZSH_CUSTOM/plugins/zsh-autosuggestions"
-fi
-if ! run_sudo test -d "$ROOT_ZSH_CUSTOM/plugins/zsh-syntax-highlighting"; then
-  run_sudo git clone https://github.com/zsh-users/zsh-syntax-highlighting "$ROOT_ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
-fi
-
-echo " [✓] Configuration replicated for root"
 pause_and_clear
 
-
-
-
-# -------------------------
-#     CONFIGURE EWW WORKSPACE
-# -------------------------
-
+# ============================================================
+# STEP 11 - EWW CONFIGURATION
+# ============================================================
 echo " [+] Configuring eww workspace..."
-
 CONFIG="$HOME/.config/eww/workspaces.yuck"
 WORKSPACE=$(xrandr --listmonitors | awk 'NR==2 {print $4}')
-
-if [ -z "$WORKSPACE" ]; then
-    WORKSPACE="eDP-1"
-fi
-
+[[ -z "$WORKSPACE" ]] && WORKSPACE="eDP-1"
 sed -i "s/WORKSPACE/$WORKSPACE/g" "$CONFIG"
-
-echo " [✓] Workspace set to: $WORKSPACE"
 pause_and_clear
 
+# ============================================================
+# STEP 12 - CLEANUP
+# ============================================================
+echo " [+] Cleaning up sudoers..."
+run_sudo rm -f "$TMP_SUDOERS" || true
+pause_and_clear
 
-# ---------
-
-
-# =============================
-# LIMPIEZA DE SUDOERS
-# =============================
-echo " [+] Cleaning up sudoers rule..."
-run_sudo rm -f /etc/sudoers.d/99_g3k_tmp
-echo " [✓] Sudoers restored"
-
-
-# -------------------------
-#     FINAL
-# -------------------------
+# ============================================================
+# DONE
+# ============================================================
 echo " ============================================================"
 echo " [✓] All done."
-echo " [✓] The environment has been configured"
+echo " [✓] The environment has been configured."
 echo "============================================================"
-pause_and_clear
-

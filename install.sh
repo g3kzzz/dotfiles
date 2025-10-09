@@ -173,11 +173,7 @@ pause_and_clear
 # STEP 6 - INSTALL PACKAGES
 # ============================================================
 PACMAN_TOOLS=(
-  alsa-utils base-devel bat brightnessctl thunar tmux bspwm dbus dunst eza feh flameshot fzf alacritty git gnome-themes-extra jq
-  lxappearance lxsession-gtk3 mpc mpd mpv neovim networkmanager ncmpcpp noto-fonts noto-fonts-emoji pamixer papirus-icon-theme picom
-  playerctl polkit pipewire pipewire-pulse pavucontrol python-gobject qt5ct rofi rustup sxhkd tar ttf-font-awesome ttf-jetbrains-mono
-  ttf-jetbrains-mono-nerd ttf-terminus-nerd ttf-ubuntu-mono-nerd unzip xclip xdg-user-dirs xdo zsh xdotool xorg xorg-xdpyinfo xorg-xinit
-  xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo xsettingsd libnotify nodejs npm xf86-input-libinput lightdm lightdm-gtk-greeter
+  xorg xorg-xinit bspwm lxdm sxhkd picom feh alacritty zsh tmux eza bat xclip brightnessctl pamixer rofi thunar ttf-jetbrains-mono papirus-icon-theme picom gnome-themes-extra dunst libnotify flameshot
 )
 
 YAY_TOOLS=( eww bash-language-server xautolock i3lock-color librewolf-bin )
@@ -193,8 +189,7 @@ pause_and_clear
 # ============================================================
 # STEP 7 - SERVICES & CONFIG
 # ============================================================
-echo " [+] Enabling LightDM and NetworkManager..."
-run_sudo systemctl enable lightdm.service || true
+run_sudo systemctl enable lxdm.service || true
 run_sudo systemctl enable NetworkManager || true
 run_sudo systemctl start NetworkManager || true
 echo "exec bspwm" > ~/.xinitrc

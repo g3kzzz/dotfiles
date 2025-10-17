@@ -10,9 +10,10 @@ CYAN="\e[36m"
 RESET="\e[0m"
 BOLD="\e[1m"
 NOTIFY_ID=6666
+SHUFFLE_FILE="/tmp/music_shuffle.txt"
 
 # ───────────────────────────────────────────────
-# Función: animación simple
+# Animación
 # ───────────────────────────────────────────────
 loading() {
   local msg="$1"
@@ -25,7 +26,7 @@ loading() {
 }
 
 # ───────────────────────────────────────────────
-# Función: notificación (sin imagen)
+# Notificación (sin imagen)
 # ───────────────────────────────────────────────
 notify_cyan() {
   local title="$1"
@@ -34,7 +35,7 @@ notify_cyan() {
 }
 
 # ───────────────────────────────────────────────
-# Función: validar carpeta y archivos
+# Validar carpeta y archivos
 # ───────────────────────────────────────────────
 validate_music_dir() {
   if [ ! -d "$MUSIC_DIR" ]; then
@@ -53,10 +54,40 @@ validate_music_dir() {
 }
 
 # ───────────────────────────────────────────────
-# Función: verificar si mpv está activo
+# Verificar si mpv está activo
 # ───────────────────────────────────────────────
 is_playing() {
   pgrep -f "mpv.*$MUSIC_DIR" >/dev/null
+}
+
+# ───────────────────────────────────────────────
+# Generar lista aleatoria sin repetición
+# ───────────────────────────────────────────────
+generate_shuffle() {
+  find "$MUSIC_DIR" -maxdepth 1 -type f -iname "*.mp3" | sort -R > "$SHUFFLE_FILE"
+}
+
+# ───────────────────────────────────────────────
+# Reproducción secuencial aleatoria
+# ───────────────────────────────────────────────
+play_random_no_repeat() {
+  echo -e "${CYAN}🎵 Generando lista aleatoria sin repetición...${RESET}"
+  generate_shuffle
+
+  while true; do
+    local total=$(wc -l < "$SHUFFLE_FILE")
+    local count=0
+    while IFS= read -r track; do
+      [ -z "$track" ] && continue
+      count=$((count + 1))
+      local base=$(basename "$track")
+      echo -e "${CYAN}♪ [$count/$total] Reproduciendo:${RESET} $base"
+      notify_cyan "🎶 Reproduciendo ($count/$total)" "$base"
+      "$PLAYER" --really-quiet --no-video --loop-file=no "$track"
+    done < "$SHUFFLE_FILE"
+    echo -e "${CYAN}🔁 Lista completada — remezclando...${RESET}"
+    generate_shuffle
+  done
 }
 
 # ───────────────────────────────────────────────
@@ -82,15 +113,20 @@ if is_playing; then
     notify_cyan "Music Player" "Error al detener reproducción ⚠"
   fi
 else
-  echo -e "${CYAN}🎧 Iniciando playlist...${RESET}"
+  echo -e "${CYAN}🎧 Iniciando playlist aleatoria sin repetición...${RESET}"
   loading "Cargando MPV"
-  nohup "$PLAYER" --no-video --loop=inf --shuffle "$MUSIC_DIR"/*.mp3 >/dev/null 2>&1 &
+  
+  (
+    play_random_no_repeat
+  ) >/dev/null 2>&1 &
+
   sleep 1
   if is_playing; then
     echo -e "${CYAN}✅ Playlist iniciada correctamente.${RESET}"
-    notify_cyan "Music Player" "Playlist en reproducción 🎶"
+    notify_cyan "Music Player" "Playlist aleatoria en reproducción 🎶"
   else
     echo -e "${CYAN}✖ Error al iniciar playlist.${RESET}"
     notify_cyan "Music Player" "No se pudo iniciar la playlist ⚠"
   fi
 fi
+

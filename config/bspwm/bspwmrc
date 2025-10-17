@@ -1,6 +1,6 @@
 #! /bin/sh
 
-
+export PATH="$HOME/.config/bspwm/scripts:$PATH"
 export XDG_CURRENT_DESKTOP='bspwm'
 export _JAVA_AWT_WM_NONREPARENTING=1
 

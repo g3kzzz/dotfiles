@@ -54,7 +54,7 @@ validate_music_dir() {
 }
 
 # ───────────────────────────────────────────────
-# Verificar si mpv está activo
+# Verificar si mpv está activo (solo nuestra música)
 # ───────────────────────────────────────────────
 is_playing() {
   pgrep -f "mpv.*$MUSIC_DIR" >/dev/null
@@ -74,10 +74,11 @@ play_random_no_repeat() {
   echo -e "${CYAN}🎵 Generando lista aleatoria sin repetición...${RESET}"
   generate_shuffle
 
-  while true; do
+  while [ -f "$SHUFFLE_FILE" ]; do
     local total=$(wc -l < "$SHUFFLE_FILE")
     local count=0
     while IFS= read -r track; do
+      [ ! -f "$SHUFFLE_FILE" ] && break 2  # si se borra el archivo, sal del bucle principal
       [ -z "$track" ] && continue
       count=$((count + 1))
       local base=$(basename "$track")
@@ -85,9 +86,34 @@ play_random_no_repeat() {
       notify_cyan "🎶 Reproduciendo ($count/$total)" "$base"
       "$PLAYER" --really-quiet --no-video --loop-file=no "$track"
     done < "$SHUFFLE_FILE"
+
     echo -e "${CYAN}🔁 Lista completada — remezclando...${RESET}"
     generate_shuffle
   done
+}
+
+# ───────────────────────────────────────────────
+# Detener mpv correctamente (solo música del playlist)
+# ───────────────────────────────────────────────
+stop_music() {
+  echo -e "${CYAN}🎶 Deteniendo música...${RESET}"
+
+  # Eliminar archivo de control para romper el bucle
+  rm -f "$SHUFFLE_FILE"
+
+  # Matar procesos mpv que estén reproduciendo desde la carpeta de música
+  pkill -f "mpv.*$MUSIC_DIR"
+
+  sleep 1
+
+  # Verificar si aún queda algo activo
+  if ! is_playing; then
+    echo -e "${CYAN}✅ Música detenida correctamente.${RESET}"
+    notify_cyan "Music Player" "Música detenida correctamente 🎵"
+  else
+    echo -e "${CYAN}✖ No se pudo detener toda la música.${RESET}"
+    notify_cyan "Music Player" "No se pudo detener completamente ⚠"
+  fi
 }
 
 # ───────────────────────────────────────────────
@@ -104,14 +130,7 @@ validate_music_dir
 if is_playing; then
   echo -e "${CYAN}🎶 Reproducción activa — deteniendo...${RESET}"
   loading "Deteniendo música"
-  pkill -f "mpv.*$MUSIC_DIR"
-  if ! is_playing; then
-    echo -e "${CYAN}✅ Música detenida.${RESET}"
-    notify_cyan "Music Player" "Música detenida correctamente 🎵"
-  else
-    echo -e "${CYAN}✖ Error al detener la música.${RESET}"
-    notify_cyan "Music Player" "Error al detener reproducción ⚠"
-  fi
+  stop_music
 else
   echo -e "${CYAN}🎧 Iniciando playlist aleatoria sin repetición...${RESET}"
   loading "Cargando MPV"
@@ -129,4 +148,3 @@ else
     notify_cyan "Music Player" "No se pudo iniciar la playlist ⚠"
   fi
 fi
-

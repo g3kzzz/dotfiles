@@ -207,7 +207,7 @@ pause_and_clear
 # STEP 9 - DOTFILES & USER FOLDERS
 # ============================================================
 echo " [+] Creating folders and applying dotfiles..."
-mkdir -p "$HOME"/{Documents,Desktop,CTF,Downloads,Pictures/Clipboard}
+mkdir -p "$HOME"/{Documents,CTF,Downloads,Pictures/Clipboard}
 git clone https://github.com/g3kzzz/dotfiles || true
 cp -r dotfiles/config/* ~/.config/ || true
 cp -r dotfiles/home/.librewolf ~/ || true 

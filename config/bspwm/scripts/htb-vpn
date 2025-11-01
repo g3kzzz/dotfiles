@@ -1,206 +1,97 @@
 #!/bin/bash
-# =====================================================
-#        HTB VPN Manager — Validación + Supervisión
-#                  (Cyan - Dunst + htb.png)
-# =====================================================
 
 SRC_DIR="$HOME/.config/bspwm/scripts/src"
-LOGFILE="$HOME/.htb-vpn.log"
-ICON_PATH="$HOME/.config/bspwm/scripts/images/htb.png"  # <-- tu imagen
-TIMEOUT_INIT=15   # segundos a esperar por "Initialization Sequence Completed"
-CYAN="\e[36m"
-BOLD="\e[1m"
-RESET="\e[0m"
+LOGFILE="$HOME/.vpn.log"
+ICON="$HOME/.config/bspwm/scripts/images/htb.png"
+TIMEOUT=15
 
-# ---------- helpers ----------
-typing() {
-  local text="$1"
-  for ((i=0; i<${#text}; i++)); do
-    echo -ne "${CYAN}${text:$i:1}${RESET}"
-    sleep 0.005
-  done
-  echo
-}
+notify() { dunstify -u "$1" -r 9999 -i "$ICON" "$2" "$3"; }
 
-dnotify() {
-  # Usa dunstify pero pedimos colores/fg/bg como hint (si tu dunst los respeta)
-  # argumentos: $1 urgency (low|normal|critical), $2 title, $3 message
-  local urg="$1"; shift
-  local title="$1"; shift
-  local msg="$1"; shift
-  dunstify -r 7777 -u "$urg" -t 4500 -h string:x-dunst-stack-tag:htb-vpn -i "$ICON_PATH" "$title" "$msg"
-}
-
-# ---------- validaciones de archivo .ovpn ----------
-validate_ovpn() {
-  local file="$1"
-
-  # existe y es legible
-  if [ ! -r "$file" ]; then
+is_connected() {
+    pgrep -f "openvpn --config" >/dev/null && return 0
+    ip a | grep -q "tun0" && return 0
     return 1
-  fi
-
-  # tamaño mínimo razonable (ej: > 50 bytes)
-  local size
-  size=$(stat -c%s "$file" 2>/dev/null || echo 0)
-  if [ "$size" -lt 50 ]; then
-    return 2
-  fi
-
-  # buscar tokens típicos en .ovpn (client|remote|dev|proto)
-  local need_count=0
-  grep -Eqi '^\s*client\b' "$file" && ((need_count++))
-  grep -Eqi '^\s*remote\b' "$file" && ((need_count++))
-  grep -Eqi '^\s*dev\b' "$file" && ((need_count++))
-  grep -Eqi '^\s*proto\b' "$file" && ((need_count++))
-
-  # requerimos al menos 2 tokens para considerarlo plausiblemente un .ovpn válido
-  if [ "$need_count" -lt 2 ]; then
-    return 3
-  fi
-
-  return 0
 }
 
-# ---------- funciones de supervisión ----------
-start_openvpn() {
-  local file="$1"
-  # limpamos log antiguo de esta sesión para facilitar parsing
-  : > "$LOGFILE"
-  # Iniciamos openvpn en daemon y con log al archivo
-  # No usamos sudo -n porque puede pedir contraseña; dejamos prompt si corresponde
-  sudo openvpn --config "$file" --daemon --log "$LOGFILE" 2>>"$LOGFILE"
-  return $?
+disconnect_vpn() {
+    echo "Disconnecting VPN..."
+    sudo pkill -f openvpn >/dev/null 2>&1
+    sudo ip link delete tun0 >/dev/null 2>&1
+    notify normal "VPN" "Disconnected"
+    echo "✅ Disconnected"
+    exit 0
 }
 
-wait_for_initialization() {
-  local logfile="$1"
-  local timeout=${2:-$TIMEOUT_INIT}
-  local elapsed=0
-  local interval=1
-
-  while [ $elapsed -lt $timeout ]; do
-    # si aparece la línea de éxito, devolvemos 0
-    if grep -q "Initialization Sequence Completed" "$logfile" 2>/dev/null; then
-      return 0
-    fi
-    # si aparece un "Options error" o "ERROR" obvio, fallamos
-    if grep -qiE "Options error|ERROR|error|Exiting" "$logfile" 2>/dev/null; then
-      return 2
-    fi
-    # también detectamos si tun0 ya existe
-    if ip a | grep -q "tun0"; then
-      # puede ser que el servicio ya levantó sin la línea exacta; aceptamos
-      return 0
-    fi
-    sleep $interval
-    elapsed=$(( elapsed + interval ))
-  done
-
-  # timeout
-  return 1
+validate_ovpn() {
+    local f="$1"
+    [ -r "$f" ] || return 1
+    [ "$(stat -c%s "$f" 2>/dev/null || echo 0)" -gt 50 ] || return 2
+    local c=0
+    grep -qi '^ *client' "$f" && ((c++))
+    grep -qi '^ *remote' "$f" && ((c++))
+    grep -qi '^ *dev' "$f" && ((c++))
+    grep -qi '^ *proto' "$f" && ((c++))
+    [ "$c" -ge 2 ] || return 3
 }
 
-# ---------- flujo principal ----------
-clear
-echo -e "${CYAN}╔══════════════════════════════════════════════╗${RESET}"
-typing "║         HACK THE BOX VPN MANAGER ⚡          ║"
-echo -e "${CYAN}╚══════════════════════════════════════════════╝${RESET}"
-echo
+connect_vpn() {
+    sudo pkill -f openvpn >/dev/null 2>&1
+    : > "$LOGFILE"
+    sudo openvpn --config "$1" --daemon --log "$LOGFILE" 2>>"$LOGFILE"
+}
 
-# validar directorio y archivos
-if [ ! -d "$SRC_DIR" ]; then
-  echo -e "${CYAN}⚠ Directorio no encontrado:${RESET} $SRC_DIR"
-  dnotify critical "HTB VPN" "Directorio $SRC_DIR no encontrado"
-  exit 1
+wait_init() {
+    local t=0
+    while [ $t -lt "$TIMEOUT" ]; do
+        grep -q "Initialization Sequence Completed" "$LOGFILE" && return 0
+        grep -qiE "ERROR|Options error|Exiting" "$LOGFILE" && return 2
+        ip a | grep -q "tun0" && return 0
+        sleep 1; t=$((t+1))
+    done
+    return 1
+}
+
+# -------- toggle logic --------
+
+if is_connected; then
+    disconnect_vpn
 fi
 
-shopt -s nullglob
-VPN_FILES=("$SRC_DIR"/*.ovpn)
-shopt -u nullglob
+# not connected -> connect
 
-if [ ${#VPN_FILES[@]} -eq 0 ]; then
-  echo -e "${CYAN}⚠ No hay archivos .ovpn en:${RESET} $SRC_DIR"
-  dnotify critical "HTB VPN" "No se encontraron archivos .ovpn en $SRC_DIR"
-  exit 1
+[ -d "$SRC_DIR" ] || { echo "Dir not found"; notify critical "VPN" "Dir not found"; exit 1; }
+
+shopt -s nullglob; VPNs=("$SRC_DIR"/*.ovpn); shopt -u nullglob
+count=${#VPNs[@]}
+
+[ $count -gt 0 ] || { echo "No .ovpn"; notify critical "VPN" "No .ovpn"; exit 1; }
+
+if [ $count -eq 1 ]; then
+    FILE="${VPNs[0]}"
+    echo "Using default: $(basename "$FILE")"
+else
+    echo "VPN configs:"
+    for i in "${!VPNs[@]}"; do echo "[$((i+1))] $(basename "${VPNs[$i]}")"; done
+    read -p "Select: " n
+    [[ "$n" =~ ^[0-9]+$ ]] && [ "$n" -ge 1 ] && [ "$n" -le $count ] \
+        || { echo "Invalid"; notify critical "VPN" "Invalid selection"; exit 1; }
+    FILE="${VPNs[$((n-1))]}"
 fi
 
-# mostrar lista compacta (sin bordes redundantes)
-echo -e "${CYAN}🌐 Archivos VPN disponibles:${RESET}"
-for i in "${!VPN_FILES[@]}"; do
-  printf "${CYAN}[%d]${RESET} %s\n" $((i+1)) "$(basename "${VPN_FILES[$i]}")"
-done
+echo "Validating $(basename "$FILE")..."
+validate_ovpn "$FILE" || { echo "Invalid .ovpn"; notify critical "VPN" "Bad config"; exit 1; }
 
-echo
-echo -ne "${CYAN}Seleccione un archivo VPN (número): ${RESET}"
-read -r selection
+echo "Connecting..."
+connect_vpn "$FILE"; sleep 1
 
-if ! [[ "$selection" =~ ^[0-9]+$ ]] || [ "$selection" -lt 1 ] || [ "$selection" -gt ${#VPN_FILES[@]} ]; then
-  echo -e "${CYAN}✖ Selección inválida.${RESET}"
-  dnotify critical "HTB VPN" "Selección inválida"
-  exit 1
-fi
-
-VPN_FILE="${VPN_FILES[$((selection-1))]}"
-echo -e "${CYAN}✔ Archivo elegido:${RESET} $(basename "$VPN_FILE")"
-echo
-
-# validar contenido plausible del .ovpn
-echo -ne "${CYAN}Validando archivo... ${RESET}"
-if ! validate_ovpn "$VPN_FILE"; then
-  echo -e "${CYAN}✖${RESET}"
-  echo -e "${CYAN}→ El archivo no parece un .ovpn válido. Abortando.${RESET}"
-  dnotify critical "HTB VPN" "Archivo inválido: $(basename "$VPN_FILE")"
-  exit 1
-fi
-echo -e "${CYAN}✔${RESET}"
-
-# iniciar openvpn y supervisar el log
-echo -ne "${CYAN}Iniciando OpenVPN${RESET}"
-for dot in {1..3}; do echo -ne "${CYAN}.${RESET}"; sleep 0.4; done
-echo
-start_openvpn "$VPN_FILE"
-sleep 1
-
-# esperar a inicialización (o error)
-wait_for_initialization "$LOGFILE" $TIMEOUT_INIT
+wait_init
 case $? in
-  0)
-    # ok: confirmamos tun0 o mensaje en log y notificamos éxito
-    if ip a | grep -q "tun0"; then
-      dnotify normal "HTB VPN" "Conectado: $(basename "$VPN_FILE")"
-      echo -e "${CYAN}✅ VPN conectada correctamente.${RESET}"
-      exit 0
-    else
-      # muy raro: init ok pero no tun0; aún así consideramos éxito si log tiene la línea
-      if grep -q "Initialization Sequence Completed" "$LOGFILE" 2>/dev/null; then
-        dnotify normal "HTB VPN" "Conectado: $(basename "$VPN_FILE")"
-        echo -e "${CYAN}✅ VPN conectada (init OK).${RESET}"
-        exit 0
-      fi
-      dnotify critical "HTB VPN" "Conexión inconclusa"
-      echo -e "${CYAN}✖ Conexión no verificada. Revisa $LOGFILE${RESET}"
-      exit 1
-    fi
-    ;;
-  1)
-    # timeout sin init; consideramos fallo
-    dnotify critical "HTB VPN" "Tiempo de conexión agotado"
-    echo -e "${CYAN}✖ Timeout: no se completó la inicialización en ${TIMEOUT_INIT}s${RESET}"
-    echo -e "${CYAN}→ Revisa $LOGFILE para detalles.${RESET}"
-    exit 2
-    ;;
-  2)
-    # error detectado en log
-    local err_line
-    err_line=$(grep -iE "Options error|ERROR|error|Exiting" "$LOGFILE" 2>/dev/null | head -n1)
-    dnotify critical "HTB VPN" "Error al conectar: $(basename "$VPN_FILE")"
-    echo -e "${CYAN}✖ Error detectado:${RESET} ${err_line:-(revisa $LOGFILE)}"
-    exit 3
-    ;;
-  *)
-    dnotify critical "HTB VPN" "Error inesperado"
-    echo -e "${CYAN}✖ Error inesperado.${RESET}"
-    exit 4
-    ;;
+    0) echo "✅ Connected"; notify normal "VPN" "Connected"; exit 0;;
+    1) echo "❌ Timeout"; notify critical "VPN" "Timeout"; exit 1;;
+    2) echo "❌ Error"; notify critical "VPN" "Error in log"; exit 2;;
 esac
+
+echo "❌ Unknown"
+notify critical "VPN" "Unknown error"
+exit 3
+

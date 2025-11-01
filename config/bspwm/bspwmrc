@@ -8,13 +8,13 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 pgrep -x sxhkd > /dev/null || sxhkd &
 
 
-bspc monitor -d I II III IV V
+bspc monitor -d I II III IV V 
 
 
-bspc config top_padding           10
-bspc config bottom_padding        10
+bspc config top_padding           15
+bspc config bottom_padding        15
 bspc config right_padding         5
-bspc config left_padding          81
+bspc config left_padding          84
 bspc config window_gap 8   
 bspc config split_ratio           0.505
 bspc config single_monocle        true

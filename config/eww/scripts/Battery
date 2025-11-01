@@ -9,6 +9,9 @@ img_path="$HOME/.config/eww/images"
 # Archivo temporal para animación
 frame_file="/tmp/.battery_frame"
 
+# Archivo para evitar notificación repetida
+warn_file="$HOME/.cache/battery_warned"
+
 # Inicializa frame si no existe
 [ ! -f "$frame_file" ] && echo 0 > "$frame_file"
 
@@ -20,7 +23,30 @@ battery_status() {
 	fi
 }
 
+# Notificación de batería baja
+low_battery_warning() {
+    if [ "$per" -le 10 ]; then
+        # Si no existe el archivo => primera advertencia
+        if [ ! -f "$warn_file" ]; then
+            # notificación estilo Ubuntu
+            notify-send "Low Battery" "Battery level is critically low. Please plug in your charger." -u critical
+
+            # bajar brillo a 2%
+            brightnessctl set 1%
+
+            # registrar que ya se notificó
+            touch "$warn_file"
+        fi
+    else
+        # si sube de 10%, resetear aviso
+        [ -f "$warn_file" ] && rm "$warn_file"
+    fi
+}
+
 icon() {
+    # Ejecutar chequeo de batería baja siempre que se pida ícono
+    low_battery_warning
+
     if [ "$(cat "$bat/status")" = "Charging" ]; then
         # Definir frames según nivel actual
         if [ "$per" -le 10 ]; then
@@ -65,3 +91,4 @@ percent() {
 [ "$1" = "battery_status" ] && battery_status && exit
 [ "$1" = "icon" ] && icon && exit
 [ "$1" = "percent" ] && percent && exit
+

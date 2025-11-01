@@ -226,6 +226,102 @@ run_sudo cp -r ~/.config /root/ || true
 pause_and_clear
 
 # ============================================================
+# STEP 11 - SSH KEY SETUP (Default or Secure Mode)
+# ============================================================
+echo " [+] SSH Key Setup"
+echo
+
+DEFAULT_USER="g3kzzz"
+
+echo "Choose SSH key generation mode:"
+echo "  1) Default — NO passphrase (automatic, less secure)"
+echo "  2) Secure  — Enter passphrase (recommended)"
+read -p "Select option [1]: " mode_choice
+
+# Validate input: anything other than "2" = default (1)
+if [[ "$mode_choice" != "2" ]]; then
+  mode_choice=1
+  echo " [*] Default mode selected"
+else
+  echo " [*] Secure mode selected"
+fi
+echo
+
+read -p "SSH key label (comment) [${DEFAULT_USER}]: " SSH_USER
+SSH_USER=${SSH_USER:-$DEFAULT_USER}
+
+mkdir -p "$HOME/.ssh"
+chmod 700 "$HOME/.ssh"
+
+PASSPHRASE_RSA=""
+PASSPHRASE_ED25519=""
+
+# If secure mode, ask passphrases
+if [[ "$mode_choice" == "2" ]]; then
+  echo "Secure mode: enter passphrases"
+
+  while true; do
+    read -s -p "RSA key passphrase: " p1; echo
+    read -s -p "Confirm rsa passphrase: " p2; echo
+    [[ "$p1" == "$p2" ]] && PASSPHRASE_RSA="$p1" && break
+    echo "Passphrases do not match. Try again."
+  done
+
+  echo
+  read -s -p "ED25519 passphrase (Press ENTER to reuse RSA passphrase): " q1; echo
+  if [[ -z "$q1" ]]; then
+    PASSPHRASE_ED25519="$PASSPHRASE_RSA"
+  else
+    while true; do
+      read -s -p "Confirm ED25519 passphrase: " q2; echo
+      [[ "$q1" == "$q2" ]] && PASSPHRASE_ED25519="$q1" && break
+      echo "Passphrases do not match. Try again."
+    done
+  fi
+fi
+
+generate_key() {
+  local keypath="$1"
+  local type="$2"
+  local bits="$3"
+  local pass="$4"
+
+  if [[ -f "$keypath" ]]; then
+    echo " [!] $keypath already exists."
+    read -p "Overwrite? [y/N]: " resp
+    if [[ "${resp,,}" != "y" ]]; then
+      echo " [i] Keeping existing key."
+      return
+    fi
+    cp "$keypath" "${keypath}.backup" 2>/dev/null || true
+    cp "${keypath}.pub" "${keypath}.pub.backup" 2>/dev/null || true
+    rm -f "$keypath" "${keypath}.pub"
+  fi
+
+  echo " [+] Generating $type key..."
+  if [[ "$type" == "rsa" ]]; then
+    ssh-keygen -t rsa -b "$bits" -C "${SSH_USER}@$(hostname)" -f "$keypath" -N "$pass" >/dev/null
+  else
+    ssh-keygen -t ed25519 -C "${SSH_USER}@$(hostname)" -f "$keypath" -N "$pass" >/dev/null
+  fi
+
+  chmod 600 "$keypath"
+  chmod 644 "${keypath}.pub"
+  echo " [✓] $type key created"
+}
+
+generate_key "$HOME/.ssh/id_rsa" "rsa" 4096 "$PASSPHRASE_RSA"
+generate_key "$HOME/.ssh/id_ed25519" "ed25519" "" "$PASSPHRASE_ED25519"
+
+echo " [+] Showing public keys:"
+[[ -f "$HOME/.ssh/id_rsa.pub" ]] && echo -e "\n--- id_rsa.pub ---" && cat "$HOME/.ssh/id_rsa.pub"
+[[ -f "$HOME/.ssh/id_ed25519.pub" ]] && echo -e "\n--- id_ed25519.pub ---" && cat "$HOME/.ssh/id_ed25519.pub"
+
+echo
+echo " [✓] SSH setup complete. Keys ready to add to GitHub/GitLab/etc."
+pause_and_clear
+
+# ============================================================
 # STEP 12 - CLEANUP
 # ============================================================
 echo " [+] Cleaning up sudoers..."

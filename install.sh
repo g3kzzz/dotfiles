@@ -167,10 +167,10 @@ pause_and_clear
 # STEP 6 - INSTALL PACKAGES
 # ============================================================
 PACMAN_TOOLS=(
-  xorg xorg-xinit bspwm lxdm sxhkd picom feh ttf-fira-code adobe-source-code-pro-fonts ttf-inconsolata ttf-hack ttf-cascadia-code ttf-ibm-plex kitty zsh tmux eza bat xclip brightnessctl pamixer rofi thunar  gvfs gvfs-mtp tumbler ffmpegthumbnailer ttf-jetbrains-mono neovim ttf-jetbrains-mono-nerd papirus-icon-theme picom gnome-themes-extra dunst libnotify flameshot nodejs npm
+  xorg xorg-xinit bspwm lxdm sxhkd picom feh ttf-fira-code adobe-source-code-pro-fonts ttf-inconsolata ttf-hack ttf-cascadia-code ttf-ibm-plex kitty zsh tmux eza bat xclip brightnessctl pamixer rofi thunar  gvfs gvfs-mtp tumbler ffmpegthumbnailer ttf-jetbrains-mono neovim ttf-jetbrains-mono-nerd papirus-icon-theme picom gnome-themes-extra dunst libnotify flameshot nodejs npm firefox
 )
 
-YAY_TOOLS=( eww bash-language-server xautolock i3lock-color librewolf-bin )
+YAY_TOOLS=( eww bash-language-server xautolock i3lock-color )
 
 echo " [+] Installing PACMAN tools..."
 install_pacman "${PACMAN_TOOLS[@]}"
@@ -210,7 +210,7 @@ echo " [+] Creating folders and applying dotfiles..."
 mkdir -p "$HOME"/{Documents,CTF,Downloads,Pictures/Clipboard}
 git clone https://github.com/g3kzzz/dotfiles || true
 cp -r dotfiles/config/* ~/.config/ || true
-cp -r dotfiles/home/.librewolf ~/ || true 
+cp -r dotfiles/home/.mozilla ~/ || true 
 cp -f dotfiles/home/.zshrc ~/.zshrc 
 source "$HOME/.zshrc" || true
 pause_and_clear

@@ -126,3 +126,43 @@ super + d
 # Cerrar todas las ventanas del escritorio actual
 super + ctrl + x
     bspc query -N -d | xargs -I id -n 1 bspc node id -c
+
+# ╭──────────────────────────────────────────────╮
+# │           Teclas especiales (Fn keys)        │
+# ╰──────────────────────────────────────────────╯
+
+# Play / Pause
+XF86AudioPlay
+    playerctl play-pause
+
+# Siguiente pista
+XF86AudioNext
+    playerctl next
+
+# Pista anterior
+XF86AudioPrev
+    playerctl previous
+
+# Stop
+XF86AudioStop
+    playerctl stop
+
+# Mic mute
+XF86AudioMicMute
+    pactl set-source-mute @DEFAULT_SOURCE@ toggle && notify-send "🎤 Mic Toggle"
+
+# Botón llamada (Responder)
+XF86Phone
+    notify-send "📞 Botón de llamada (no asignado)" 
+
+# Botón colgar
+XF86Hangup
+    notify-send "📵 Colgar llamada (no asignado)"
+
+# Modo avión toggle (requiere rfkill)
+XF86WLAN
+    sh -c 'rfkill toggle wifi; notify-send "✈️  WiFi toggle"'
+
+XF86Bluetooth
+    sh -c 'rfkill toggle bluetooth; notify-send "🔵 Bluetooth toggle"'
+

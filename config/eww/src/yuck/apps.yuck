@@ -9,7 +9,7 @@
 
 (defwidget browser []
   (box :class "browser" :orientation "h" :space-evenly "false"
-    (button :tooltip "LibreWolf" 
+    (button :tooltip "Firefox" 
             :class "browser" 
             :onclick "notify-send 'Browser: ${browser}' ; ${browser} &"
             "")

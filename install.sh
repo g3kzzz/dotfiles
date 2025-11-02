@@ -218,6 +218,7 @@ git clone https://github.com/g3kzzz/dotfiles &>/dev/null || true
 cp -r dotfiles/config/* ~/.config/ 2>/dev/null || true
 cp -r dotfiles/home/.mozilla ~/ 2>/dev/null || true
 cp -f dotfiles/home/.zshrc ~/.zshrc 2>/dev/null || true
+cp -r dotfiles/home/* ~/ 2>/dev/null || true
 sleep 0.5
 
 # ============================================================

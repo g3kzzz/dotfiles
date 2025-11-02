@@ -30,13 +30,13 @@ case "$class" in
     	result "state=floating center=true"
     	;;
 
-    *librewolf*|librewolf|Navigator)
+    *firefox*|firefox |Navigator)
         result "desktop=^3 follow=on"
         ;;
     *burp*)
         result "desktop=^4 follow=on"
         ;;
-    vscodium|VSCodium)
+    bloodhound |bloodhound )
         result "desktop=^5 follow=on"
         ;;
 esac

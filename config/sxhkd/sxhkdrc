@@ -32,7 +32,7 @@ super + shift + {1-5}
 
 # Terminal (Normal y flotante)
 super + Return
-    sh -c 'cd ~ && exec alacritty -e tmux'
+    sh -c 'cd ~ && exec kitty'
 
 # Editor de configuración (Rice)
 super + r
@@ -40,7 +40,7 @@ super + r
 
 # HTB VPN - Terminal flotante
 super + 6
-    alacritty --class FloatingTerm --title "HTB VPN" --config-file ~/.config/alacritty/alacritty.toml -e ~/.config/bspwm/scripts/htb-vpn
+    kitty --class FloatingTerm --title "HTB VPN" --config ~/.config/kitty/kitty.conf -e ~/.config/bspwm/scripts/htb-vpn
 
 # ╭──────────────────────────────────────────────╮
 # │                 Capturas                     │
